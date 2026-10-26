@@ -23,7 +23,7 @@ function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
     if (e.isDirectory()) {
-      if (e.name !== 'node_modules') walk(p, out);
+      if (e.name !== 'node_modules' && e.name !== '.git') walk(p, out);
       continue;
     }
     out.push(p);

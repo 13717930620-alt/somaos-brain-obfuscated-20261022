@@ -1,0 +1,29 @@
+# SomaOS BrainAgent Phase 2 — Python LoRA 在线微调训练管线依赖
+# 安装: pip install -r requirements.txt
+# 注: bitsandbytes 仅 Linux/WSL 可用; Windows 原生环境训练建议在 WSL2 中运行。
+
+# ── 深度学习框架 ──
+torch>=2.1.0
+accelerate>=0.27.0
+
+# ── 模型与分词 ──
+transformers>=4.40.0
+safetensors>=0.4.0
+tokenizers>=0.15.0
+
+# ── 参数高效微调 (LoRA) ──
+peft>=0.10.0
+trl>=0.8.0
+
+# ── 4bit 量化 ──
+bitsandbytes>=0.43.0
+
+# ── 数据与视觉 ──
+datasets>=2.18.0
+numpy>=1.24.0
+opencv-python>=4.8.0
+Pillow>=10.0.0
+einops>=0.7.0
+
+# ── 实验追踪 ──
+wandb>=0.16.0

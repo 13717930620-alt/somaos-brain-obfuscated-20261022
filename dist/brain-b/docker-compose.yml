@@ -1,0 +1,81 @@
+# ── SomaOS BrainAgent — Docker Compose ──
+# Single command: docker compose up -d
+# Services:
+#   brain-agent  — Core brain with web UI (port 3001)
+#   llama-server — Gemma 4 12B local inference (port 18080) [optional, GPU only]
+
+version: '3.8'
+
+services:
+  brain-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: brain-agent
+    restart: unless-stopped
+    ports:
+      - '3001:3001'
+    environment:
+      - NODE_ENV=production
+      - LLM_MODE=${LLM_MODE:-api}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.deepseek.com}
+      - LLM_API_KEY=${LLM_API_KEY:?LLM_API_KEY is required}
+      - LLM_MODEL=${LLM_MODEL:-deepseek-chat}
+      - LLM_MAX_TOKENS=${LLM_MAX_TOKENS:-4096}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - SELF_LEARNING_ENABLED=${SELF_LEARNING_ENABLED:-false}
+      - SELF_LEARNING_GATE=${SELF_LEARNING_GATE:-auto}
+      - BRAIN_WEB_PORT=3001
+      - BRAIN_LLAMA_PORT=18080
+      - FRANKA_IP=${FRANKA_IP:-172.16.0.2}
+      - SO100_PORT=${SO100_PORT:-/dev/ttyUSB0}
+    volumes:
+      # Persist brain state across restarts
+      - brain-memory:/app/memory_store
+      - brain-hippocampus:/app/hippocampus_store
+      - brain-logs:/app/logs
+    healthcheck:
+      test: ['CMD', 'node', '-e', "require('http').get('http://localhost:3001/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - brain-net
+
+  # Optional: Local GPU inference server (uncomment if using LLM_MODE=local)
+  # llama-server:
+  #   image: ghcr.io/ggerganov/llama.cpp:server
+  #   container_name: somaos-llama-server
+  #   restart: unless-stopped
+  #   ports:
+  #     - '18080:8080'
+  #   volumes:
+  #     - ./models:/models:ro
+  #   command:
+  #     - '--model'
+  #     - '/models/gemma-4-12b-it-Q4_K_M.gguf'
+  #     - '--host'
+  #     - '0.0.0.0'
+  #     - '--port'
+  #     - '8080'
+  #     - '--n-gpu-layers'
+  #     - '99'
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: 1
+  #             capabilities: [gpu]
+  #   networks:
+  #     - brain-net
+
+volumes:
+  brain-memory:
+  brain-hippocampus:
+  brain-logs:
+
+networks:
+  brain-net:
+    driver: bridge

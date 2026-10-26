@@ -1,0 +1,83 @@
+{
+  "success_rate": "3/8",
+  "pct": 37.5,
+  "results": [
+    {
+      "instruction": "Push the green ball towards the red can, then move the blue cup to the left side",
+      "parsed": {
+        "action": "push",
+        "target_object": "ball",
+        "target_color": "green",
+        "target_shape": "sphere",
+        "reference_object": "can",
+        "reference_color": "red",
+        "spatial_relation": "towards",
+        "direction": null,
+        "distance": null,
+        "constraints": [
+          "move the blue cup to the left side"
+        ]
+      },
+      "success": true
+    },
+    {
+      "instruction": "Grasp the box and rotate it 90 degrees, then place it on top of the red can",
+      "success": false,
+      "raw": "?\nOkay, let's tackle this instruction: \"Grasp the box and rotate it 90 degrees, "
+    },
+    {
+      "instruction": "Pick up the blue cup and place it near the green ball, avoiding the red can",
+      "parsed": {
+        "action": "pick",
+        "target_object": "cup",
+        "target_color": "blue",
+        "target_shape": "cylinder",
+        "reference_object": "ball",
+        "reference_color": "green",
+        "spatial_relation": "near",
+        "direction": null,
+        "distance": null,
+        "constraints": [
+          "avoid red can"
+        ]
+      },
+      "success": true
+    },
+    {
+      "instruction": "Move all objects to the center: push green ball, blue cup, box, and red can together",
+      "success": false,
+      "raw": "?\nOkay, let's tackle this query. The user wants to convert the instruction \"Move"
+    },
+    {
+      "instruction": "把绿色球推到蓝色杯子左边，再把红色罐子移到盒子旁边",
+      "success": false,
+      "raw": "{\"action\":\"push\",\"target_object\":\"ball\",\"target_color\":\"green\",\"target_shape\":\"s"
+    },
+    {
+      "instruction": "Pull the red can backward by 0.5 meters",
+      "success": false,
+      "raw": "?\nOkay, let's tackle this instruction: \"Pull the red can backward by 0.5 meters\""
+    },
+    {
+      "instruction": "Rotate the box above the blue cup",
+      "success": false,
+      "raw": "?\nOkay, let's tackle this. The instruction is \"Rotate the box above the blue cup"
+    },
+    {
+      "instruction": "把红色罐子放到盒子里面",
+      "parsed": {
+        "action": "put",
+        "target_object": "can",
+        "target_color": "red",
+        "target_shape": "box",
+        "reference_object": "box",
+        "reference_color": null,
+        "spatial_relation": "inside",
+        "direction": null,
+        "distance": null,
+        "constraints": []
+      },
+      "success": true
+    }
+  ]
+}

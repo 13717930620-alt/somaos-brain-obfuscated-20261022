@@ -1,0 +1,8 @@
+{
+  "task": "grasp_right",
+  "steps": 2000000,
+  "elapsed_min": 35.39951242208481,
+  "forward_dist": 0.12951426022373758,
+  "standing_steps": 500,
+  "save_path": "C:\\Users\\redactxxxxxxx\\Desktop\\\u5927\u8111\u9879\u76ee\\\u5927\u8111\u9879\u76ee_\u526f\u672c\\training\\humanoid_grasp_right_ppo.zip"
+}

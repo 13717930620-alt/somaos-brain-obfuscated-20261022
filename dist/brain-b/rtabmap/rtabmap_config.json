@@ -1,0 +1,31 @@
+﻿{
+  "_comment": "RTAB-Map SLAM Configuration for SomaOS BrainAgent",
+  "slam": {
+    "grid_resolution": 0.05,
+    "grid_size_cells": 200,
+    "keyframe_interval_m": 0.3,
+    "keyframe_rotation_deg": 15,
+    "orb_features": 500,
+    "vocabulary_size": 256,
+    "wm_max_nodes": 200,
+    "min_loop_matches": 15,
+    "min_loop_inlier_ratio": 0.6
+  },
+  "graph_optimization": {
+    "max_iterations": 5,
+    "apriltag_edge_weight": 10.0,
+    "loop_closure_edge_weight": 2.0,
+    "odometry_edge_weight": 1.0
+  },
+  "persistence": {
+    "map_path": "rtabmap/map.json",
+    "vocab_path": "rtabmap/vocabulary.npy",
+    "auto_save_keyframes": 50
+  },
+  "integration": {
+    "gush3r_objects_max": 50,
+    "apriltag_anchors_max": 100,
+    "latency_target_ms": 30
+  }
+}
+

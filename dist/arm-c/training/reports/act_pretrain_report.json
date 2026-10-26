@@ -1,0 +1,83 @@
+{
+  "policy": "ACT_pretrain",
+  "source_data": "sim_episodes_v2",
+  "source_embodiment": "dual_arm_franka",
+  "action_dim": 8,
+  "state_dim": 102,
+  "n_samples": 10000,
+  "epochs": 50,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "best_test_loss": 0.029844505414366722,
+  "final_checkpoint": "C:\\Users\\redactxxxxxxx\\Desktop\\大脑项目2\\training\\checkpoints\\act_pretrain_final.pt",
+  "norm_stats_file": "C:\\Users\\redactxxxxxxx\\Desktop\\大脑项目2\\training\\checkpoints\\act_pretrain_norm.npz",
+  "n_params": 250888,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 513.2906943633225,
+      "test_loss": 0.0825094554387033,
+      "kl_weight": 0.0002
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.06966706172294086,
+      "test_loss": 0.0684776821732521,
+      "kl_weight": 0.001
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.04694008087449603,
+      "test_loss": 0.05003669574856758,
+      "kl_weight": 0.002
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.036380806184477275,
+      "test_loss": 0.041758577525615695,
+      "kl_weight": 0.003
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.03301321387290954,
+      "test_loss": 0.03740735821425915,
+      "kl_weight": 0.004
+    },
+    {
+      "epoch": 25,
+      "train_loss": 0.03132619279291895,
+      "test_loss": 0.034015259519219396,
+      "kl_weight": 0.005
+    },
+    {
+      "epoch": 30,
+      "train_loss": 0.029051160279247496,
+      "test_loss": 0.03248583525419235,
+      "kl_weight": 0.005
+    },
+    {
+      "epoch": 35,
+      "train_loss": 0.027343031282226246,
+      "test_loss": 0.03106456160545349,
+      "kl_weight": 0.005
+    },
+    {
+      "epoch": 40,
+      "train_loss": 0.026276108634140757,
+      "test_loss": 0.030455861315131186,
+      "kl_weight": 0.005
+    },
+    {
+      "epoch": 45,
+      "train_loss": 0.025887515087922416,
+      "test_loss": 0.029844505414366722,
+      "kl_weight": 0.005
+    },
+    {
+      "epoch": 50,
+      "train_loss": 0.025552195550666915,
+      "test_loss": 0.029897549897432325,
+      "kl_weight": 0.005
+    }
+  ]
+}

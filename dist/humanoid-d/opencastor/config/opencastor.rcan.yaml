@@ -1,0 +1,76 @@
+# RCAN Configuration for SomaOS Brain Next — OpenCastor Integration
+
+rcan_version: "3.0"
+
+metadata:
+  robot_name: somaos-brain-next
+  robot_type: embodied-ai
+  description: "SomaOS Brain Next with OpenCastor RCAN runtime"
+  created: 2026-08-29
+
+agent:
+  provider: somaos-next
+  model: brain-next-kernel
+  endpoint: http://127.0.0.1:3002
+  note: "Brain Next干净小内核通过EventBus对接RCAN"
+
+rcan:
+  signing:
+    algorithm: ed25519
+    pqc_algorithm: ml-dsa-65
+  carriers:
+    - mqtt
+    - ble
+    - lora
+  loa_required: L2
+
+safety:
+  protocol_66_version: "94"
+  estop_qos: 2
+  confidence_threshold: 0.7
+  audit_chain: true
+  guardian_agent: true
+  action_filter: true
+
+hardware:
+  preset: mujoco
+  auto_detect: true
+  presets_available:
+    - raspberry_pi
+    - jetson
+    - arduino
+    - esp32
+    - so_arm101
+    - oak_d
+    - hailo
+    - realsense
+    - mujoco
+    - webots
+    - gazebo
+
+fleet:
+  enabled: true
+  fleet_ui: app.opencastor.com
+  heartbeat_ms: 5000
+  outbound_only: true
+
+messaging:
+  whatsapp: { enabled: false }
+  telegram: { enabled: false }
+  discord: { enabled: false }
+  slack: { enabled: false }
+  homeassistant: { enabled: false }
+  mqtt: { enabled: true, broker: localhost, port: 1883 }
+
+evolution:
+  sisyphus: true
+  link_enabled: true
+
+mcp:
+  enabled: true
+  tools:
+    - brain_chat
+    - brain_status
+    - brain_evolve
+    - brain_motor
+    - brain_perceive

@@ -1,0 +1,43 @@
+{
+  "walking_training_complete": true,
+  "total_timesteps": 2000000,
+  "total_reference_frames": 463527,
+  "data_sources": {
+    "amass_retargeted": {
+      "files": 446,
+      "frames": 381382
+    },
+    "openlong_bvh": {
+      "files": 202,
+      "frames": 321160
+    },
+    "protomotions_original": {
+      "frames": 150
+    }
+  },
+  "reference_library": {
+    "walk_original": 150,
+    "walk_amass": 83865,
+    "walk_openlong": 321160,
+    "stand": 45439,
+    "gesture": 12913,
+    "total": 463527
+  },
+  "training_results": {
+    "falls": 0,
+    "reward_mean": 180,
+    "explained_variance": 0.94,
+    "best_alternation": 1.68,
+    "best_forward": 1.18,
+    "standing_rate": 0.68,
+    "forward_rate": 0.4,
+    "good_alternation_rate": 0.36
+  },
+  "brain_modules": 159,
+  "policy_arch": [
+    256,
+    256
+  ],
+  "observation_dim": 264,
+  "action_dim": 21
+}

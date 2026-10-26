@@ -1,0 +1,70 @@
+{
+  "metaGrad": {
+    "initialLoss": "0.2060",
+    "finalLoss": "0.0176",
+    "converged": true,
+    "improvement": "91.5%",
+    "steps": 200
+  },
+  "experience": {
+    "totalExperiences": 10000,
+    "finalMaturity": "0.833",
+    "elapsed": "0.1s",
+    "milestones": {
+      "100": {
+        "experiences": 100,
+        "hitRate": "100.0%",
+        "maturity": "0.838"
+      },
+      "500": {
+        "experiences": 500,
+        "hitRate": "100.0%",
+        "maturity": "0.833"
+      },
+      "1000": {
+        "experiences": 1000,
+        "hitRate": "100.0%",
+        "maturity": "0.833"
+      },
+      "2000": {
+        "experiences": 2000,
+        "hitRate": "100.0%",
+        "maturity": "0.833"
+      },
+      "5000": {
+        "experiences": 5000,
+        "hitRate": "100.0%",
+        "maturity": "0.833"
+      },
+      "10000": {
+        "experiences": 10000,
+        "hitRate": "100.0%",
+        "maturity": "0.833"
+      }
+    }
+  },
+  "thcl": {
+    "totalSamples": 500,
+    "finalLoss": "2.3026",
+    "positiveEmbeddings": 333,
+    "negativeEmbeddings": 167
+  },
+  "cosmos": {
+    "modelExists": true,
+    "modelSize": "8.54GB",
+    "safetensors": 5,
+    "components": {
+      "transformer": true,
+      "vae": true,
+      "visionEncoder": true
+    },
+    "serverScript": true,
+    "trainable": true
+  },
+  "vlmLoRA": {
+    "modelExists": true,
+    "loraTrainerExists": true,
+    "trainable": true,
+    "trainingData": true
+  }
+}

@@ -1,0 +1,442 @@
+{
+  "profileVersion": 1,
+  "embodimentId": "builtin:ur5",
+  "signature": "015e965c4f40",
+  "name": "Universal Robots UR5",
+  "manufacturer": "builtin",
+  "type": "arm",
+  "dof": 6,
+  "actionDim": 6,
+  "observationDim": null,
+  "controlFreqHz": null,
+  "standHeight": null,
+  "maxVelocity": 3.14,
+  "capabilities": {
+    "id": "builtin:ur5",
+    "type": "arm",
+    "dof": 6,
+    "hasLegs": false,
+    "bipedal": false,
+    "hasArms": true,
+    "armDof": 6,
+    "hasWaist": false,
+    "hasHead": false,
+    "hasWheels": false,
+    "hasGripper": true,
+    "canWalk": false,
+    "canManipulate": true,
+    "controlFreqHz": null,
+    "actionDim": 6,
+    "observationDim": null,
+    "cameras": [
+      "external_cam"
+    ],
+    "groups": {
+      "arm": 6
+    },
+    "unnamedArmDof": 0
+  },
+  "joints": [
+    {
+      "name": "shoulder_pan_joint",
+      "canonical": "shoulder_pan",
+      "index": 0,
+      "min": -6.2832,
+      "max": 6.2832,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "arm",
+      "side": null
+    },
+    {
+      "name": "shoulder_lift_joint",
+      "canonical": "shoulder_lift",
+      "index": 1,
+      "min": -6.2832,
+      "max": 6.2832,
+      "init": -1.57,
+      "axis": null,
+      "forceRange": null,
+      "group": "arm",
+      "side": null
+    },
+    {
+      "name": "elbow_joint",
+      "canonical": "elbow",
+      "index": 2,
+      "min": -6.2832,
+      "max": 6.2832,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "arm",
+      "side": null
+    },
+    {
+      "name": "wrist_1_joint",
+      "canonical": "wrist_1",
+      "index": 3,
+      "min": -6.2832,
+      "max": 6.2832,
+      "init": -1.57,
+      "axis": null,
+      "forceRange": null,
+      "group": "arm",
+      "side": null
+    },
+    {
+      "name": "wrist_2_joint",
+      "canonical": "wrist_2",
+      "index": 4,
+      "min": -6.2832,
+      "max": 6.2832,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "arm",
+      "side": null
+    },
+    {
+      "name": "wrist_3_joint",
+      "canonical": "wrist_3",
+      "index": 5,
+      "min": -6.2832,
+      "max": 6.2832,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "arm",
+      "side": null
+    }
+  ],
+  "motor": {
+    "adaptationDofCap": 64,
+    "adaptationDofApplied": 6,
+    "directDriveJoints": [
+      "shoulder_pan_joint",
+      "shoulder_lift_joint",
+      "elbow_joint",
+      "wrist_1_joint",
+      "wrist_2_joint",
+      "wrist_3_joint"
+    ],
+    "directDriveForbiddenJoints": [],
+    "verbs": {
+      "allowed": [
+        "stop",
+        "standUp",
+        "armTo",
+        "wave",
+        "armsOut",
+        "grasp"
+      ],
+      "conditional": [],
+      "blocked": [
+        {
+          "verb": "sitDown",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "bow",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "waistTwist",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "march",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "walk",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "turn",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "moveTo",
+          "reason": "capability_not_met"
+        }
+      ]
+    }
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "shoulder_pan_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "shoulder_lift_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "elbow_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "wrist_1_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "wrist_2_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "wrist_3_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "shoulder_pan_joint",
+        "max": null
+      },
+      {
+        "name": "shoulder_lift_joint",
+        "max": null
+      },
+      {
+        "name": "elbow_joint",
+        "max": null
+      },
+      {
+        "name": "wrist_1_joint",
+        "max": null
+      },
+      {
+        "name": "wrist_2_joint",
+        "max": null
+      },
+      {
+        "name": "wrist_3_joint",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "modelArtifacts": {
+    "mujocoModel": null,
+    "urdfPath": "models/ur5/ur5.urdf",
+    "cameras": [
+      "external_cam"
+    ],
+    "gripper": {
+      "type": "robotiq_2f",
+      "maxWidth": 0.085,
+      "minWidth": 0,
+      "force": 100
+    }
+  },
+  "provenance": {
+    "builtin": "services/MultiRobotAdapter.js",
+    "jointMatch": null
+  },
+  "sources": [
+    "builtin"
+  ],
+  "flags": [
+    {
+      "code": "NO_CONTROL_FREQ",
+      "message": "规格未声明 control_freq_hz，装配方必须按保守默认处理"
+    },
+    {
+      "code": "NO_TORQUE_CEILING",
+      "message": "规格无力矩上限，力矩类安全阈值不可生成"
+    }
+  ],
+  "generatedBy": "SOMAOS大底座/BrainBlueprint",
+  "generatedAt": "2026-10-11T13:02:05.634Z",
+  "controller": {
+    "id": "builtin:ur5",
+    "dof": 6,
+    "tokens": [
+      "builtin",
+      "ur5",
+      "universal",
+      "robots"
+    ],
+    "family": "arm",
+    "overall": "unsupported",
+    "note": "",
+    "sim": {
+      "tier": "none",
+      "ready": false,
+      "evidence": [],
+      "missing": [
+        "mjcf_or_urdf_physics_model"
+      ]
+    },
+    "real": {
+      "tier": "no_transport_driver",
+      "ready": false,
+      "evidence": [],
+      "missing": [
+        "transport_driver_or_vendor_api"
+      ]
+    },
+    "placeholderPolicyBytes": 0,
+    "artifacts": {
+      "family": "arm",
+      "roots": [
+        "A-trained-legacy",
+        "B-current",
+        "C-arm"
+      ],
+      "relevant": [],
+      "countedForReadiness": 0,
+      "unboundLoadUnverified": [
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/act_pretrain_best.pt",
+          "bytes": 1009126,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/act_pretrain_final.pt",
+          "bytes": 1011622,
+          "hasEvalReport": true
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/l2_l4_policy.pt",
+          "bytes": 1039505,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/multimodal_fusion.pt",
+          "bytes": 5391914,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/pointflow_weights_v7_full.pt",
+          "bytes": 17607212,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/pointflow_weights_v7_pf.pt",
+          "bytes": 17607040,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/segmentation_weights_v2.pt",
+          "bytes": 860768,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/smolvla_weights.pt",
+          "bytes": 3873934,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/_deprecated/act_best.pt",
+          "bytes": 1615514,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/_deprecated/act_final.pt",
+          "bytes": 1617178,
+          "hasEvalReport": true
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints_v2/act_best.pt",
+          "bytes": 1616050,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints_v2/act_final.pt",
+          "bytes": 1616202,
+          "hasEvalReport": true
+        }
+      ],
+      "datasetEmbedded": 4,
+      "withoutEvalReport": [
+        "training/datasets/humanoid_full/seg_net.pt",
+        "training/g1_policy.onnx",
+        "training/l2_l4_results/l2_l4_policy.pt",
+        "training/venv_gpu/Lib/site-packages/distutils-precedence.pth",
+        "training/checkpoints/act_pretrain_best.pt",
+        "training/checkpoints/l2_l4_policy.pt",
+        "training/checkpoints/multimodal_fusion.pt",
+        "training/checkpoints/pointflow_weights_v7_full.pt",
+        "training/checkpoints/pointflow_weights_v7_pf.pt",
+        "training/checkpoints/segmentation_weights_v2.pt",
+        "training/checkpoints/smolvla_weights.pt",
+        "training/checkpoints/_deprecated/act_best.pt",
+        "training/checkpoints_v2/act_best.pt"
+      ],
+      "ledgerMissingRecords": 34,
+      "ledgerMissingBytes": 41807267573
+    },
+    "evidenceSurface": {
+      "declared": [
+        {
+          "id": "A-trained-legacy",
+          "family": "all",
+          "present": true,
+          "surfaces": [
+            "robot",
+            "training"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "B-current",
+          "family": "all",
+          "present": true,
+          "surfaces": [
+            "robot",
+            "training"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "C-arm",
+          "family": "arm",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "D-humanoid",
+          "family": "humanoid",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": []
+        }
+      ],
+      "missing": [],
+      "degraded": false
+    }
+  },
+  "manifestErrors": [],
+  "savedAt": "2026-10-11T13:02:05.718Z",
+  "storedUnder": ".."
+}

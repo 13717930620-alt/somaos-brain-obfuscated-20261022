@@ -1,0 +1,58 @@
+{
+  "name": "somaos-brain-a",
+  "version": "1.0.0",
+  "description": "SomaOS 仿生脑 A（最新无权重版） — 混淆字节码发布件（不含权重、不含第三方二进制、不含明文源码）",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "private": false,
+  "main": "index.js",
+  "engines": {
+    "node": "v24.15.0"
+  },
+  "os": [
+    "win32",
+    "linux",
+    "darwin"
+  ],
+  "scripts": {
+    "verify-abi": "node ../../scripts/verify-abi.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@darksol/remem": "^0.10.0",
+    "@grpc/grpc-js": "^1.14.5",
+    "@grpc/proto-loader": "^0.8.1",
+    "adm-zip": "^0.6.1",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^16.6.1",
+    "iconv-lite": "^0.7.3",
+    "json-rules-engine": "^7.3.1",
+    "onnxruntime-node": "^1.19.2",
+    "pdf-parse": "^2.4.5",
+    "pngjs": "^7.0.0",
+    "pptxgenjs": "^4.0.1",
+    "sharp": "^0.35.5",
+    "sqlite-vec": "^0.1.9",
+    "sqlite3": "^6.0.1",
+    "winston": "^3.19.0",
+    "ws": "^8.22.0",
+    "yuandian-mcp-server": "^0.2.0",
+    "zeromq": "^6.8.0",
+    "bytenode": "^2.1.0"
+  },
+  "optionalDependencies": {
+    "@computer-use/nut-js": "^4.2.0",
+    "@langchain/langgraph": "^1.4.19",
+    "hnswlib-node": "^3.0.0"
+  },
+  "somaosRelease": {
+    "dist": "brain-a",
+    "sourceTree": "tree-a",
+    "node": "v24.15.0",
+    "v8": "13.6.233.17-node.48",
+    "python": "3.11.9",
+    "pythonMagic": "a70d0d0a",
+    "obfuscator": "javascript-obfuscator@5.9.0 (medium: stringArray+base64, hexadecimal identifiers, no control-flow flattening)",
+    "bytecode": "bytenode@2.1.0 (.jsc, Node v24.15.0 / V8 13.6.233.17-node.48 only)",
+    "builtAt": "2026-10-26T11:56:06.263Z"
+  }
+}

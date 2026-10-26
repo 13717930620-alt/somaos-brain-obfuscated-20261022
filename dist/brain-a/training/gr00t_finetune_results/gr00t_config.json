@@ -1,0 +1,15 @@
+{
+  "pretrained_path": "C:\\Users\\redact\\Desktop\\\u5927\u8111\u9879\u76ee2\\models\\vla\\groot",
+  "lora_rank": 16,
+  "lora_alpha": 32,
+  "batch_size": 4,
+  "lr": 0.0001,
+  "max_steps": 2000,
+  "tune_llm": false,
+  "tune_visual": false,
+  "tune_projector": true,
+  "tune_diffusion_model": true,
+  "use_bf16": true,
+  "use_amp": true,
+  "error": "Groot policy requires at least one visual input feature. No features of type FeatureType.VISUAL found in input_features."
+}

@@ -1,0 +1,187 @@
+{
+  "_title": "PhanthyMotus 驱动目录 → SomaOS 本体 接入映射表",
+  "_source": "https://github.com/4paradigm/phanthymotus-driver (Apache 2.0)",
+  "_verified_at": "2026-10-05",
+  "_data_policy": [
+    "本表仅登记「可确证」字段：厂商名、设备名、PM 驱动目录路径 —— 均直接取自 PM 仓库目录结构。",
+    "运动学参数（关节名 / 限位 / 力矩 / DOF）一律不臆测：无官方 URDF/MJCF 佐证时留 null，",
+    "  specStatus 置为 'pending'，表示「可接入但规格待补」，绝不填充猜测值。",
+    "type 字段仅在本项目有把握时填写；无把握时为 null。",
+    "本表不参与动作迁移（无关节表 → fidelity 为 0），仅用于「可接入本体」清点与接入排期。"
+  ],
+  "reference": "g1_29dof",
+  "counts": {
+    "total": 18,
+    "mapped": 1,
+    "pending": 17
+  },
+  "drivers": [
+    {
+      "pmPath": "unitree/g1",
+      "vendor": "Unitree",
+      "device": "G1",
+      "type": "humanoid",
+      "localEmbodiment": "g1_29dof",
+      "specStatus": "mapped",
+      "note": "本项目已有 training/robot_configs/g1_29dof.yaml + mujoco_menagerie/unitree_g1 MJCF 真值，可作为接入首验对象"
+    },
+    {
+      "pmPath": "unitree/go1",
+      "vendor": "Unitree",
+      "device": "Go1",
+      "type": "quadruped",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "四足；关节名与限位待官方 URDF/MJCF 佐证后补"
+    },
+    {
+      "pmPath": "unitree/go2",
+      "vendor": "Unitree",
+      "device": "Go2",
+      "type": "quadruped",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "四足；关节名与限位待官方 URDF/MJCF 佐证后补"
+    },
+    {
+      "pmPath": "unitree/r1",
+      "vendor": "Unitree",
+      "device": "R1",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；DoF 存在多版本口径，未确证前不填"
+    },
+    {
+      "pmPath": "dji/m300",
+      "vendor": "DJI",
+      "device": "M300 RTK",
+      "type": "aerial",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "无人机：非关节型本体，无关节表；接入需另建 flight 动作通道"
+    },
+    {
+      "pmPath": "dji/mavic3e",
+      "vendor": "DJI",
+      "device": "Mavic 3E",
+      "type": "aerial",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "无人机：非关节型本体，无关节表"
+    },
+    {
+      "pmPath": "dji/mavic4e",
+      "vendor": "DJI",
+      "device": "Mavic 4E",
+      "type": "aerial",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "无人机：非关节型本体，无关节表"
+    },
+    {
+      "pmPath": "engineai/t800",
+      "vendor": "EngineAI",
+      "device": "T800",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；规格待官方资料"
+    },
+    {
+      "pmPath": "noetix/bumi",
+      "vendor": "Noetix",
+      "device": "Bumi",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；规格待官方资料"
+    },
+    {
+      "pmPath": "x-humanoid/tianyi2.0",
+      "vendor": "X-Humanoid",
+      "device": "Tianyi 2.0",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；规格待官方资料"
+    },
+    {
+      "pmPath": "deep_robotics/lynx_m20",
+      "vendor": "Deep Robotics",
+      "device": "Lynx M20",
+      "type": null,
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "轮足类形态；具体关节构型未确证，type 留空"
+    },
+    {
+      "pmPath": "chasing/qianjiao_p200_pro",
+      "vendor": "Chasing",
+      "device": "Qianjiao P200 Pro",
+      "type": null,
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "形态与规格均未确证，不填 type"
+    },
+    {
+      "pmPath": "pndbotics/adam",
+      "vendor": "PNDbotics",
+      "device": "Adam",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；规格待官方资料"
+    },
+    {
+      "pmPath": "realman/rm75_6f_v",
+      "vendor": "RealMan",
+      "device": "RM75-6F-V",
+      "type": "arm",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "机械臂 + 六自由度手；型号名暗示 7 臂 DoF，但未获官方 URDF 佐证故不写入 dof"
+    },
+    {
+      "pmPath": "robotera/q5_bundle",
+      "vendor": "RobotEra",
+      "device": "Q5",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；规格待官方资料"
+    },
+    {
+      "pmPath": "booster/k1",
+      "vendor": "Booster Robotics",
+      "device": "K1",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；规格待官方资料"
+    },
+    {
+      "pmPath": "brainco/revo2",
+      "vendor": "BrainCo",
+      "device": "Revo 2",
+      "type": "hand",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "灵巧手：末端执行器，非完整本体；接入定位为 gripper 附件而非独立 embodiment"
+    },
+    {
+      "pmPath": "agibot/AimDK_X2",
+      "vendor": "AgiBot",
+      "device": "AimDK X2",
+      "type": "humanoid",
+      "localEmbodiment": null,
+      "specStatus": "pending",
+      "note": "人形；规格待官方资料"
+    }
+  ],
+  "_how_to_use": [
+    "1) 先用 MCPHttpTransport / MCPConnector.connectServer(name, { url }) 连上 PM 驱动，tools/list 拿到该机型真实能力清单；",
+    "2) 依据返回的工具 schema 与官方 URDF/MJCF，为本表对应条目补 joints（关节名 + min/max），specStatus 置为 'spec_ready'；",
+    "3) 补完关节表后，该本体才可参与动作迁移（EmbodimentNormalizer）与跨本体下发。"
+  ]
+}

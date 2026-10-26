@@ -1,0 +1,364 @@
+{
+  "manifestVersion": 1,
+  "embodimentId": "g1_29dof",
+  "signature": "6f8b1cc3cb15",
+  "name": "G1",
+  "manufacturer": "Unitree",
+  "type": "humanoid",
+  "dof": 29,
+  "brainVersion": 1,
+  "controlFreqHz": 100,
+  "interfaces": {
+    "health": "/health",
+    "state": "/state",
+    "command": "/command",
+    "estop": "/estop"
+  },
+  "state": {
+    "joints": [
+      "left_hip_pitch",
+      "left_hip_roll",
+      "left_hip_yaw",
+      "left_knee",
+      "left_ankle_pitch",
+      "left_ankle_roll",
+      "right_hip_pitch",
+      "right_hip_roll",
+      "right_hip_yaw",
+      "right_knee",
+      "right_ankle_pitch",
+      "right_ankle_roll",
+      "waist_yaw",
+      "waist_roll",
+      "waist_pitch",
+      "left_shoulder_pitch",
+      "left_shoulder_roll",
+      "left_shoulder_yaw",
+      "left_elbow",
+      "left_wrist_roll",
+      "left_wrist_pitch",
+      "left_wrist_yaw",
+      "right_shoulder_pitch",
+      "right_shoulder_roll",
+      "right_shoulder_yaw",
+      "right_elbow",
+      "right_wrist_roll",
+      "right_wrist_pitch",
+      "right_wrist_yaw"
+    ],
+    "observationDim": 102,
+    "actionDim": 29
+  },
+  "commands": {
+    "allowed": [
+      "stop",
+      "standUp",
+      "sitDown",
+      "armTo",
+      "wave",
+      "armsOut",
+      "bow",
+      "waistTwist"
+    ],
+    "conditional": [
+      "march",
+      "walk",
+      "turn",
+      "moveTo"
+    ],
+    "blocked": [
+      "grasp"
+    ]
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "left_hip_pitch",
+        "min": -2.5307,
+        "max": 2.8798
+      },
+      {
+        "name": "left_hip_roll",
+        "min": -0.5236,
+        "max": 2.9671
+      },
+      {
+        "name": "left_hip_yaw",
+        "min": -2.7576,
+        "max": 2.7576
+      },
+      {
+        "name": "left_knee",
+        "min": -0.087267,
+        "max": 2.8798
+      },
+      {
+        "name": "left_ankle_pitch",
+        "min": -0.87267,
+        "max": 0.5236
+      },
+      {
+        "name": "left_ankle_roll",
+        "min": -0.2618,
+        "max": 0.2618
+      },
+      {
+        "name": "right_hip_pitch",
+        "min": -2.5307,
+        "max": 2.8798
+      },
+      {
+        "name": "right_hip_roll",
+        "min": -2.9671,
+        "max": 0.5236
+      },
+      {
+        "name": "right_hip_yaw",
+        "min": -2.7576,
+        "max": 2.7576
+      },
+      {
+        "name": "right_knee",
+        "min": -0.087267,
+        "max": 2.8798
+      },
+      {
+        "name": "right_ankle_pitch",
+        "min": -0.87267,
+        "max": 0.5236
+      },
+      {
+        "name": "right_ankle_roll",
+        "min": -0.2618,
+        "max": 0.2618
+      },
+      {
+        "name": "waist_yaw",
+        "min": -2.618,
+        "max": 2.618
+      },
+      {
+        "name": "waist_roll",
+        "min": -0.52,
+        "max": 0.52
+      },
+      {
+        "name": "waist_pitch",
+        "min": -0.52,
+        "max": 0.52
+      },
+      {
+        "name": "left_shoulder_pitch",
+        "min": -3.0892,
+        "max": 2.6704
+      },
+      {
+        "name": "left_shoulder_roll",
+        "min": -1.5882,
+        "max": 2.2515
+      },
+      {
+        "name": "left_shoulder_yaw",
+        "min": -2.618,
+        "max": 2.618
+      },
+      {
+        "name": "left_elbow",
+        "min": -1.0472,
+        "max": 2.0944
+      },
+      {
+        "name": "left_wrist_roll",
+        "min": -1.97222,
+        "max": 1.97222
+      },
+      {
+        "name": "left_wrist_pitch",
+        "min": -1.61443,
+        "max": 1.61443
+      },
+      {
+        "name": "left_wrist_yaw",
+        "min": -1.61443,
+        "max": 1.61443
+      },
+      {
+        "name": "right_shoulder_pitch",
+        "min": -3.0892,
+        "max": 2.6704
+      },
+      {
+        "name": "right_shoulder_roll",
+        "min": -2.2515,
+        "max": 1.5882
+      },
+      {
+        "name": "right_shoulder_yaw",
+        "min": -2.618,
+        "max": 2.618
+      },
+      {
+        "name": "right_elbow",
+        "min": -1.0472,
+        "max": 2.0944
+      },
+      {
+        "name": "right_wrist_roll",
+        "min": -1.97222,
+        "max": 1.97222
+      },
+      {
+        "name": "right_wrist_pitch",
+        "min": -1.61443,
+        "max": 1.61443
+      },
+      {
+        "name": "right_wrist_yaw",
+        "min": -1.61443,
+        "max": 1.61443
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "left_hip_pitch",
+        "max": 88
+      },
+      {
+        "name": "left_hip_roll",
+        "max": 139
+      },
+      {
+        "name": "left_hip_yaw",
+        "max": 88
+      },
+      {
+        "name": "left_knee",
+        "max": 139
+      },
+      {
+        "name": "left_ankle_pitch",
+        "max": 50
+      },
+      {
+        "name": "left_ankle_roll",
+        "max": 50
+      },
+      {
+        "name": "right_hip_pitch",
+        "max": 88
+      },
+      {
+        "name": "right_hip_roll",
+        "max": 139
+      },
+      {
+        "name": "right_hip_yaw",
+        "max": 88
+      },
+      {
+        "name": "right_knee",
+        "max": 139
+      },
+      {
+        "name": "right_ankle_pitch",
+        "max": 50
+      },
+      {
+        "name": "right_ankle_roll",
+        "max": 50
+      },
+      {
+        "name": "waist_yaw",
+        "max": 88
+      },
+      {
+        "name": "waist_roll",
+        "max": 50
+      },
+      {
+        "name": "waist_pitch",
+        "max": 50
+      },
+      {
+        "name": "left_shoulder_pitch",
+        "max": 25
+      },
+      {
+        "name": "left_shoulder_roll",
+        "max": 25
+      },
+      {
+        "name": "left_shoulder_yaw",
+        "max": 25
+      },
+      {
+        "name": "left_elbow",
+        "max": 25
+      },
+      {
+        "name": "left_wrist_roll",
+        "max": 25
+      },
+      {
+        "name": "left_wrist_pitch",
+        "max": 5
+      },
+      {
+        "name": "left_wrist_yaw",
+        "max": 5
+      },
+      {
+        "name": "right_shoulder_pitch",
+        "max": 25
+      },
+      {
+        "name": "right_shoulder_roll",
+        "max": 25
+      },
+      {
+        "name": "right_shoulder_yaw",
+        "max": 25
+      },
+      {
+        "name": "right_elbow",
+        "max": 25
+      },
+      {
+        "name": "right_wrist_roll",
+        "max": 25
+      },
+      {
+        "name": "right_wrist_pitch",
+        "max": 5
+      },
+      {
+        "name": "right_wrist_yaw",
+        "max": 5
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "controller": {
+    "overall": "ready-real",
+    "simTier": "mujoco+joint_targets",
+    "realTier": "vendor-controller",
+    "note": "存在厂商高层控制器证据"
+  },
+  "readiness": "commandable",
+  "provenance": {
+    "yaml": "training\\robot_configs\\g1_29dof.yaml",
+    "mjcf": "mujoco_menagerie\\unitree_g1\\g1.xml",
+    "jointMatch": {
+      "matched": 29,
+      "mjcfOnly": 0,
+      "yamlOnly": 0
+    },
+    "rangeOverrides": [],
+    "significantMismatches": 0
+  },
+  "generatedBy": "SOMAOS大底座/cloudBrainManifest",
+  "generatedAt": "2026-10-11T13:02:12.883Z",
+  "savedAt": "2026-10-11T13:02:12.893Z",
+  "storedUnder": ".."
+}

@@ -1,0 +1,478 @@
+{
+  "profileVersion": 1,
+  "embodimentId": "builtin:franka_droid",
+  "signature": "70fbd7f303e7",
+  "name": "Franka Emika Panda",
+  "manufacturer": "builtin",
+  "type": "arm",
+  "dof": 7,
+  "actionDim": 7,
+  "observationDim": null,
+  "controlFreqHz": null,
+  "standHeight": null,
+  "maxVelocity": 1.5,
+  "capabilities": {
+    "id": "builtin:franka_droid",
+    "type": "arm",
+    "dof": 7,
+    "hasLegs": false,
+    "bipedal": false,
+    "hasArms": true,
+    "armDof": 7,
+    "hasWaist": false,
+    "hasHead": false,
+    "hasWheels": false,
+    "hasGripper": true,
+    "canWalk": false,
+    "canManipulate": true,
+    "controlFreqHz": null,
+    "actionDim": 7,
+    "observationDim": null,
+    "cameras": [
+      "external_cam",
+      "wrist_cam"
+    ],
+    "groups": {
+      "generic": 7
+    },
+    "unnamedArmDof": 7
+  },
+  "joints": [
+    {
+      "name": "panda_joint1",
+      "canonical": "joint1",
+      "index": 0,
+      "min": -2.8973,
+      "max": 2.8973,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "generic",
+      "side": null
+    },
+    {
+      "name": "panda_joint2",
+      "canonical": "joint2",
+      "index": 1,
+      "min": -1.7628,
+      "max": 1.7628,
+      "init": -0.3,
+      "axis": null,
+      "forceRange": null,
+      "group": "generic",
+      "side": null
+    },
+    {
+      "name": "panda_joint3",
+      "canonical": "joint3",
+      "index": 2,
+      "min": -2.8973,
+      "max": 2.8973,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "generic",
+      "side": null
+    },
+    {
+      "name": "panda_joint4",
+      "canonical": "joint4",
+      "index": 3,
+      "min": -3.0718,
+      "max": -0.0698,
+      "init": -1.5,
+      "axis": null,
+      "forceRange": null,
+      "group": "generic",
+      "side": null
+    },
+    {
+      "name": "panda_joint5",
+      "canonical": "joint5",
+      "index": 4,
+      "min": -2.8973,
+      "max": 2.8973,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "generic",
+      "side": null
+    },
+    {
+      "name": "panda_joint6",
+      "canonical": "joint6",
+      "index": 5,
+      "min": -0.0175,
+      "max": 3.7525,
+      "init": 1,
+      "axis": null,
+      "forceRange": null,
+      "group": "generic",
+      "side": null
+    },
+    {
+      "name": "panda_joint7",
+      "canonical": "joint7",
+      "index": 6,
+      "min": -2.8973,
+      "max": 2.8973,
+      "init": 0,
+      "axis": null,
+      "forceRange": null,
+      "group": "generic",
+      "side": null
+    }
+  ],
+  "motor": {
+    "adaptationDofCap": 64,
+    "adaptationDofApplied": 7,
+    "directDriveJoints": [],
+    "directDriveForbiddenJoints": [
+      "panda_joint1",
+      "panda_joint2",
+      "panda_joint3",
+      "panda_joint4",
+      "panda_joint5",
+      "panda_joint6",
+      "panda_joint7"
+    ],
+    "verbs": {
+      "allowed": [
+        "stop",
+        "standUp",
+        "armTo",
+        "wave",
+        "armsOut",
+        "grasp"
+      ],
+      "conditional": [],
+      "blocked": [
+        {
+          "verb": "sitDown",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "bow",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "waistTwist",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "march",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "walk",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "turn",
+          "reason": "capability_not_met"
+        },
+        {
+          "verb": "moveTo",
+          "reason": "capability_not_met"
+        }
+      ]
+    }
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "panda_joint1",
+        "min": -2.8973,
+        "max": 2.8973
+      },
+      {
+        "name": "panda_joint2",
+        "min": -1.7628,
+        "max": 1.7628
+      },
+      {
+        "name": "panda_joint3",
+        "min": -2.8973,
+        "max": 2.8973
+      },
+      {
+        "name": "panda_joint4",
+        "min": -3.0718,
+        "max": -0.0698
+      },
+      {
+        "name": "panda_joint5",
+        "min": -2.8973,
+        "max": 2.8973
+      },
+      {
+        "name": "panda_joint6",
+        "min": -0.0175,
+        "max": 3.7525
+      },
+      {
+        "name": "panda_joint7",
+        "min": -2.8973,
+        "max": 2.8973
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "panda_joint1",
+        "max": null
+      },
+      {
+        "name": "panda_joint2",
+        "max": null
+      },
+      {
+        "name": "panda_joint3",
+        "max": null
+      },
+      {
+        "name": "panda_joint4",
+        "max": null
+      },
+      {
+        "name": "panda_joint5",
+        "max": null
+      },
+      {
+        "name": "panda_joint6",
+        "max": null
+      },
+      {
+        "name": "panda_joint7",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "modelArtifacts": {
+    "mujocoModel": null,
+    "urdfPath": "models/franka_panda/panda.urdf",
+    "cameras": [
+      "external_cam",
+      "wrist_cam"
+    ],
+    "gripper": {
+      "type": "parallel_jaw",
+      "maxWidth": 0.08,
+      "minWidth": 0,
+      "force": 70
+    }
+  },
+  "provenance": {
+    "builtin": "services/MultiRobotAdapter.js",
+    "jointMatch": null
+  },
+  "sources": [
+    "builtin"
+  ],
+  "flags": [
+    {
+      "code": "NO_CONTROL_FREQ",
+      "message": "规格未声明 control_freq_hz，装配方必须按保守默认处理"
+    },
+    {
+      "code": "NO_TORQUE_CEILING",
+      "message": "规格无力矩上限，力矩类安全阈值不可生成"
+    }
+  ],
+  "generatedBy": "SOMAOS大底座/BrainBlueprint",
+  "generatedAt": "2026-10-11T13:02:05.320Z",
+  "controller": {
+    "id": "builtin:franka_droid",
+    "dof": 7,
+    "tokens": [
+      "builtin",
+      "franka",
+      "droid",
+      "emika",
+      "panda"
+    ],
+    "family": "arm",
+    "overall": "ready-real",
+    "note": "指令通路证据为驱动脚本存在，尚未真机验证",
+    "sim": {
+      "tier": "none",
+      "ready": false,
+      "evidence": [],
+      "missing": [
+        "mjcf_or_urdf_physics_model"
+      ]
+    },
+    "real": {
+      "tier": "joint-target-driver",
+      "ready": true,
+      "evidence": [
+        {
+          "kind": "joint-target-driver-script",
+          "files": [
+            {
+              "file": "robot/robot_driver.py",
+              "robotTypes": [
+                "franka_droid"
+              ],
+              "root": "大脑项目_训练完版无权重副本（旧版）"
+            }
+          ]
+        }
+      ],
+      "missing": []
+    },
+    "placeholderPolicyBytes": 0,
+    "artifacts": {
+      "family": "arm",
+      "roots": [
+        "A-trained-legacy",
+        "B-current",
+        "C-arm"
+      ],
+      "relevant": [],
+      "countedForReadiness": 0,
+      "unboundLoadUnverified": [
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/act_pretrain_best.pt",
+          "bytes": 1009126,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/act_pretrain_final.pt",
+          "bytes": 1011622,
+          "hasEvalReport": true
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/l2_l4_policy.pt",
+          "bytes": 1039505,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/multimodal_fusion.pt",
+          "bytes": 5391914,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/pointflow_weights_v7_full.pt",
+          "bytes": 17607212,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/pointflow_weights_v7_pf.pt",
+          "bytes": 17607040,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/segmentation_weights_v2.pt",
+          "bytes": 860768,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/smolvla_weights.pt",
+          "bytes": 3873934,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/_deprecated/act_best.pt",
+          "bytes": 1615514,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/_deprecated/act_final.pt",
+          "bytes": 1617178,
+          "hasEvalReport": true
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints_v2/act_best.pt",
+          "bytes": 1616050,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints_v2/act_final.pt",
+          "bytes": 1616202,
+          "hasEvalReport": true
+        }
+      ],
+      "datasetEmbedded": 4,
+      "withoutEvalReport": [
+        "training/datasets/humanoid_full/seg_net.pt",
+        "training/g1_policy.onnx",
+        "training/l2_l4_results/l2_l4_policy.pt",
+        "training/venv_gpu/Lib/site-packages/distutils-precedence.pth",
+        "training/checkpoints/act_pretrain_best.pt",
+        "training/checkpoints/l2_l4_policy.pt",
+        "training/checkpoints/multimodal_fusion.pt",
+        "training/checkpoints/pointflow_weights_v7_full.pt",
+        "training/checkpoints/pointflow_weights_v7_pf.pt",
+        "training/checkpoints/segmentation_weights_v2.pt",
+        "training/checkpoints/smolvla_weights.pt",
+        "training/checkpoints/_deprecated/act_best.pt",
+        "training/checkpoints_v2/act_best.pt"
+      ],
+      "ledgerMissingRecords": 34,
+      "ledgerMissingBytes": 41807267573
+    },
+    "evidenceSurface": {
+      "declared": [
+        {
+          "id": "A-trained-legacy",
+          "family": "all",
+          "present": true,
+          "surfaces": [
+            "robot",
+            "training"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "B-current",
+          "family": "all",
+          "present": true,
+          "surfaces": [
+            "robot",
+            "training"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "C-arm",
+          "family": "arm",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "D-humanoid",
+          "family": "humanoid",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": []
+        }
+      ],
+      "missing": [],
+      "degraded": false
+    }
+  },
+  "manifestErrors": [],
+  "savedAt": "2026-10-11T13:02:05.432Z",
+  "storedUnder": ".."
+}

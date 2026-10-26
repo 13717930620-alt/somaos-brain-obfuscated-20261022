@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://somaos.local/schemas/observation.schema.json",
+  "title": "SomaOS Perception Observation",
+  "type": "object",
+  "required": ["modality", "timestamp", "confidence"],
+  "properties": {
+    "modality": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "minLength": 20
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 8
+    },
+    "frameId": {
+      "type": "string"
+    },
+    "degradation": {
+      "type": "array"
+    },
+    "points": {
+      "type": "array",
+      "minItems": 1
+    },
+    "targetPosition": {
+      "type": "array",
+      "minItems": 3
+    }
+  }
+}

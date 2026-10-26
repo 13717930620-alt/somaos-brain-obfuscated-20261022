@@ -1,0 +1,17 @@
+{
+  "bioBaseRoot": "..\\..\\base-bio",
+  "motBaseRoot": "..\\..\\base-motion",
+  "persist": false,
+  "joinKey": "embodiment.id",
+  "forbidRootMerge": true,
+  "requireMissingRootsEmpty": true,
+  "columns": [
+    "id", "family",
+    "bio.overall", "bio.simTier", "bio.realTier", "bio.countedForReadiness",
+    "mot.overall", "mot.simTier", "mot.realTier", "mot.counted"
+  ],
+  "output": {
+    "json": "output/capability_overview.json",
+    "txt": "output/capability_overview.txt"
+  }
+}

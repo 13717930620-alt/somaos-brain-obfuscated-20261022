@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainAgent · First-time Setup</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:linear-gradient(135deg,#060a16,#0a1025);color:#c8d0e0;
+       font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+       min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .wizard{max-width:560px;width:100%;padding:40px 32px}
+  h1{font-size:28px;font-weight:300;text-align:center;margin-bottom:8px}
+  h1 strong{color:#7c8dff;font-weight:600}
+  .subtitle{text-align:center;color:#5a6a8a;font-size:13px;margin-bottom:36px}
+
+  .step{display:none}
+  .step.active{display:block}
+
+  .step-title{font-size:16px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .step-num{background:linear-gradient(135deg,#4a7dff,#5a8dff);color:#fff;
+            width:28px;height:28px;border-radius:50%;display:flex;align-items:center;
+            justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+
+  .option{background:#0c1225;border:1px solid #151f35;border-radius:10px;
+          padding:16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;
+          display:flex;align-items:center;gap:14px}
+  .option:hover{border-color:#4a7dff;background:#0e1a2e}
+  .option.selected{border-color:#4a7dff;background:#111d3a;box-shadow:0 0 20px rgba(74,125,255,0.1)}
+  .option .icon{font-size:28px;flex-shrink:0}
+  .option .info{flex:1}
+  .option .name{font-weight:600;font-size:14px;margin-bottom:2px}
+  .option .desc{font-size:11px;color:#5a6a8a}
+
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12px;color:#5a6a8a;margin-bottom:6px;font-weight:500}
+  .field input{width:100%;background:#0c1225;border:1px solid #1a2540;border-radius:8px;
+               padding:10px 14px;color:#c8d0e0;font-size:13px;outline:none;
+               transition:border-color 0.2s}
+  .field input:focus{border-color:#4a7dff}
+  .field .hint{font-size:10px;color:#3a4a6a;margin-top:4px}
+
+  .btn-row{display:flex;gap:10px;justify-content:center;margin-top:28px}
+  button{padding:10px 28px;border-radius:8px;font-size:14px;cursor:pointer;border:none;
+         transition:all 0.2s;font-weight:500}
+  .btn-primary{background:linear-gradient(135deg,#4a7dff,#5a8dff);color:#fff}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(74,125,255,0.2)}
+  .btn-secondary{background:#1a2540;color:#c8d0e0;border:1px solid #2a3a5a}
+  .btn-secondary:hover{background:#1e2d4a}
+
+  .progress{display:flex;justify-content:center;gap:6px;margin-bottom:32px}
+  .progress .dot{width:8px;height:8px;border-radius:50%;background:#151f35;transition:all 0.3s}
+  .progress .dot.done{background:#34d399}
+  .progress .dot.active{background:#4a7dff;box-shadow:0 0 10px rgba(74,125,255,0.5)}
+  .checklist{font-size:12px;line-height:2;color:#5a6a8a;margin-top:12px}
+  .checklist .ok{color:#34d399}
+  .checklist .pending{color:#f59e0b}
+</style>
+</head>
+<body>
+<div class="wizard">
+  <h1>🧠 <strong>BrainAgent</strong></h1>
+  <p class="subtitle">First run · Takes about 1 minute to configure</p>
+
+  <div class="progress" id="progress">
+    <div class="dot active" data-step="1"></div>
+    <div class="dot" data-step="2"></div>
+    <div class="dot" data-step="3"></div>
+    <div class="dot" data-step="4"></div>
+  </div>
+
+  <!-- Step 1: LLM Mode -->
+  <div class="step active" id="step-1">
+    <div class="step-title"><span class="step-num">1</span> Select Language Model</div>
+    <div class="option selected" data-mode="auto" onclick="selectMode('auto', this)">
+      <div class="icon">⚡</div>
+      <div class="info">
+        <div class="name">Auto-switch (Recommended)</div>
+        <div class="desc">22:00-08:00 uses cloud API · Rest of time uses local model · Free + high quality balance</div>
+      </div>
+    </div>
+    <div class="option" data-mode="local" onclick="selectMode('local', this)">
+      <div class="icon">💻</div>
+      <div class="info">
+        <div class="name">Local Only</div>
+        <div class="desc">Fully offline · Requires GGUF model download (~7GB) · Requires NVIDIA GPU 12GB+</div>
+      </div>
+    </div>
+    <div class="option" data-mode="api" onclick="selectMode('api', this)">
+      <div class="icon">☁️</div>
+      <div class="info">
+        <div class="name">Cloud API Only</div>
+        <div class="desc">Best conversation quality · Requires API Key · Supports DeepSeek/OpenAI/Claude etc.</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="nextStep(1)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: API Config (if needed) -->
+  <div class="step" id="step-2">
+    <div class="step-title"><span class="step-num">2</span> API Configuration</div>
+    <div class="field">
+      <label>API Base URL</label>
+      <input type="text" id="api-base" placeholder="https://api.deepseek.com" value="https://api.deepseek.com">
+      <div class="hint">Supports all OpenAI-compatible APIs</div>
+    </div>
+    <div class="field">
+      <label>API Key</label>
+      <input type="password" id="api-key" placeholder="sk-...">
+      <div class="hint">Key is stored locally in .env file only</div>
+    </div>
+    <div class="field">
+      <label>Model Name</label>
+      <input type="text" id="api-model" placeholder="deepseek-chat" value="deepseek-chat">
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="prevStep(2)">← Back</button>
+      <button class="btn-primary" onclick="nextStep(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Identity -->
+  <div class="step" id="step-3">
+    <div class="step-title"><span class="step-num">3</span> Agent Identity</div>
+    <div class="field">
+      <label>Agent Name</label>
+      <input type="text" id="agent-name" placeholder="SomaOS" value="SomaOS">
+      <div class="hint">This will be the agent's "name" and identity</div>
+    </div>
+    <div class="field">
+      <label>Short Bio</label>
+      <input type="text" id="agent-bio" placeholder="I am your AI companion, with memory, capable of growth." value="I am your AI companion, with memory, capable of growth.">
+    </div>
+    <div class="field">
+      <label>Web Interface Port</label>
+      <input type="number" id="web-port" placeholder="3001" value="3001">
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="prevStep(3)">← Back</button>
+      <button class="btn-primary" onclick="nextStep(3)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Complete -->
+  <div class="step" id="step-4">
+    <div class="step-title"><span class="step-num">4</span> Ready</div>
+    <div class="checklist" id="checklist">
+      <div><span class="pending">⏳</span> Creating configuration file...</div>
+      <div><span class="pending">⏳</span> Detecting local model...</div>
+      <div><span class="pending">⏳</span> Testing API connectivity...</div>
+      <div><span class="pending">⏳</span> Initializing brain...</div>
+    </div>
+    <div class="btn-row" style="margin-top:24px">
+      <button class="btn-primary" id="start-btn" onclick="startBrain()">🚀 Launch BrainAgent</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let config = {
+    mode: 'auto',
+    apiBase: 'https://api.deepseek.com',
+    apiKey: '',
+    apiModel: 'deepseek-chat',
+    agentName: 'SomaOS',
+    agentBio: 'I am your AI companion, with memory, capable of growth.',
+    webPort: 3001,
+  };
+
+  function selectMode(mode, el) {
+    config.mode = mode;
+    document.querySelectorAll('#step-1 .option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function updateProgress(step) {
+    document.querySelectorAll('.progress .dot').forEach((dot, i) => {
+      dot.classList.remove('done', 'active');
+      if (i + 1 < step) dot.classList.add('done');
+      else if (i + 1 === step) dot.classList.add('active');
+    });
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('step-' + n);
+    if (el) el.classList.add('active');
+    updateProgress(n);
+  }
+
+  function nextStep(from) {
+    if (from === 1) {
+      if (config.mode !== 'local') showStep(2);
+      else showStep(3); // Skip API config for local mode
+    } else if (from === 2) {
+      config.apiBase = document.getElementById('api-base').value.trim();
+      config.apiKey = document.getElementById('api-key').value.trim();
+      config.apiModel = document.getElementById('api-model').value.trim();
+      showStep(3);
+    } else if (from === 3) {
+      config.agentName = document.getElementById('agent-name').value.trim() || 'SomaOS';
+      config.agentBio = document.getElementById('agent-bio').value.trim();
+      config.webPort = parseInt(document.getElementById('web-port').value) || 3001;
+      showStep(4);
+    }
+  }
+
+  function prevStep(from) {
+    showStep(from - 1);
+  }
+
+  async function startBrain() {
+    const btn = document.getElementById('start-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Starting...';
+
+    // Build config
+    const envData = {
+      mode: config.mode,
+      apiBase: config.apiBase,
+      apiKey: config.apiKey,
+      apiModel: config.apiModel,
+      agentName: config.agentName,
+      webPort: config.webPort,
+    };
+
+    const items = document.querySelectorAll('#checklist div');
+    function markDone(i, text) {
+      if (items[i]) items[i].innerHTML = '<span class="ok">✅</span> ' + text;
+    }
+
+    try {
+      // Step 1: Save config
+      // 修复(2026-10-09): 原来在 fetch 之前就先打勾 "Configuration file saved"，
+      //   且成功后直接跳主页 —— 等于对用户宣称"已生效"，而 requiresRestart 从未被读取。
+      //   现在: 打勾发生在服务端确认写盘之后; requiresRestart=true 时如实提示需重启，
+      //   不再自动跳转到仍在用旧 .env 的进程。
+      const res = await fetch('/api/setup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(envData),
+      });
+
+      if (!res.ok) {
+        // 修复(2026-10-08, #8): 这里原先写"config is still saved locally via _launch.js"，
+        //   但向导本身没有任何落盘/localStorage 路径，_launch.js 也只是 scripts/launch.js
+        //   的 12 行垫片——配置其实是被丢掉的。现在如实报错并给出可用的 CLI 兜底。
+        const detail = await res.json().catch(() => ({}));
+        console.warn('配置未保存: /api/setup 返回 ' + res.status + (detail.error ? ' — ' + detail.error : ''));
+        btn.textContent = '⚠️ 配置未保存 — 请改用命令行: node launcher.js';
+        btn.disabled = false;
+        btn.style.background = '#f59e0b';
+        return;
+      }
+
+      const data = await res.json().catch(() => ({}));
+      markDone(0, 'Configuration saved' + (data.file ? ' → ' + data.file : ''));
+
+      if (data.requiresRestart) {
+        markDone(1, '已写入 .env（dotenv 只在启动时读取）');
+        markDone(2, '需重启生效: 停掉当前进程后 node index.js');
+        markDone(3, '重启前旧配置仍在运行');
+        btn.textContent = '✅ 已保存 — 重启后生效';
+        btn.disabled = false;
+        btn.style.background = '#f59e0b';
+        return;
+      }
+
+      // Step 2: Ready
+      markDone(1, 'Environment ready');
+      markDone(2, 'Ready to start');
+      markDone(3, 'Initializing brain...');
+
+      // Redirect to main app
+      setTimeout(() => {
+        window.location.href = 'http://localhost:' + config.webPort;
+      }, 1500);
+
+    } catch (e) {
+      // Server not running yet — the launcher handles this
+      btn.textContent = 'Please run node _launch.js daemon to start the service';
+      btn.style.background = '#f59e0b';
+    }
+  }
+</script>
+</body>
+</html>

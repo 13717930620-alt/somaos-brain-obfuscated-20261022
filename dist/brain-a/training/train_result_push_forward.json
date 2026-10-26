@@ -1,0 +1,8 @@
+{
+  "task": "push_forward",
+  "steps": 2000000,
+  "elapsed_min": 35.100468683242795,
+  "forward_dist": 1.121402731643419,
+  "standing_steps": 74,
+  "save_path": "C:\\Users\\redact\\Desktop\\\u5927\u8111\u9879\u76ee\\\u5927\u8111\u9879\u76ee_\u526f\u672c\\training\\humanoid_push_forward_ppo.zip"
+}

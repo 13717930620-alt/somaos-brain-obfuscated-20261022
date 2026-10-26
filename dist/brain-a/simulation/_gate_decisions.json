@@ -1,0 +1,54 @@
+[
+  {
+    "name": "A_safe",
+    "joints": [
+      0.5,
+      -0.5,
+      0.7,
+      -1,
+      0.5,
+      0
+    ],
+    "safe": true,
+    "reason": "ok"
+  },
+  {
+    "name": "B_overlimit_j2",
+    "joints": [
+      0.5,
+      -2.5,
+      0.7,
+      -1,
+      0.5,
+      0
+    ],
+    "safe": true,
+    "reason": "ok"
+  },
+  {
+    "name": "C_overlimit_j6",
+    "joints": [
+      0.5,
+      -0.5,
+      0.7,
+      -1,
+      0.5,
+      9
+    ],
+    "safe": false,
+    "reason": "joint_idx5_limit"
+  },
+  {
+    "name": "D_after_estop",
+    "joints": [
+      0.5,
+      -0.5,
+      0.7,
+      -1,
+      0.5,
+      0
+    ],
+    "safe": false,
+    "reason": "emergency_stop_active"
+  }
+]

@@ -1,0 +1,332 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>S0MA-MOLMO 全身机器人控制面板</title>
+<script src="/lib/three.min.js?v=2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;color:#c8d0e0;font-family:sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+#main{display:flex;flex:1;min-height:0}
+#left{flex:1;display:flex;flex-direction:column;min-width:0}
+#view{flex:1;position:relative;min-height:0}
+#info{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:5;font-size:10px;color:#34d399;background:rgba(0,0,0,0.6);padding:3px 10px;border-radius:4px;white-space:nowrap}
+#btns{position:absolute;right:8px;top:35%;display:grid;grid-template-columns:44px 44px 44px;grid-template-rows:44px 44px 44px;gap:3px;z-index:5}
+#btns button{background:#1a2540;border:1px solid #2a3a5a;border-radius:6px;color:#c8d0e0;font-size:18px;cursor:pointer}
+#btns button:hover{background:#2a3a5a;border-color:#4a7dff}
+#joint-panel{background:#080c18;border-top:1px solid #151f35;padding:6px 8px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+#joint-panel label{font-size:10px;color:#5a6a8a;width:28px;text-align:right}
+#joint-panel input[type=range]{width:80px;height:4px;-webkit-appearance:none;background:#1a2540;border-radius:2px;outline:none}
+#joint-panel input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:#4a7dff;border-radius:50%;cursor:pointer}
+#joint-panel button{background:#1a2540;border:1px solid #4a7dff;border-radius:4px;padding:4px 10px;color:#fff;font-size:11px;cursor:pointer}
+#right{width:340px;display:flex;flex-direction:column;background:#080c18;border-left:1px solid #151f35}
+#chat-area{flex:1;display:flex;flex-direction:column;min-height:0}
+#chat-header{padding:6px 10px;font-size:11px;color:#5a6a8a;border-bottom:1px solid #151f35;background:#0a0e1a}
+#chat-msgs{flex:1;overflow-y:auto;padding:8px 10px;font-size:12px;display:flex;flex-direction:column;gap:6px}
+#chat-msgs::-webkit-scrollbar{width:4px}
+#chat-msgs::-webkit-scrollbar-thumb{background:#2a3a5a;border-radius:2px}
+.msg-user{align-self:flex-end;background:#1a2a4a;border-radius:8px;padding:6px 10px;max-width:85%;word-break:break-word}
+.msg-bot{align-self:flex-start;background:#1a2a3a;border-radius:8px;padding:6px 10px;max-width:85%;word-break:break-word;border:1px solid #1a2540}
+.msg-sys{align-self:center;color:#5a6a8a;font-size:10px;padding:2px 8px}
+.msg-bot .cmd-tag{display:inline-block;font-size:9px;color:#4a7dff;border:1px solid #4a7dff;border-radius:3px;padding:0 4px;margin-top:3px}
+#sensor-panel{border-top:1px solid #151f35;padding:6px 10px;font-size:10px;max-height:180px;overflow-y:auto}
+#sensor-panel h4{font-size:10px;color:#5a6a8a;margin-bottom:4px}
+#sensor-panel .srow{display:flex;justify-content:space-between;padding:1px 0;color:#8a9ab0}
+#sensor-panel .srow .sval{color:#34d399;font-family:monospace}
+#sensor-panel .danger .sval{color:#f44}
+#bar{display:flex;padding:6px 8px;gap:6px;background:#080c18;border-top:1px solid #151f35}
+#bar input{flex:1;background:#0c1225;border:1px solid #1a2540;border-radius:6px;padding:8px 12px;color:#c8d0e0;font-size:13px;outline:none}
+#bar input:focus{border-color:#4a7dff}
+#bar button{background:#1a2540;border:1px solid #4a7dff;border-radius:6px;padding:8px 18px;color:#fff;font-size:13px;cursor:pointer;white-space:nowrap}
+#bar button.estop{border-color:#f44;color:#f44;font-weight:bold}
+#bar button.estop:hover{background:#f44;color:#fff}
+</style></head><body>
+<div id="main">
+<div id="left">
+<div id="view"><div id="info">🚗(0,0,0) 👀(0,0) 🦾[0.0,-0.3,0.0] ⚡在线</div>
+<div id="btns"><button style="grid-column:2" onclick="mv(0.5,0)">▲</button><button style="grid-column:1" onclick="mv(0,0.5)">◀</button><button style="grid-column:2;font-size:14px;border-color:#f44" onclick="rst()">🔃</button><button style="grid-column:3" onclick="mv(0,-0.5)">▶</button><button style="grid-column:2" onclick="mv(-0.5,0)">▼</button></div>
+</div>
+<div id="joint-panel">
+<label>J0</label><input type="range" id="j0" min="-1" max="1" step="0.05" value="0" oninput="onSlider()">
+<label>J1</label><input type="range" id="j1" min="-1.5" max="1.5" step="0.05" value="-0.3" oninput="onSlider()">
+<label>J2</label><input type="range" id="j2" min="-1.5" max="1.5" step="0.05" value="0" oninput="onSlider()">
+<label>J3</label><input type="range" id="j3" min="-2" max="0" step="0.05" value="-1.5" oninput="onSlider()">
+<label>J4</label><input type="range" id="j4" min="-1.5" max="1.5" step="0.05" value="0" oninput="onSlider()">
+<label>J5</label><input type="range" id="j5" min="-1.5" max="1.5" step="0.05" value="1.2" oninput="onSlider()">
+<label>J6</label><input type="range" id="j6" min="-1" max="1" step="0.05" value="0" oninput="onSlider()">
+<label>爪</label><input type="range" id="jg" min="0" max="1" step="0.05" value="0.5" oninput="onGripSlider()">
+<button onclick="applyJoints()">应用</button>
+<button onclick="resetJoints()">复位关节</button>
+</div>
+</div>
+<div id="right">
+<div id="chat-area">
+<div id="chat-header">💬 对话 + 运动指令</div>
+<div id="chat-msgs"></div>
+</div>
+<div id="sensor-panel">
+<h4>📊 传感器数据 (实时)</h4>
+<div class="srow"><span>关节位置:</span><span class="sval" id="s-pos">-</span></div>
+<div class="srow"><span>关节速度:</span><span class="sval" id="s-vel">-</span></div>
+<div class="srow"><span>关节力矩:</span><span class="sval" id="s-tor">-</span></div>
+<div class="srow"><span>关节温度:</span><span class="sval" id="s-tmp">-</span></div>
+<div class="srow"><span>夹爪位置:</span><span class="sval" id="s-grp">-</span></div>
+<div class="srow" id="s-estop-row"><span>急停状态:</span><span class="sval" id="s-estop">✅ 正常</span></div>
+<div class="srow"><span>最后更新:</span><span class="sval" id="s-time">-</span></div>
+</div>
+</div>
+</div>
+<div id="bar">
+<input id="cmd" placeholder="对话或指令: 你好 / 抓起杯子 / 往前 / 放下 / 推 / 抬头 / 复位 ..." autofocus>
+<button onclick="send()">发送</button>
+<button class="estop" onclick="estop()">⛔ 急停</button>
+<button onclick="rst()">复位</button>
+</div>
+<script>
+// ═══ SCENE ═══
+var V=document.getElementById('view'),W=V.clientWidth,H=V.clientHeight;
+var sc=new THREE.Scene();sc.background=new THREE.Color(0x0a0e1a);
+var cam=new THREE.PerspectiveCamera(45,W/H,0.1,50);cam.position.set(3,2.5,5);cam.lookAt(0,0.5,0);
+var rd=new THREE.WebGLRenderer({antialias:true});rd.setSize(W,H);rd.setPixelRatio(Math.min(devicePixelRatio||1,2));V.appendChild(rd.domElement);
+sc.add(new THREE.AmbientLight(0x6688aa,0.9));var dl=new THREE.DirectionalLight(0xffffff,1.2);dl.position.set(3,6,4);sc.add(dl);
+
+// Ground
+var gnd=new THREE.Mesh(new THREE.PlaneGeometry(8,8),new THREE.MeshPhongMaterial({color:0x1a2a3a}));gnd.rotation.x=-Math.PI/2;sc.add(gnd);
+sc.add(new THREE.GridHelper(8,16,0x2a3a5a,0x1a2a3a));
+
+// ═══ SAFETY BOUNDARY (工作空间安全边界可视化) ═══
+var safeBoundary=new THREE.Mesh(new THREE.SphereGeometry(1.2,16,12),new THREE.MeshBasicMaterial({color:0x4a7dff,wireframe:true,transparent:true,opacity:0.15}));safeBoundary.position.set(0.15,0.5,0);sc.add(safeBoundary);
+var safeFloor=new THREE.Mesh(new THREE.RingGeometry(1.1,1.2,32),new THREE.MeshBasicMaterial({color:0x4a7dff,transparent:true,opacity:0.3,side:THREE.DoubleSide}));safeFloor.rotation.x=-Math.PI/2;safeFloor.position.set(0.15,0.01,0);sc.add(safeFloor);
+
+// ═══ ROBOT ═══
+var rb=new THREE.Group();sc.add(rb);
+var bs=new THREE.Mesh(new THREE.BoxGeometry(0.3,0.06,0.22),new THREE.MeshPhongMaterial({color:0x2a2a3a}));bs.position.y=0.08;rb.add(bs);
+var wg=new THREE.CylinderGeometry(0.05,0.05,0.03,12),wm3=new THREE.MeshPhongMaterial({color:0x111});
+var wh1=new THREE.Mesh(wg,wm3);wh1.rotation.z=Math.PI/2;wh1.position.set(0,0.05,0.13);rb.add(wh1);
+var wh2=new THREE.Mesh(wg,wm3);wh2.rotation.z=Math.PI/2;wh2.position.set(0,0.05,-0.13);rb.add(wh2);
+var wh3=new THREE.Mesh(wg,wm3);wh3.rotation.z=Math.PI/2;wh3.position.set(0.2,0.05,0.13);rb.add(wh3);
+var wh4=new THREE.Mesh(wg,wm3);wh4.rotation.z=Math.PI/2;wh4.position.set(0.2,0.05,-0.13);rb.add(wh4);
+var WH=[wh1,wh2,wh3,wh4];
+
+// Torso + Head
+var to=new THREE.Group();to.position.set(0.15,0.11,0);rb.add(to);
+var tcy=new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.065,0.16,10),new THREE.MeshPhongMaterial({color:0x3a4a5a}));tcy.position.y=0.08;to.add(tcy);
+var tbx=new THREE.Mesh(new THREE.BoxGeometry(0.18,0.11,0.09),new THREE.MeshPhongMaterial({color:0x4a5a6a}));tbx.position.y=0.26;to.add(tbx);
+var nk=new THREE.Group();nk.position.y=0.33;to.add(nk);
+var hd=new THREE.Mesh(new THREE.BoxGeometry(0.065,0.055,0.045),new THREE.MeshPhongMaterial({color:0x556688}));hd.position.set(0.03,0.05,0);nk.add(hd);
+
+// ═══ ARMS (7DoF each, named segments) ═══
+var L0=new THREE.Group();var L1=new THREE.Group();var L2=new THREE.Group();var L3=new THREE.Group();var L4=new THREE.Group();var L5=new THREE.Group();var L6=new THREE.Group();
+var R0=new THREE.Group();var R1=new THREE.Group();var R2=new THREE.Group();var R3=new THREE.Group();var R4=new THREE.Group();var R5=new THREE.Group();var R6=new THREE.Group();
+var LP=[L0,L1,L2,L3,L4,L5,L6],RP=[R0,R1,R2,R3,R4,R5,R6];
+var LAg=new THREE.Group();LAg.position.set(0.04,0.44,0.09);to.add(LAg);
+var RAg=new THREE.Group();RAg.position.set(0.04,0.44,-0.09);to.add(RAg);
+var lens=[0.2,0.18,0.24,0,0.07,0,0.06],clrs=[0xff4444,0xff8844,0xffaa44,0xffcc44,0x44ff88,0x44ccff,0xaa88ff];
+for(var ai=0;ai<7;ai++){
+  var lp=LP[ai],rp=RP[ai];
+  (ai===0?LAg:LP[ai-1]).add(lp);(ai===0?RAg:RP[ai-1]).add(rp);
+  lp.add(new THREE.Mesh(new THREE.SphereGeometry(0.028,6,5),new THREE.MeshPhongMaterial({color:clrs[ai]})));
+  rp.add(new THREE.Mesh(new THREE.SphereGeometry(0.028,6,5),new THREE.MeshPhongMaterial({color:clrs[ai]})));
+  if(lens[ai]>0.001){var lk=new THREE.Mesh(new THREE.CylinderGeometry(0.016,0.016,lens[ai],5,1),new THREE.MeshPhongMaterial({color:0x778899}));lk.position.y=lens[ai]/2;lp.add(lk);}
+  if(lens[ai]>0.001){var rk=new THREE.Mesh(new THREE.CylinderGeometry(0.016,0.016,lens[ai],5,1),new THREE.MeshPhongMaterial({color:0x778899}));rk.position.y=lens[ai]/2;rp.add(rk);}
+  if(ai<6){LP[ai+1].position.y=lens[ai];RP[ai+1].position.y=lens[ai];}
+}
+// 🤖 大号夹爪(可见手指)
+var _gripFingers=[];
+function mkGrp(pv){
+  var g=new THREE.Group();g.position.y=0.06;pv[6].add(g);
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(0.035,0.018,0.035),new THREE.MeshPhongMaterial({color:0xdd8833})));
+  var fm=new THREE.MeshPhongMaterial({color:0xff3333,emissive:0x330000});
+  var f1=new THREE.Mesh(new THREE.BoxGeometry(0.008,0.04,0.008),fm);
+  f1.position.set(-0.014,-0.02,0);g.add(f1);
+  var f2=new THREE.Mesh(new THREE.BoxGeometry(0.008,0.04,0.008),fm);
+  f2.position.set(0.014,-0.02,0);g.add(f2);
+  _gripFingers.push({f1:f1,f2:f2,group:g});return g;
+}
+var _gL=mkGrp(LP),_gR=mkGrp(RP);
+var _gripOpen=0.02;
+function setJ(pv,a){for(var i=0;i<7;i++){var v=a[i]||0;if(i===0)pv[i].rotation.set(0,v*3,0);else if(i===1||i===5)pv[i].rotation.set(0,0,v*2);else pv[i].rotation.set(v*4,0,0);}}
+var LH=[0,-0.3,0,-1.5,0,1.2,0,0.02],RH=[0,-0.2,0,-1.5,0,0.8,0,0.02];
+setJ(LP,LH);setJ(RP,RH);
+
+// ═══ TABLE ═══
+var tm=new THREE.Mesh(new THREE.BoxGeometry(0.7,0.03,0.5),new THREE.MeshPhongMaterial({color:0x5a4a3a}));tm.position.set(0.6,0.72,-0.05);sc.add(tm);
+for(var ti=0;ti<4;ti++){var tli=new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.02,0.7,12),new THREE.MeshPhongMaterial({color:0x4a4a4a}));tli.position.set(ti<2?0.85:0.35,0.35,ti%2?0.15:-0.25);sc.add(tli);}
+var cup=new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,0.05,12),new THREE.MeshPhongMaterial({color:0x2244cc}));cup.position.set(0.5,0.745,-0.05);sc.add(cup);
+var ball=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,6),new THREE.MeshPhongMaterial({color:0x22cc44}));ball.position.set(0.62,0.745,0.1);sc.add(ball);
+var box=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.04),new THREE.MeshPhongMaterial({color:0xcc8833}));box.position.set(0.65,0.74,-0.2);sc.add(box);
+var can=new THREE.Mesh(new THREE.CylinderGeometry(0.025,0.025,0.06,12),new THREE.MeshPhongMaterial({color:0xcc2222}));can.position.set(0.52,0.74,0.12);sc.add(can);
+
+// ═══ STATE ═══
+var ST={b:[0,0,0],h:[0,0],L:LH.slice(0,7),R:RH.slice(0,7)};
+function mv(dx,dy){ST.b[0]=Math.max(-4,Math.min(4,ST.b[0]+dx));ST.b[2]=Math.max(-2.5,Math.min(2.5,ST.b[2]+dy));ui();}
+function mh(pi,ti){ST.h[0]=pi;ST.h[1]=ti;ui();}
+function rst(){ST={b:[0,0,0],h:[0,0],L:LH.slice(0,7),R:RH.slice(0,7)};rb.position.x=0;rb.position.z=0;rb.rotation.y=0;syncSliders();ui();}
+function ui(){document.getElementById('info').textContent='🚗('+ST.b[0].toFixed(1)+','+ST.b[2].toFixed(1)+') 👀('+ST.h[0].toFixed(1)+','+ST.h[1].toFixed(1)+') 🦾['+ST.L.slice(0,3).map(function(v){return v.toFixed(1)}).join(',')+'] ⚡在线';}
+function sm(pv,t){for(var i=0;i<7;i++){var tv=t[i]||0;var c,ax,amp=1;if(i===0){c=pv[i].rotation.y;ax='y';amp=3.0;}else if(i===1){c=pv[i].rotation.z;ax='z';amp=2.0;}else if(i===2){c=pv[i].rotation.x;ax='x';amp=4.0;}else if(i===3){c=pv[i].rotation.z;ax='z';amp=2.0;}else if(i===4){c=pv[i].rotation.x;ax='x';amp=4.0;}else if(i===5){c=pv[i].rotation.z;ax='z';amp=1.5;}else{c=pv[i].rotation.x;ax='x';amp=3.0;}var nv=c+((tv*amp)-c)*0.12;if(ax==='y')pv[i].rotation.set(0,nv,0);else if(ax==='z')pv[i].rotation.set(0,0,nv);else pv[i].rotation.set(nv,0,0);}}
+
+// ═══ ANIMATION ═══
+(function anim(){requestAnimationFrame(anim);
+  rb.position.x+=(ST.b[0]-rb.position.x)*0.08;rb.rotation.y+=(ST.b[2]-rb.rotation.y)*0.1;
+  nk.rotation.y+=(ST.h[0]-nk.rotation.y)*0.1;nk.rotation.x+=(ST.h[1]-nk.rotation.x)*0.1;
+  sm(LP,ST.L);sm(RP,ST.R);
+  for(var gi=0;gi<_gripFingers.length;gi++){var gf=_gripFingers[gi];var cx=gf.f1.position.x;var tx=gf.f2.position.x;var tg=_gripOpen;gf.f1.position.x+=( -tg-cx)*0.15;gf.f2.position.x+=( tg-tx)*0.15;}
+  var sp=(ST.b[0]-rb.position.x)*20;for(var i=0;i<4;i++)WH[i].rotation.x+=sp*0.01;
+  rd.render(sc,cam);
+})();
+
+// ═══ INPUT ═══
+document.addEventListener('keydown',function(e){var k=e.key;
+  if(k==='ArrowUp'){mv(0.5,0);e.preventDefault();}
+  else if(k==='ArrowDown'){mv(-0.5,0);e.preventDefault();}
+  else if(k==='ArrowLeft'){mv(0,0.5);e.preventDefault();}
+  else if(k==='ArrowRight'){mv(0,-0.5);e.preventDefault();}
+});
+
+// ═══ MOUSE ═══
+var dr=false,lx=0,ly=0,cd=5,cp=0.6,ct=-0.5;
+rd.domElement.addEventListener('mousedown',function(e){if(e.button===0){dr=true;lx=e.clientX;ly=e.clientY;}});
+window.addEventListener('mouseup',function(){dr=false;});
+window.addEventListener('mousemove',function(e){if(!dr)return;var dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;ct+=dx*0.005;cp=Math.max(-1.3,Math.min(1.3,cp-dy*0.005));cam.position.set(cd*Math.cos(cp)*Math.cos(ct),cd*Math.sin(cp)+1,cd*Math.cos(cp)*Math.sin(ct));});
+rd.domElement.addEventListener('wheel',function(e){cd=Math.max(2,Math.min(10,cd+e.deltaY*0.01));e.preventDefault();},{passive:false});
+window.addEventListener('resize',function(){W=V.clientWidth;H=V.clientHeight;cam.aspect=W/H;cam.updateProjectionMatrix();rd.setSize(W,H);});
+
+// ═══ CHAT (对话气泡区域) ═══
+var chatMsgs=document.getElementById('chat-msgs');
+function addMsg(text,cls){
+  var d=document.createElement('div');d.className='msg-'+cls;d.textContent=text;chatMsgs.appendChild(d);chatMsgs.scrollTop=chatMsgs.scrollHeight;
+}
+function addMsgRich(text,cls,cmdTag){
+  var d=document.createElement('div');d.className='msg-'+cls;
+  var span=document.createElement('span');span.textContent=text;d.appendChild(span);
+  if(cmdTag&&cmdTag!=='chat'){var tag=document.createElement('div');tag.className='cmd-tag';tag.textContent='['+cmdTag+']';d.appendChild(tag);}
+  chatMsgs.appendChild(d);chatMsgs.scrollTop=chatMsgs.scrollHeight;
+}
+addMsg('机器人已连接，可以对话或发送运动指令','sys');
+
+// ═══ JOINT SLIDERS (关节直接控制) ═══
+function onSlider(){
+  ST.L=[parseFloat(document.getElementById('j0').value),parseFloat(document.getElementById('j1').value),parseFloat(document.getElementById('j2').value),parseFloat(document.getElementById('j3').value),parseFloat(document.getElementById('j4').value),parseFloat(document.getElementById('j5').value),parseFloat(document.getElementById('j6').value)];
+  ui();
+}
+function onGripSlider(){
+  _gripOpen=parseFloat(document.getElementById('jg').value)>0.5?0.002:0.02;
+}
+function syncSliders(){
+  document.getElementById('j0').value=ST.L[0];document.getElementById('j1').value=ST.L[1];document.getElementById('j2').value=ST.L[2];document.getElementById('j3').value=ST.L[3];document.getElementById('j4').value=ST.L[4];document.getElementById('j5').value=ST.L[5];document.getElementById('j6').value=ST.L[6];
+}
+function applyJoints(){
+  onSlider();onGripSlider();
+  addMsg('已应用关节滑块控制: ['+ST.L.map(function(v){return v.toFixed(2)}).join(', ')+']','sys');
+}
+function resetJoints(){
+  ST.L=LH.slice(0,7);ST.R=RH.slice(0,7);_gripOpen=0.02;syncSliders();document.getElementById('jg').value=0.5;ui();
+  addMsg('关节已复位到Home姿态','sys');
+}
+
+// ═══ E-STOP (急停) ═══
+function estop(){
+  addMsg('⚠️ 发送急停指令...','sys');
+  var x=new XMLHttpRequest();x.open('POST','/robot/estop',true);
+  x.setRequestHeader('Content-Type','application/json;charset=utf-8');
+  x.onload=function(){try{var d=JSON.parse(x.responseText);addMsg('⛔ 急停已触发: '+(d.estopped?'已停止':'已释放'),'sys');}catch(e){addMsg('急停响应解析失败','sys');}};
+  x.onerror=function(){addMsg('急停请求失败（离线）','sys');};
+  x.send(JSON.stringify({estopped:true,reason:'user_manual'}));
+}
+
+// ═══ SENSOR POLLING (传感器数据实时轮询) ═══
+function pollSensors(){
+  var x=new XMLHttpRequest();x.open('GET','/robot/actual_state',true);
+  x.onload=function(){
+    try{var s=JSON.parse(x.responseText);
+      if(s.positions)document.getElementById('s-pos').textContent=s.positions.map(function(v){return v.toFixed(2)}).join(', ');
+      if(s.velocities)document.getElementById('s-vel').textContent=s.velocities.map(function(v){return v.toFixed(2)}).join(', ');
+      if(s.torques)document.getElementById('s-tor').textContent=s.torques.map(function(v){return v.toFixed(2)}).join(', ');
+      if(s.temperatures)document.getElementById('s-tmp').textContent=s.temperatures.map(function(v){return v.toFixed(1)+'°C'}).join(', ');
+      if(typeof s.gripper_pos==='number')document.getElementById('s-grp').textContent=s.gripper_pos.toFixed(3);
+      var er=document.getElementById('s-estop-row');
+      if(s.estopped){document.getElementById('s-estop').textContent='⚠️ 已急停';er.className='srow danger';}
+      else{document.getElementById('s-estop').textContent='✅ 正常';er.className='srow';}
+      document.getElementById('s-time').textContent=new Date().toLocaleTimeString();
+    }catch(e){}
+  };
+  x.onerror=function(){};
+  x.timeout=3000;x.ontimeout=function(){};
+  x.send();
+}
+setInterval(pollSensors,2000);
+
+// ═══ COMMAND (对话+运动指令) ═══
+function send(){
+  var inp=document.getElementById('cmd'),msg=inp.value.trim();if(!msg)return;inp.value='';
+  addMsg(msg,'user');
+  document.getElementById('info').style.color='#f59e0b';
+  var x=new XMLHttpRequest();x.open('POST','/chat',true);
+  x.setRequestHeader('Content-Type','application/json;charset=utf-8');
+  x.onload=function(){
+    try{var d=JSON.parse(x.responseText),c=d.cmd||'';
+      // ═══ 显示对话回复 ═══
+      var replyText=d.reply||'';
+      if(replyText){addMsgRich(replyText,'bot',c);}
+      else if(c==='chat'){addMsg('（无回复内容）','bot');}
+      // ═══ 底盘/头部/复位 ═══
+      var hasBaseSeq = d.baseSeq && Array.isArray(d.baseSeq) && d.baseSeq.length > 0;
+      var baseSteps = d.baseSteps || 0;
+      if(!hasBaseSeq){
+        if(c==='base_fwd')mv(0.5,0);else if(c==='base_back')mv(-0.5,0);
+        else if(c==='base_left')mv(0,0.5);else if(c==='base_right')mv(0,-0.5);
+        else if(c==='base_tl')mv(0,0.5);else if(c==='base_tr')mv(0,-0.5);
+        else if(c==='head_up')mh(-0.4,0);else if(c==='head_down')mh(0.3,0);
+        else if(c==='head_L')mh(0,-0.7);else if(c==='head_R')mh(0,0.7);
+        else if(c==='reset')rst();
+        if(/^base_/.test(c) && baseSteps > 1){
+          if(window._baseTimer){clearTimeout(window._baseTimer);window._baseTimer=null;}
+          var bIdx3=1;
+          function _stepBase3(){
+            if(bIdx3>=baseSteps){window._baseTimer=null;ui();return;}
+            if(c==='base_fwd')mv(0.5,0);else if(c==='base_back')mv(-0.5,0);
+            else if(c==='base_left')mv(0,0.5);else if(c==='base_right')mv(0,-0.5);
+            bIdx3++;
+            if(bIdx3>=baseSteps){window._baseTimer=null;ui();return;}
+            window._baseTimer=setTimeout(_stepBase3,700);
+          }
+          window._baseTimer=setTimeout(_stepBase3,700);
+        }
+      }
+      // ═══ 机械臂动画 ═══
+      if(c.indexOf('arm_')===0&&d.actions&&Array.isArray(d.actions[0])&&d.actions[0].length>=7){
+        var seq=d.actions,idx=0;
+        ST.L=seq[0].slice(0,7);ST.R=seq[0].slice(0,7).map(function(v,i){return i===0?v+0.02:(i===1?v+0.1:(i===5?v-0.4:v));});
+        _gripOpen=seq[0][7]>0.5?0.002:0.02;syncSliders();
+        if(seq.length>1){
+          if(window._armTimer)clearInterval(window._armTimer);
+          window._armTimer=setInterval(function(){
+            idx++;if(idx>=seq.length){clearInterval(window._armTimer);window._armTimer=null;return;}
+            ST.L=seq[idx].slice(0,7);ST.R=seq[idx].slice(0,7).map(function(v,i){return i===0?v+0.02:(i===1?v+0.1:(i===5?v-0.4:v));});
+            _gripOpen=seq[idx][7]>0.5?0.002:0.02;syncSliders();
+            if(idx>=3&&seq[idx][7]>0.5&&(seq[idx-1]||[])[7]<0.5){document.getElementById('info').textContent='🤖 抓取!';document.getElementById('info').style.color='#00ff44';setTimeout(function(){document.getElementById('info').style.color='#34d399';},800);}
+          },350);
+        }
+      }
+      // ═══ 顺序底盘移动 ═══
+      if(d.baseSeq&&Array.isArray(d.baseSeq)&&d.baseSeq.length>0){
+        if(window._baseTimer){clearTimeout(window._baseTimer);window._baseTimer=null;}
+        var bIdx=0;
+        function _stepBase(){
+          var bc=d.baseSeq[bIdx];
+          if(bc==='base_fwd')mv(0.5,0);else if(bc==='base_back')mv(-0.5,0);
+          else if(bc==='base_left')mv(0,0.5);else if(bc==='base_right')mv(0,-0.5);
+          else if(bc==='reset')rst();
+          bIdx++;
+          if(bIdx>=d.baseSeq.length){window._baseTimer=null;return;}
+          window._baseTimer=setTimeout(_stepBase,800);
+        }
+        _stepBase();
+      }
+      ui();document.getElementById('info').style.color='#34d399';
+    }catch(e){addMsg('❌ 响应解析失败: '+e.message,'sys');document.getElementById('info').textContent='❌ parse error';document.getElementById('info').style.color='#f44';}
+  };
+  x.onerror=function(){addMsg('⚠️ 连接失败（离线）','sys');document.getElementById('info').textContent='⚠️ offline';document.getElementById('info').style.color='#f44';};
+  x.timeout=60000;x.ontimeout=function(){addMsg('⏰ 请求超时（60s）','sys');document.getElementById('info').textContent='⏰ timeout';document.getElementById('info').style.color='#f44';};
+  x.send(JSON.stringify({message:msg}));
+}
+document.getElementById('cmd').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+</script></body></html>

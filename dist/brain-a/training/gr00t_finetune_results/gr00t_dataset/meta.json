@@ -1,0 +1,16 @@
+{
+  "n_episodes": 500,
+  "n_steps": 100,
+  "qpos_dim": 102,
+  "action_dim": 8,
+  "instructions": [
+    "push the block to the left",
+    "push the block to the right",
+    "push the block forward",
+    "push the block backward",
+    "reach toward the block",
+    "pick up and lift the block",
+    "reorient the block",
+    "push diagonally"
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "manifestVersion": 1,
+  "embodimentId": "builtin:kinova_gen3",
+  "signature": "bea6f40019fa",
+  "name": "Kinova Gen3",
+  "manufacturer": "builtin",
+  "type": "arm",
+  "dof": 7,
+  "brainVersion": 1,
+  "controlFreqHz": null,
+  "interfaces": {
+    "health": "/health",
+    "state": "/state",
+    "command": "/command",
+    "estop": "/estop"
+  },
+  "state": {
+    "joints": [
+      "joint_1",
+      "joint_2",
+      "joint_3",
+      "joint_4",
+      "joint_5",
+      "joint_6",
+      "joint_7"
+    ],
+    "observationDim": null,
+    "actionDim": 7
+  },
+  "commands": {
+    "allowed": [
+      "stop",
+      "standUp",
+      "armTo",
+      "wave",
+      "armsOut",
+      "grasp"
+    ],
+    "conditional": [],
+    "blocked": [
+      "sitDown",
+      "bow",
+      "waistTwist",
+      "march",
+      "walk",
+      "turn",
+      "moveTo"
+    ]
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "joint_1",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "joint_2",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "joint_3",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "joint_4",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "joint_5",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "joint_6",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "joint_7",
+        "min": -3.14,
+        "max": 3.14
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "joint_1",
+        "max": null
+      },
+      {
+        "name": "joint_2",
+        "max": null
+      },
+      {
+        "name": "joint_3",
+        "max": null
+      },
+      {
+        "name": "joint_4",
+        "max": null
+      },
+      {
+        "name": "joint_5",
+        "max": null
+      },
+      {
+        "name": "joint_6",
+        "max": null
+      },
+      {
+        "name": "joint_7",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "controller": {
+    "overall": "unsupported",
+    "simTier": "none",
+    "realTier": "no_transport_driver",
+    "note": ""
+  },
+  "readiness": "blocked-no-transport",
+  "provenance": {
+    "builtin": "services/MultiRobotAdapter.js",
+    "jointMatch": null
+  },
+  "generatedBy": "SOMAOS大底座/cloudBrainManifest",
+  "generatedAt": "2026-10-11T13:02:05.853Z",
+  "savedAt": "2026-10-11T13:02:05.892Z",
+  "storedUnder": ".."
+}

@@ -1,0 +1,126 @@
+{
+  "manifestVersion": 1,
+  "embodimentId": "builtin:so100",
+  "signature": "015e965c4f40",
+  "name": "SO-100 Open Source Arm",
+  "manufacturer": "builtin",
+  "type": "arm",
+  "dof": 6,
+  "brainVersion": 1,
+  "controlFreqHz": null,
+  "interfaces": {
+    "health": "/health",
+    "state": "/state",
+    "command": "/command",
+    "estop": "/estop"
+  },
+  "state": {
+    "joints": [
+      "shoulder_pan",
+      "shoulder_lift",
+      "elbow",
+      "wrist_1",
+      "wrist_2",
+      "wrist_3"
+    ],
+    "observationDim": null,
+    "actionDim": 6
+  },
+  "commands": {
+    "allowed": [
+      "stop",
+      "standUp",
+      "armTo",
+      "wave",
+      "armsOut",
+      "grasp"
+    ],
+    "conditional": [],
+    "blocked": [
+      "sitDown",
+      "bow",
+      "waistTwist",
+      "march",
+      "walk",
+      "turn",
+      "moveTo"
+    ]
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "shoulder_pan",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "shoulder_lift",
+        "min": -1.57,
+        "max": 1.57
+      },
+      {
+        "name": "elbow",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "wrist_1",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "wrist_2",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "wrist_3",
+        "min": -3.14,
+        "max": 3.14
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "shoulder_pan",
+        "max": null
+      },
+      {
+        "name": "shoulder_lift",
+        "max": null
+      },
+      {
+        "name": "elbow",
+        "max": null
+      },
+      {
+        "name": "wrist_1",
+        "max": null
+      },
+      {
+        "name": "wrist_2",
+        "max": null
+      },
+      {
+        "name": "wrist_3",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "controller": {
+    "overall": "ready-real",
+    "simTier": "none",
+    "realTier": "joint-target-driver",
+    "note": "指令通路证据为驱动脚本存在，尚未真机验证"
+  },
+  "readiness": "commandable",
+  "provenance": {
+    "builtin": "services/MultiRobotAdapter.js",
+    "jointMatch": null
+  },
+  "generatedBy": "SOMAOS大底座/cloudBrainManifest",
+  "generatedAt": "2026-10-11T13:02:05.567Z",
+  "savedAt": "2026-10-11T13:02:05.601Z",
+  "storedUnder": ".."
+}

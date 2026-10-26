@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainAgent · General Agent</title>
+<script src="/lib/three.min.js"></script>
+<script src="/lib/OrbitControls.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI","Arial",sans-serif;background:#060a16;color:#c8d0e0;height:100vh;display:flex;flex-direction:column;overflow:hidden;user-select:none}
+
+/* Header navigation */
+#header{background:linear-gradient(135deg,#0a1025,#080c18);padding:8px 20px;border-bottom:1px solid #151f35;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;height:44px}
+#header h1{font-size:14px;color:#7c8dff;font-weight:600;display:flex;align-items:center;gap:6px}
+#header .stats{display:flex;gap:12px;font-size:11px;color:#4a5a7a}
+.stat-item{display:flex;align-items:center;gap:4px;padding:2px 8px;background:#0c1225;border-radius:4px;border:1px solid #151f35}
+.stat-item .label{color:#5a6a8a}
+.stat-item .val{color:#c8d0e0;font-weight:500}
+
+/* Main layout */
+#main{flex:1;display:flex;min-height:0;position:relative}
+
+/* Left: avatar section */
+#avatar-section{width:200px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#0a1025,#080c18);border-right:1px solid #151f35;padding:20px 10px;gap:16px}
+#avatar-frame{width:135px;height:135px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.08);box-shadow:0 0 40px rgba(100,140,255,0.15);flex-shrink:0;transition:all 0.5s}
+#avatar-frame:hover{box-shadow:0 0 60px rgba(100,140,255,0.3);transform:scale(1.05)}
+#avatar-canvas{width:100%;height:100%;display:block}
+@keyframes brainFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+#avatar-name{font-size:16px;font-weight:600;color:#c8d0e0;text-align:center}
+#avatar-status{font-size:11px;color:#34d399;display:flex;align-items:center;gap:4px}
+#avatar-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* Left bottom toggle buttons */
+#avatar-tabs{display:flex;gap:4px;margin-top:auto;padding-bottom:16px;width:100%;justify-content:center}
+#avatar-tabs .tab{padding:6px 12px;border-radius:6px;font-size:11px;cursor:pointer;color:#5a6a8a;transition:all 0.2s;border:none;background:transparent;white-space:nowrap}
+#avatar-tabs .tab:hover{color:#c8d0e0;background:rgba(74,125,255,0.1)}
+#avatar-tabs .tab.active{color:#fff;background:rgba(74,125,255,0.2);box-shadow:0 0 10px rgba(74,125,255,0.1)}
+
+/* Right panel */
+#side-panel{flex:1;display:flex;flex-direction:column;min-width:0;background:#080c18}
+
+/* Right panel tabs */
+#panel-tabs{display:flex;gap:2px;padding:8px 12px 0;flex-shrink:0;background:#080c18;border-bottom:1px solid #151f35}
+#panel-tabs .tab{padding:6px 16px;border-radius:6px 6px 0 0;font-size:11px;cursor:pointer;color:#5a6a8a;transition:all 0.2s;border:none;background:transparent;border-bottom:2px solid transparent}
+#panel-tabs .tab:hover{color:#c8d0e0;background:rgba(74,125,255,0.05)}
+#panel-tabs .tab.active{color:#7c8dff;background:rgba(74,125,255,0.08);border-bottom-color:#4a7dff}
+
+/* Panel content container */
+#panel-content{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
+
+/* Chat panel — hidden by default */
+#chat-view{flex:1;display:none;flex-direction:column;min-height:0}
+#chat-msgs{flex:1;overflow-y:auto;padding:8px 12px;font-size:13px}
+#chat-msgs::-webkit-scrollbar{width:4px}
+#chat-msgs::-webkit-scrollbar-thumb{background:#2a3a5a;border-radius:2px}
+#chat-msgs::-webkit-scrollbar-track{background:transparent}
+.msg{display:flex;gap:10px;margin-bottom:14px;align-items:flex-start}
+.msg .msg-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid rgba(179,136,255,0.3);margin-top:2px;background:radial-gradient(circle at 40% 35%,#2a1a4a,#120a25);display:flex;align-items:center;justify-content:center}
+.msg .msg-avatar svg{width:28px;height:28px}
+.msg.user{flex-direction:row-reverse}
+.msg.user .msg-avatar{display:none}
+.msg .msg-bubble{max-width:75%;padding:8px 14px;border-radius:12px;line-height:1.5;word-break:break-word;font-size:13px}
+.msg.brain .msg-bubble{background:#0e1a2e;border:1px solid #1a2a45;border-bottom-left-radius:4px;color:#d0d8e8}
+.msg.user .msg-bubble{background:#1a2a4a;border:1px solid #2a3a6a;border-bottom-right-radius:4px;color:#e0e8f8}
+.msg .msg-time{font-size:10px;color:#3a4a6a;margin-top:4px;padding:0 4px}
+.msg.user .msg-time{text-align:right}
+
+#chat-input-bar{display:flex;padding:8px 12px;gap:8px;border-top:1px solid #151f35;background:#0a0e1a;flex-shrink:0}
+#chat-input{flex:1;background:#0c1225;border:1px solid #1a2540;border-radius:8px;padding:8px 14px;color:#c8d0e0;font-size:13px;outline:none}
+#chat-input:focus{border-color:#4a7dff;box-shadow:0 0 10px rgba(74,125,255,0.1)}
+#chat-btn{background:linear-gradient(135deg,#4a7dff,#5a8dff);border:none;border-radius:8px;padding:8px 20px;color:#fff;font-size:13px;cursor:pointer;transition:all 0.2s}
+#chat-btn:hover{background:linear-gradient(135deg,#5a8dff,#6a9dff);transform:translateY(-1px)}
+#chat-btn:disabled{opacity:0.4;cursor:default;transform:none}
+
+/* Brain panel — shown by default */
+#brain-view{flex:1;display:block;position:relative;background:radial-gradient(ellipse at center,#0c1425 0%,#060a16 70%)}
+#brain-view.hidden{display:none}
+#brain-canvas{width:100%;height:100%;display:block}
+
+/* Brain sub-tabs (Brain/Body) */
+#brain-subtabs{position:absolute;top:10px;left:12px;display:flex;gap:2px;z-index:5;background:rgba(6,10,22,0.7);padding:3px;border-radius:10px;border:1px solid #151f35}
+#brain-subtabs .tab{padding:5px 14px;border-radius:7px;font-size:11px;cursor:pointer;color:#5a6a8a;transition:all 0.2s;border:none;background:transparent}
+#brain-subtabs .tab:hover{color:#c8d0e0;background:rgba(74,125,255,0.1)}
+#brain-subtabs .tab.active{color:#fff;background:rgba(74,125,255,0.2);box-shadow:0 0 10px rgba(74,125,255,0.1)}
+
+#brain-legend{position:absolute;left:12px;bottom:12px;display:flex;gap:8px;font-size:10px;color:#5a6a8a;background:rgba(6,10,22,0.85);padding:6px 10px;border-radius:6px;border:1px solid #151f35}
+#brain-legend span{display:flex;align-items:center;gap:4px}
+#brain-legend .swatch{width:8px;height:8px;border-radius:2px}
+
+#body-3d-container{position:absolute;top:0;left:0;width:100%;height:100%;display:none}
+#body-3d-container canvas{display:block}
+
+/* Dashboard panel */
+#dash-view{flex:1;display:none;flex-direction:column;padding:12px;overflow-y:auto;gap:8px}
+#dash-view.active{display:flex}
+#gauges{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.gauge{background:#0e1425;border:1px solid #151f35;border-radius:6px;padding:8px 10px}
+.gauge .gtop{display:flex;justify-content:space-between;font-size:10px;color:#5a6a8a;margin-bottom:4px}
+.gauge .gtop .gval{color:#c8d0e0;font-weight:500}
+.gauge .gbar{height:5px;background:#151f35;border-radius:3px;overflow:hidden}
+.gauge .gfill{height:100%;border-radius:3px;transition:width 0.5s ease}
+.gauge-label{font-size:9px;color:#3a4a6a;margin-top:2px}
+
+#consciousness{background:#0e1425;border:1px solid #151f35;border-radius:6px;padding:8px 10px}
+#consciousness .label{font-size:10px;color:#5a6a8a;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+#consciousness .content{font-size:12px;color:#c8d0e0;padding:6px 8px;border-radius:4px;border-left:2px solid #4a7dff;min-height:22px;line-height:1.4;word-break:break-word}
+
+/* Signal particles */
+.signal-particle{position:absolute;width:4px;height:4px;border-radius:50%;pointer-events:none;opacity:0}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>🧠 BrainAgent · General Agent</h1>
+  <div class="stats" id="status-bar">
+    <div class="stat-item"><span class="label">Consciousness</span><span class="val" id="s-consciousness">—</span></div>
+    <div class="stat-item"><span class="label">Energy</span><span class="val" id="s-energy">—%</span></div>
+    <div class="stat-item"><span class="label">Dopamine</span><span class="val" id="s-dopamine">—</span></div>
+    <div class="stat-item"><span class="label">Threat</span><span class="val" id="s-threat">—%</span></div>
+    <div class="stat-item"><span class="label">Brain Regions</span><span class="val" id="s-regions">—</span></div>
+    <a href="/robot-3d.html" target="_blank" style="background:#1a2540;border:1px solid #4a7dff;border-radius:6px;padding:3px 10px;color:#7c8dff;font-size:11px;text-decoration:none;display:flex;align-items:center;gap:4px">🤖 Robot</a>
+  </div>
+</div>
+
+<div id="main">
+  <!-- Left avatar -->
+  <div id="avatar-section">
+    <div id="avatar-frame" style="animation:brainFloat 4s ease-in-out infinite">
+      <canvas id="avatar-canvas" width="135" height="135"></canvas>
+    </div>
+    <div id="avatar-name">EngineerAgent</div>
+    <div id="avatar-status" style="display:flex;align-items:center;gap:4px;font-size:11px;color:#34d399">
+      <span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block;animation:pulse 2s infinite"></span>Online
+    </div>
+    <div id="avatar-mode" style="font-size:9px;color:#5a6a8a;background:#0c1225;border:1px solid #1a2540;border-radius:4px;padding:2px 8px;display:inline-block;margin-top:2px">Loading...</div>
+    <div id="avatar-tabs">
+      <button class="tab" data-panel="chat">💬 Chat</button>
+      <button class="tab active" data-panel="brain">🧠 Brain</button>
+      <button class="tab" data-panel="dash">📊 Status</button>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <div id="side-panel">
+    <div id="panel-tabs">
+      <button class="tab" data-panel="chat">💬 Chat</button>
+      <button class="tab active" data-panel="brain">🧠 Brain Network</button>
+      <button class="tab" data-panel="dash">📊 Status Dashboard</button>
+    </div>
+
+    <div id="panel-content">
+      <!-- Chat view -->
+      <div id="chat-view">
+        <div id="chat-msgs"></div>
+        <div id="chat-input-bar">
+          <input id="chat-input" placeholder="Type a message... (Feed knowledge via: remember: content or upload files)" />
+          <input type="file" id="file-upload" multiple accept=".txt,.md,.pdf,.pptx,.ppt,.png,.jpg,.jpeg,.bmp,.gif,.js,.py,.ts,.html,.csv,.json" onchange="uploadFiles()" style="display:none" />
+          <button id="upload-btn" onclick="document.getElementById('file-upload').click()" title="Feed file knowledge" style="background:#1a2540;border:1px solid #2a3a5a;border-radius:8px;padding:8px 12px;color:#c8d0e0;font-size:12px;cursor:pointer">📎</button>
+          <button id="chat-btn" onclick="sendChat()">Send</button>
+          <button id="new-chat-btn" onclick="newChat()" title="Start new chat" style="background:#1a2540;border:1px solid #2a3a5a;border-radius:8px;padding:8px 12px;color:#c8d0e0;font-size:12px;cursor:pointer">➕New Chat</button>
+        </div>
+      </div>
+
+      <!-- Brain view -->
+      <div id="brain-view">
+        <div id="brain-subtabs">
+          <button class="tab active" onclick="switchBrainView('brain',this)">🧠 Brain</button>
+          <button class="tab" onclick="switchBrainView('body',this)">🟣 Body</button>
+        </div>
+        <canvas id="brain-canvas"></canvas>
+        <div id="body-3d-container"></div>
+        <div id="brain-legend">
+          <span><span class="swatch" style="background:#4a7dff"></span>Consciousness Core</span>
+          <span><span class="swatch" style="background:#34d399"></span>World Model</span>
+          <span><span class="swatch" style="background:#f59e0b"></span>Drive &amp; Emotion</span>
+          <span><span class="swatch" style="background:#a78bfa"></span>Execution &amp; Interaction</span>
+        </div>
+      </div>
+
+      <!-- Dashboard view -->
+      <div id="dash-view">
+        <div id="gauges">
+          <div class="gauge"><div class="gtop"><span>Dopamine</span><span class="gval" id="g-da">0.50</span></div><div class="gbar"><div class="gfill" id="gf-da" style="width:50%;background:#f59e0b"></div></div><div class="gauge-label">Reward System</div></div>
+          <div class="gauge"><div class="gtop"><span>Energy</span><span class="gval" id="g-energy">70%</span></div><div class="gbar"><div class="gfill" id="gf-energy" style="width:70%;background:#34d399"></div></div><div class="gauge-label">Pineal Gland</div></div>
+          <div class="gauge"><div class="gtop"><span>Threat</span><span class="gval" id="g-threat">0%</span></div><div class="gbar"><div class="gfill" id="gf-threat" style="width:0%;background:#ef4444"></div></div><div class="gauge-label">Amygdala</div></div>
+          <div class="gauge"><div class="gtop"><span>Fatigue</span><span class="gval" id="g-fatigue">20%</span></div><div class="gbar"><div class="gfill" id="gf-fatigue" style="width:20%;background:#8b5cf6"></div></div><div class="gauge-label">Interoception</div></div>
+        </div>
+        <div id="consciousness" style="margin-top:4px">
+          <div class="label">🧠 Current Consciousness Focus</div>
+          <div class="content" id="focus-content">Waiting for signal...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================
+// Brain region topology and visualization config
+// ============================================
+const REGIONS = ${JSON.stringify(BRAIN_REGIONS.map(r => ({ name: r[0], cluster: r[1], px: r[2], py: r[3] })))};
+const CONNS = ${JSON.stringify(BRAIN_CONNECTIONS)};
+const CLUSTERS = ${JSON.stringify(CLUSTERS)};
+
+// Server brain region ID → display name mapping
+const REGION_NAME_MAP = {
+  pfc: 'Prefrontal Cortex', prefrontal: 'Prefrontal Cortex',
+  hippocampus: 'Hippocampus', hippocampal: 'Hippocampus',
+  cortex: 'Cortex', language: 'Language Cortex', language_cortex: 'Language Cortex',
+  amygdala: 'Amygdala', thalamus: 'Thalamus',
+  reward: 'Reward System', reward_system: 'Reward System',
+  dmn: 'DMN', pineal: 'Pineal Gland', pineal_gland: 'Pineal Gland',
+  interoception: 'Interoception', sensory_cortex: 'Sensory Cortex',
+  motor_cortex: 'Motor Cortex', basal_ganglia: 'Basal Ganglia',
+  cerebellum: 'Cerebellum', mirror_neurons: 'Mirror Neurons',
+  brainstem: 'Brainstem', knowledge: 'Knowledge Base', knowledge_base: 'Knowledge Base',
+  lexicon: 'Lexicon', memory: 'Memory', gwt: 'GWT',
+  corpus_callosum: 'Corpus Callosum', global_workspace: 'GWT',
+  reflex: 'Reflex Arc', reflex_arc: 'Reflex Arc',
+  life_support: 'Brainstem',
+};
+
+function toDisplayRegion(serverKey) {
+  if (!serverKey) return null;
+  const lower = serverKey.toLowerCase();
+  return REGION_NAME_MAP[lower] || serverKey;
+}
+
+// State
+let brainStatus = {};
+let particles = [];
+let animFrame = null;
+
+// ============================================
+// Panel switching
+// ============================================
+function switchPanel(panel) {
+  document.querySelectorAll('#avatar-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.panel === panel));
+  document.querySelectorAll('#panel-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.panel === panel));
+  document.getElementById('chat-view').style.display = panel === 'chat' ? 'flex' : 'none';
+  document.getElementById('brain-view').classList.toggle('hidden', panel !== 'brain');
+  document.getElementById('dash-view').classList.toggle('active', panel === 'dash');
+  if (panel === 'brain') resize();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('#avatar-tabs .tab, #panel-tabs .tab').forEach(btn => {
+    btn.addEventListener('click', () => switchPanel(btn.dataset.panel));
+  });
+  ensureSession(); // Create session on page load
+});
+
+// ============================================
+// Canvas rendering (Brain network graph v2 — clean and beautiful)
+// ============================================
+const canvas = document.getElementById('brain-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  // Multi-level fallback: panel-content → brain-view → side-panel → main → window
+  let w = 0, h = 0;
+  const ids = ['panel-content', 'brain-view', 'side-panel', 'main'];
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (el) {
+      const r = el.getBoundingClientRect();
+      w = r.width; h = r.height;
+      if (w > 10 && h > 10) break;
+    }
+  }
+  if (w <= 10 || h <= 10) { w = window.innerWidth || 800; h = window.innerHeight || 500; }
+  canvas.width = w * devicePixelRatio;
+  canvas.height = h * devicePixelRatio;
+  W = w; H = h;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+}
+
+function getNodePos(name) {
+  const r = REGIONS.find(x => x.name === name);
+  if (!r) return { x: W/2, y: H/2 };
+  return { x: r.px / 100 * W, y: r.py / 100 * H };
+}
+
+// Find the cluster color for each connection
+function getConnColor(a, b) {
+  const ra = REGIONS.find(x => x.name === a);
+  return CLUSTERS[ra?.cluster]?.color || '#818cf8';
+}
+
+let _timeOffset = Date.now();
+
+function drawBrain() {
+  // Auto-fix when size is abnormal
+  if (W <= 0 || H <= 0 || isNaN(W) || isNaN(H)) { resize(); if (W <= 0 || H <= 0) return; }
+  const t = Date.now() - _timeOffset;
+  ctx.clearRect(0, 0, W, H);
+
+  // ===== Always draw four cluster boxes (hardcoded fallback, unaffected by errors) =====
+  function drawFallbackBoxes() {
+    const fb = {
+      core:   { x: 0.15, y: 0.08, w: 0.30, h: 0.82, color: '#818cf8', bg: 'rgba(129,140,248,0.12)', label: 'Consciousness Core' },
+      world:  { x: 0.05, y: 0.08, w: 0.16, h: 0.58, color: '#34d399', bg: 'rgba(52,211,153,0.12)', label: 'World Model' },
+      drive:  { x: 0.60, y: 0.08, w: 0.20, h: 0.55, color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', label: 'Drive & Emotion' },
+      exec:   { x: 0.45, y: 0.10, w: 0.35, h: 0.72, color: '#c084fc', bg: 'rgba(192,132,252,0.12)', label: 'Execution & Interaction' },
+    };
+    for (const [, b] of Object.entries(fb)) {
+      const bx = b.x * W, by = b.y * H, bw = b.w * W, bh = b.h * H;
+      ctx.fillStyle = b.bg; ctx.globalAlpha = 0.5;
+      ctx.beginPath(); ctx.moveTo(bx + 14, by); ctx.lineTo(bx + bw - 14, by);
+      ctx.arcTo(bx + bw, by, bx + bw, by + 14, 14);
+      ctx.lineTo(bx + bw, by + bh - 14);
+      ctx.arcTo(bx + bw, by + bh, bx + bw - 14, by + bh, 14);
+      ctx.lineTo(bx + 14, by + bh);
+      ctx.arcTo(bx, by + bh, bx, by + bh - 14, 14);
+      ctx.lineTo(bx, by + 14);
+      ctx.arcTo(bx, by, bx + 14, by, 14);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = b.color; ctx.lineWidth = 3; ctx.globalAlpha = 0.8; ctx.stroke();
+      ctx.fillStyle = b.color; ctx.globalAlpha = 1;
+      ctx.font = 'bold 14px "Segoe UI","Arial",sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(b.label, bx + 14, by + 24);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  try {
+
+  // Helper: manually draw rounded rectangle
+  function _roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+  }
+
+  // 1. Draw cluster background areas — four boxes orbit without self-rotation, like a revolving door
+  // Box home center positions (percentages, used to calculate node relative offset)
+  const BOX_HOME = {
+    core:   { cx: 0.15 + 0.30/2, cy: 0.08 + 0.82/2, w: 0.30, h: 0.82 },
+    world:  { cx: 0.05 + 0.16/2, cy: 0.08 + 0.58/2, w: 0.16, h: 0.58 },
+    drive:  { cx: 0.60 + 0.20/2, cy: 0.08 + 0.55/2, w: 0.20, h: 0.55 },
+    exec:   { cx: 0.45 + 0.35/2, cy: 0.10 + 0.72/2, w: 0.35, h: 0.72 },
+  };
+
+  // Four boxes orbit around center (clockwise, 30 seconds per lap)
+  const rotAngle = t / 30000 * Math.PI * 2;
+  const cx = W / 2, cy = H / 2;
+  const orbitAngles = { core: -0.4, world: -2.0, drive: 2.0, exec: 1.2 };
+  const orbitRadii  = { core: 0.32, world: 0.18, drive: 0.22, exec: 0.28 };
+
+  // Count active brain regions per cluster
+  const clusterActivity = { core: 0, world: 0, drive: 0, exec: 0 };
+  for (const r of REGIONS) {
+    let sKey = r.name?.toLowerCase();
+    for (const [ek, cn] of Object.entries(REGION_NAME_MAP)) { if (cn === r.name) { sKey = ek; break; } }
+    const st = brainStatus.regions?.[sKey];
+    if (st && (st.status === 'active' || st.status === 'idle' || st.uptime > 0)) {
+      clusterActivity[r.cluster] = (clusterActivity[r.cluster] || 0) + 1;
+    }
+  }
+  const clusterCounts = { core: 6, world: 5, drive: 4, exec: 6 };
+
+  // Calculate each box's center position after orbit + offset
+  const boxCenters = {};
+  const boxOffsets = {}; // Current box position - original position, nodes/connections add this offset to follow
+  for (const [cid, bh] of Object.entries(BOX_HOME)) {
+    const angle = orbitAngles[cid] - rotAngle;
+    const r = orbitRadii[cid] * Math.min(W, H);
+    const nx = cx + Math.cos(angle) * r;
+    const ny = cy + Math.sin(angle) * r;
+    boxCenters[cid] = { x: nx, y: ny };
+    boxOffsets[cid] = { dx: nx - bh.cx * W, dy: ny - bh.cy * H };
+  }
+
+  // Calculate node's actual draw position based on box offset
+  function getShiftedPos(regionName, clusterId) {
+    const raw = getNodePos(regionName);
+    const off = boxOffsets[clusterId] || { dx: 0, dy: 0 };
+    return { x: raw.x + off.dx, y: raw.y + off.dy };
+  }
+
+  // ===== Draw boxes (no self-rotation, always upright) =====
+  for (const [cid, cl] of Object.entries(CLUSTERS)) {
+    const bh = BOX_HOME[cid];
+    if (!bh) continue;
+    const cnt = clusterCounts[cid] || 1;
+    const activeCnt = clusterActivity[cid] || cnt;
+    const activeRatio = activeCnt / Math.max(cnt, 1);
+
+    const bw = bh.w * W, bH = bh.h * H;
+    const pos = boxCenters[cid];
+    const bx = pos.x - bw / 2, by = pos.y - bH / 2;
+
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.globalAlpha = 0.6;
+    _roundRect(bx + 2, by + 2, bw, bH, 14);
+    ctx.fill();
+    // Fill
+    ctx.fillStyle = cl.bg;
+    ctx.globalAlpha = 0.45 + activeRatio * 0.2;
+    _roundRect(bx, by, bw, bH, 14);
+    ctx.fill();
+    // Border
+    ctx.strokeStyle = cl.color;
+    ctx.lineWidth = 2.5 + activeRatio * 1;
+    ctx.globalAlpha = 0.8;
+    _roundRect(bx, by, bw, bH, 14);
+    ctx.stroke();
+    // Outer glow
+    ctx.strokeStyle = cl.color;
+    ctx.lineWidth = 3.5;
+    ctx.globalAlpha = activeRatio * 0.3;
+    _roundRect(bx - 1, by - 1, bw + 2, bH + 2, 16);
+    ctx.stroke();
+    // Corner glow points
+    const corners = [[bx, by], [bx + bw, by], [bx + bw, by + bH], [bx, by + bH]];
+    for (let ci = 0; ci < 4; ci++) {
+      ctx.beginPath(); ctx.arc(corners[ci][0], corners[ci][1], 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = cl.color;
+      ctx.globalAlpha = 0.6 + Math.sin(t / 1000 + ci) * 0.3;
+      ctx.fill();
+    }
+    // Label
+    const label = cl.label + '  ' + activeCnt + '/' + cnt;
+    ctx.font = 'bold 12px "Segoe UI","Arial",sans-serif';
+    ctx.textAlign = 'center';
+    const lw = ctx.measureText(label).width + 16;
+    ctx.fillStyle = 'rgba(4,8,20,0.9)';
+    ctx.globalAlpha = 0.85;
+    _roundRect(pos.x - lw / 2, by - 18, lw, 22, 6);
+    ctx.fill();
+    ctx.fillStyle = cl.color;
+    ctx.globalAlpha = 1.0;
+    ctx.fillText(label, pos.x, by - 2);
+  }
+  ctx.globalAlpha = 1;
+
+  // ===== 2. Connection lines (node positions follow box orbit) =====
+  const drawnPairs = new Set();
+  for (const [a, b] of CONNS) {
+    const pairKey = [a, b].sort().join('||');
+    if (drawnPairs.has(pairKey)) continue;
+    drawnPairs.add(pairKey);
+    const ra = REGIONS.find(x => x.name === a);
+    const rb = REGIONS.find(x => x.name === b);
+    const p1 = getShiftedPos(a, ra?.cluster || 'core');
+    const p2 = getShiftedPos(b, rb?.cluster || 'core');
+    const color = getConnColor(a, b);
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.18;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+    ctx.strokeStyle = color; ctx.lineWidth = 3; ctx.globalAlpha = 0.05;
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  // ===== 3. Signal particles =====
+  for (const p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.life * 0.8;
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // ===== 4. 19 brain region nodes — real-time status =====
+  const da = brainStatus.reward?.dopamine || brainStatus.da || 0.5;
+  const energy = brainStatus.pineal?.energy || 0.5;
+  const threat = brainStatus.amygdala?.threatLevel || 0;
+  const gwtStream = brainStatus.gwt?.stream || [];
+  const recentBroadcasts = new Set();
+  for (const s of gwtStream.slice(-8)) { if (s.region) recentBroadcasts.add(s.region); }
+
+  for (const r of REGIONS) {
+    let serverKey = r.name?.toLowerCase();
+    for (const [ek, cn] of Object.entries(REGION_NAME_MAP)) { if (cn === r.name) { serverKey = ek; break; } }
+    const status = brainStatus.regions?.[serverKey];
+    const gwtRegion = brainStatus.gwt?.consciousness?.region;
+    const isConscious = gwtRegion && (
+      toDisplayRegion(gwtRegion) === r.name || gwtRegion === serverKey ||
+      (String(brainStatus.gwt?.consciousness?.content || '')).includes(r.name)
+    );
+    const wasRecent = recentBroadcasts.has(serverKey) && !isConscious;
+    const isAmygdala = r.name === 'Amygdala';
+    const cluster = CLUSTERS[r.cluster];
+    const pos = getShiftedPos(r.name, r.cluster);
+    const baseRadius = Math.max(7, Math.min(W, H) * 0.025);
+
+    // Dopamine glow
+    if (da > 0.55) {
+      const daGlow = ctx.createRadialGradient(pos.x, pos.y, baseRadius * 0.8, pos.x, pos.y, baseRadius * 1.8);
+      daGlow.addColorStop(0, 'rgba(255,200,80,' + ((da - 0.5) * 0.3) + ')');
+      daGlow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = daGlow; ctx.globalAlpha = 0.5;
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, baseRadius * 1.8, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    // Threat alert
+    if (isAmygdala && threat > 0.2) {
+      const tGlow = ctx.createRadialGradient(pos.x, pos.y, baseRadius * 0.5, pos.x, pos.y, baseRadius * 2.2);
+      tGlow.addColorStop(0, 'rgba(255,50,30,' + (threat * 0.6) + ')');
+      tGlow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = tGlow; ctx.globalAlpha = threat;
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, baseRadius * 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    // Consciousness focus halo
+    if (isConscious) {
+      const glowR = baseRadius * 2.5 + Math.sin(t / 400) * 2;
+      const gGrad = ctx.createRadialGradient(pos.x, pos.y, baseRadius * 0.5, pos.x, pos.y, glowR);
+      gGrad.addColorStop(0, 'rgba(255,255,255,0.35)');
+      gGrad.addColorStop(0.5, 'rgba(255,255,255,0.1)');
+      gGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gGrad;
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, glowR, 0, Math.PI * 2); ctx.fill();
+      const ringR = baseRadius * 1.6 + Math.sin(t / (600 - da * 200)) * 3;
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, ringR, 0, Math.PI * 2);
+      ctx.strokeStyle = cluster.color;
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 0.4 + Math.sin(t / 500) * 0.2;
+      ctx.setLineDash([4, 4]); ctx.stroke(); ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+    }
+    // Recent broadcast glow
+    if (wasRecent) {
+      const rGlow = ctx.createRadialGradient(pos.x, pos.y, baseRadius * 0.6, pos.x, pos.y, baseRadius * 1.5);
+      rGlow.addColorStop(0, 'rgba(200,220,255,0.15)');
+      rGlow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = rGlow; ctx.globalAlpha = 0.6;
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, baseRadius * 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    // Node shadow
+    ctx.beginPath(); ctx.arc(pos.x + 1, pos.y + 1, baseRadius, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.fill();
+    // Node body
+    const brightBoost = Math.round(energy * 30);
+    const nodeGrad = ctx.createRadialGradient(pos.x - baseRadius * 0.25, pos.y - baseRadius * 0.35, baseRadius * 0.1, pos.x, pos.y, baseRadius);
+    if (isConscious) {
+      nodeGrad.addColorStop(0, '#ffffff');
+      nodeGrad.addColorStop(0.25, cluster.color);
+      nodeGrad.addColorStop(1, '#1a1a3e');
+    } else if (isAmygdala && threat > 0.3) {
+      nodeGrad.addColorStop(0, '#ff4444');
+      nodeGrad.addColorStop(0.5, '#881111');
+      nodeGrad.addColorStop(1, 'rgba(10,15,35,0.7)');
+    } else {
+      nodeGrad.addColorStop(0, cluster.color);
+      nodeGrad.addColorStop(0.5, cluster.color + '99');
+      nodeGrad.addColorStop(1, 'rgba(10,15,35,0.7)');
+    }
+    ctx.beginPath(); ctx.arc(pos.x, pos.y, baseRadius, 0, Math.PI * 2);
+    ctx.fillStyle = nodeGrad; ctx.fill();
+    // Node border
+    ctx.beginPath(); ctx.arc(pos.x, pos.y, baseRadius, 0, Math.PI * 2);
+    const borderAlpha = isConscious ? 1 : wasRecent ? 0.9 : 0.7;
+    ctx.strokeStyle = isAmygdala && threat > 0.3 ? '#ff6666' : isConscious ? '#ffffff' : cluster.color;
+    ctx.lineWidth = isConscious ? 2 : wasRecent ? 1.5 : 1.0;
+    ctx.globalAlpha = borderAlpha; ctx.stroke(); ctx.globalAlpha = 1;
+    // Label
+    const fontSize = isConscious ? 12 : 10;
+    ctx.font = 'bold ' + fontSize + 'px "Segoe UI","Arial",sans-serif';
+    ctx.textAlign = 'center';
+    const textW = ctx.measureText(r.name).width;
+    const labelY = pos.y + baseRadius + 13;
+    const labelH = fontSize + 4;
+    const labelW = textW + 10;
+    ctx.fillStyle = 'rgba(4,8,20,0.9)';
+    ctx.strokeStyle = cluster.color; ctx.lineWidth = 0.6;
+    ctx.globalAlpha = 0.85;
+    _roundRect(pos.x - labelW / 2, labelY - fontSize / 2 - 2, labelW, labelH, 5);
+    ctx.fill(); ctx.globalAlpha = 0.4; ctx.stroke(); ctx.globalAlpha = 1;
+    ctx.fillStyle = isConscious ? '#ffffff' : wasRecent ? '#c8d8ff' : '#e0e4f0';
+    ctx.fillText(r.name, pos.x, labelY);
+    // Status dot
+    const dotX = pos.x + baseRadius * 0.65, dotY = pos.y - baseRadius * 0.65;
+    ctx.beginPath(); ctx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
+    if (isConscious) { ctx.fillStyle = '#fff'; ctx.globalAlpha = 1; }
+    else if (wasRecent) { ctx.fillStyle = '#ffcc80'; ctx.globalAlpha = 0.9; }
+    else { ctx.fillStyle = cluster.color; ctx.globalAlpha = 0.6; }
+    ctx.fill(); ctx.globalAlpha = 1;
+  }
+
+  // ===== 6. Direction indicators =====
+  ctx.fillStyle = '#5a6a8a';
+  ctx.font = '10px "Segoe UI","Arial",sans-serif';
+  ctx.textAlign = 'left';
+  ctx.globalAlpha = 0.6;
+  ctx.fillText('↑ Higher Cognition', 12, 24);
+  ctx.fillText('↓ Life Support', 12, H - 14);
+  ctx.globalAlpha = 1;
+
+  } catch (e) {
+    // Render error, draw fallback boxes + show error message
+    drawFallbackBoxes();
+    ctx.fillStyle = '#ff6b6b';
+    ctx.font = '12px "Segoe UI","Arial",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Render error: ' + (e.message || e), W/2, H - 20);
+  }
+}
+
+// ============================================
+// Signal particle animation
+// ============================================
+function emitSignal(from, to, color) {
+  const p1 = getNodePos(from);
+  const p2 = getNodePos(to);
+  particles.push({
+    x: p1.x, y: p1.y, from: p1, to: p2,
+    t: 0, speed: 0.02 + Math.random() * 0.01,
+    color: color || 'rgba(74,125,255,0.6)',
+    life: 1,
+  });
+  if (particles.length > 50) particles.shift();
+}
+
+function updateParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.t += p.speed;
+    p.x = p.from.x + (p.to.x - p.from.x) * p.t;
+    p.y = p.from.y + (p.to.y - p.from.y) * p.t;
+    p.life = 1 - p.t;
+    if (p.t >= 1) particles.splice(i, 1);
+  }
+}
+
+// ============================================
+// Brain sub-view switching (Brain/Body)
+// ============================================
+let bodyScene = null;
+function switchBrainView(view, btn) {
+  document.querySelectorAll('#brain-subtabs .tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (view === 'body') {
+    document.getElementById('brain-canvas').style.display = 'none';
+    document.getElementById('brain-legend').style.display = 'none';
+    document.getElementById('body-3d-container').style.display = 'block';
+    if (!bodyScene) initBody3D();
+  } else {
+    document.getElementById('brain-canvas').style.display = 'block';
+    document.getElementById('brain-legend').style.display = 'flex';
+    document.getElementById('body-3d-container').style.display = 'none';
+  }
+}
+
+// ============================================
+// 🟣 3D spherical body visualization
+// ============================================
+function initBody3D() {
+  const container = document.getElementById('body-3d-container');
+  const panelContent = document.getElementById('panel-content');
+  const rect = panelContent.getBoundingClientRect();
+  const W = rect.width || 800, H = rect.height || 500;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(35, W/H, 0.1, 50);
+  camera.position.set(4, 2.5, 5);
+
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  container.appendChild(renderer.domElement);
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.6;
+  controls.minDistance = 2;
+  controls.maxDistance = 12;
+
+  scene.add(new THREE.AmbientLight(0x223355, 0.6));
+  const key = new THREE.DirectionalLight(0x88ccff, 1.5); key.position.set(5,8,6); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xff8844, 0.5); fill.position.set(-5,2,-4); scene.add(fill);
+  scene.add(new THREE.DirectionalLight(0x4488ff, 0.6).position.set(-3,-4,5));
+
+  const starsGeo = new THREE.BufferGeometry();
+  const sp = []; for(let i=0;i<1000;i++) sp.push((Math.random()-0.5)*80, (Math.random()-0.5)*80, (Math.random()-0.5)*80);
+  starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
+  scene.add(new THREE.Points(starsGeo, new THREE.PointsMaterial({ color:0x4488ff, size:0.05, transparent:true, opacity:0.4 })));
+
+  const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(1.5, 48, 48),
+    new THREE.MeshPhysicalMaterial({ color:0x88ccff, metalness:0.05, roughness:0.1, transparent:true, opacity:0.12, clearcoat:0.5, side:THREE.DoubleSide })
+  );
+  scene.add(sphere);
+
+  const wire = new THREE.Mesh(new THREE.SphereGeometry(1.505, 24, 18), new THREE.MeshBasicMaterial({ color:0x4488ff, wireframe:true, transparent:true, opacity:0.06 }));
+  scene.add(wire);
+
+  const glow = new THREE.Mesh(new THREE.SphereGeometry(1.45, 24, 24), new THREE.MeshBasicMaterial({ color:0x4488ff, transparent:true, opacity:0.03, side:THREE.BackSide }));
+  scene.add(glow);
+
+  const brainData = [
+    ['Brainstem',0,-0.9,0,'#ff4444',0.10],['Thalamus',0,-0.35,0.45,'#ff8800',0.09],['Amygdala',0.45,-0.15,0.25,'#ff2244',0.07],
+    ['Hippocampus',-0.45,-0.25,0.25,'#ff66aa',0.08],['Cortex',0,0.15,0.75,'#44aaff',0.11],['Basal Ganglia',0.55,-0.05,-0.1,'#aa66ff',0.07],
+    ['Reward',-0.5,0.1,-0.2,'#ffdd44',0.07],['DMN',-0.25,0.55,0.25,'#66ffcc',0.07],['Pineal Gland',0,0.1,0.85,'#ffffff',0.05],
+    ['Cerebellum',0,-0.75,-0.35,'#ff8844',0.08],['Mirror Neurons',0.65,0.25,-0.15,'#44ffaa',0.06],['Interoception',-0.65,-0.05,-0.25,'#ff66aa',0.06],
+    ['Language Cortex',0.25,0.5,-0.35,'#44ddff',0.08],['Corpus Callosum',0,0,0,'#88aaff',0.04],['Prefrontal Cortex',0.15,0.65,0.05,'#66bbff',0.09],
+    ['Motor Cortex',0.45,0.35,0.45,'#ff8844',0.07],['Sensory Cortex',-0.35,0.45,0.45,'#44bb88',0.07],['Knowledge Base',-0.15,-0.55,0.55,'#44dd88',0.08],
+    ['Self Awareness',0,0.35,-0.55,'#ff66ff',0.09],
+  ];
+  for(const n of brainData) {
+    const c = new THREE.Color(n[4]);
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(n[5], 12, 12), new THREE.MeshPhysicalMaterial({ color:c, emissive:c, emissiveIntensity:0.2, transparent:true, opacity:0.6 }));
+    ball.position.set(n[1], n[2], n[3]); scene.add(ball);
+    const halo = new THREE.Mesh(new THREE.SphereGeometry(n[5]*1.5, 8, 8), new THREE.MeshBasicMaterial({ color:c, transparent:true, opacity:0.06 }));
+    halo.position.set(n[1], n[2], n[3]); scene.add(halo);
+  }
+
+  const conns = [[0,1],[1,4],[1,6],[4,14],[14,10],[12,14],[4,2],[2,6],[5,15],[15,16],[1,3],[3,7],[7,14],[6,5],[0,9],[1,17],[1,8],[13,1]];
+  const lineMat = new THREE.LineBasicMaterial({ color:0x4488ff, transparent:true, opacity:0.04 });
+  for(const [a,b] of conns) {
+    if(a < brainData.length && b < brainData.length) {
+      const p1 = new THREE.Vector3(brainData[a][1], brainData[a][2], brainData[a][3]);
+      const p2 = new THREE.Vector3(brainData[b][1], brainData[b][2], brainData[b][3]);
+      if(p1.distanceTo(p2) < 1.5) {
+        scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([p1,p2]), lineMat));
+      }
+    }
+  }
+
+  const eye = new THREE.Group();
+  const eyeRing = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.035, 12, 24), new THREE.MeshPhysicalMaterial({ color:0x34d399, emissive:0x34d399, emissiveIntensity:0.3 }));
+  eyeRing.position.z = 0.05; eye.add(eyeRing);
+  const lens = new THREE.Mesh(new THREE.CircleGeometry(0.24, 20), new THREE.MeshPhysicalMaterial({ color:0x1a5a3a, emissive:0x34d399, emissiveIntensity:0.15, transparent:true, opacity:0.5, side:THREE.DoubleSide }));
+  lens.position.z = 0.06; eye.add(lens);
+  const pupil = new THREE.Mesh(new THREE.CircleGeometry(0.06, 12), new THREE.MeshBasicMaterial({ color:0xffffff, transparent:true, opacity:0.5 }));
+  pupil.position.set(0.05, 0.05, 0.07); eye.add(pupil);
+  eye.position.set(1.6, 0.15, 0); scene.add(eye);
+
+  const ear = new THREE.Group();
+  for(let i=0;i<3;i++) {
+    const pts = []; for(let a=-0.6;a<=0.6;a+=0.1) pts.push(new THREE.Vector3(Math.sin(a)*0.18+i*0.06, Math.cos(a)*0.08, 0));
+    const arc = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color:0x34d399, transparent:true, opacity:0.3-i*0.08 }));
+    ear.add(arc);
+  }
+  ear.position.set(0, 0.15, 1.6); scene.add(ear);
+
+  // 🦾 Motor system — LeRobot + motor control (replaces taste/smell/touch positions)
+  const motor = new THREE.Group();
+  for(let i=0;i<6;i++) {
+    const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 0.4, 8), new THREE.MeshPhysicalMaterial({ color:0xf59e0b, emissive:0xf59e0b, emissiveIntensity:0.25 }));
+    arm.position.set(Math.sin(i*1.05)*0.6, -1.3, Math.cos(i*1.05)*0.6);
+    arm.rotation.z = 0.3; motor.add(arm);
+  }
+  const motorCore = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 12), new THREE.MeshPhysicalMaterial({ color:0xf59e0b, emissive:0xf59e0b, emissiveIntensity:0.3 }));
+  motorCore.position.set(0, -1.35, 0); motor.add(motorCore);
+  scene.add(motor);
+
+  // 🤖 Robot arm visualization — clear hierarchical kinematic chain + multi-axis animation
+  let armMat = new THREE.MeshStandardMaterial({color:0xdd8833,metalness:0.7,roughness:0.25});
+  let armJtMat = new THREE.MeshStandardMaterial({color:0x999999,metalness:0.9,roughness:0.1});
+  let gripMat = new THREE.MeshStandardMaterial({color:0xcc3333,metalness:0.5,roughness:0.3});
+  function Mcy(r1,r2,h,m){var c=new THREE.CylinderGeometry(r1,r2,h,12);return new THREE.Mesh(c,m||armMat);}
+  function Msp(r,m){return new THREE.Mesh(new THREE.SphereGeometry(r,10,10),m||armJtMat);}
+
+  // Arm base — placed in front-right of the body sphere
+  let armRoot = new THREE.Group(); armRoot.position.set(1.7, -0.9, 0.4); scene.add(armRoot);
+  // Base platform
+  let basePlat = Mcy(0.08,0.10,0.15,armMat); basePlat.position.y=0.075; armRoot.add(basePlat);
+  // J1: Y-axis rotation (horizontal turntable)
+  let J1 = new THREE.Group(); J1.position.y=0.15; armRoot.add(J1);
+  J1.add(Msp(0.06));
+  // J2: Shoulder — Z-axis (forward/back) + X-axis (up/down)
+  let J2 = new THREE.Group(); J1.add(J2);
+  let upperLink = Mcy(0.04,0.05,0.35,armMat); upperLink.position.y=0.175; J2.add(upperLink);
+  let j2Ball = Msp(0.055); j2Ball.position.y=0.35; J2.add(j2Ball);
+  // J4: Elbow — Z-axis (bend)
+  let J4 = new THREE.Group(); J4.position.y=0.35; J2.add(J4);
+  let forearmLink = Mcy(0.03,0.04,0.28,armMat); forearmLink.position.y=0.14; J4.add(forearmLink);
+  let j4Ball = Msp(0.05); j4Ball.position.y=0.28; J4.add(j4Ball);
+  // J6: Wrist
+  let J6 = new THREE.Group(); J6.position.y=0.28; J4.add(J6);
+  let wristLink = Mcy(0.02,0.03,0.10,armMat); wristLink.position.y=0.05; J6.add(wristLink);
+  // Gripper
+  let Grip = new THREE.Group(); Grip.position.y=0.10; J6.add(Grip);
+  let gL = new THREE.Mesh(new THREE.BoxGeometry(0.012,0.08,0.015),gripMat); gL.position.set(0.02,0.04,0); Grip.add(gL);
+  let gR = new THREE.Mesh(new THREE.BoxGeometry(0.012,0.08,0.015),gripMat); gR.position.set(-0.02,0.04,0); Grip.add(gR);
+
+  window.__armJoints = {J1:J1, J2:J2, J4:J4, J6:J6, gL:gL, gR:gR};
+
+  // Robot arm animation engine — large multi-directional motion
+  window.__animateArm = function(waypoints, intervalMs) {
+    if (!waypoints || !waypoints.length) return;
+    let jts = window.__armJoints; if (!jts) return;
+
+    // Exaggerated animation sequence: sweep + extend + color-changing gripper
+    let seq = [
+      {J1y:0,    J2x:-0.3, J2z:0,    J4x:0.3, J4z:0,   J6x:0.1, gc:'#cc3333', g:0.08, ms:500,  n:'1. Upright'},
+      {J1y:1.2,  J2x:-1.0, J2z:-0.8, J4x:1.2, J4z:-0.5, J6x:-0.5, gc:'#cc3333', g:0.08, ms:600,  n:'2. Turn right + reach forward'},
+      {J1y:0.5,  J2x:-1.5, J2z:-1.0, J4x:1.6, J4z:-0.6, J6x:-0.7, gc:'#cc3333', g:0.08, ms:500,  n:'3. Lower to object'},
+      {J1y:0.5,  J2x:-1.5, J2z:-1.0, J4x:1.6, J4z:-0.6, J6x:-0.7, gc:'#00ff44', g:0.012, ms:800, n:'4. 🤖Grip!'},
+      {J1y:0.3,  J2x:-0.6, J2z:-0.4, J4x:0.7, J4z:-0.2, J6x:-0.3, gc:'#00ff44', g:0.012, ms:600,  n:'5. Lift'},
+      {J1y:0,    J2x:-0.3, J2z:0,    J4x:0.3, J4z:0,   J6x:0.1, gc:'#00ff44', g:0.012, ms:500,  n:'6. Return'},
+    ];
+
+    let idx = 0;
+    function _step() {
+      if (idx >= seq.length) return;
+      let s = seq[idx];
+      try {
+        jts.J1.rotation.y = s.J1y;
+        jts.J2.rotation.x = s.J2x;
+        jts.J2.rotation.z = s.J2z;
+        jts.J4.rotation.x = s.J4x;
+        jts.J4.rotation.z = s.J4z;
+        jts.J6.rotation.x = s.J6x;
+        jts.gL.position.x = s.g; jts.gR.position.x = -s.g;
+        try { if (jts.gL.material) jts.gL.material.color.set(s.gc); } catch(e) {}
+        try { if (jts.gR.material) jts.gR.material.color.set(s.gc); } catch(e) {}
+      } catch(e) { console.log('[Arm step error]', e); }
+      idx++;
+      if (idx < seq.length) setTimeout(_step, s.ms);
+    }
+    _step();
+  };
+
+  const flowParticles = [];
+  for(let i=0;i<60;i++) {
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.012, 4, 4), new THREE.MeshBasicMaterial({ color:0x4488ff, transparent:true, opacity:0.3 }));
+    const theta = Math.random()*Math.PI*2, phi = Math.acos(2*Math.random()-1);
+    p.position.set(Math.sin(phi)*Math.cos(theta)*1.6, Math.sin(phi)*Math.sin(theta)*1.6, Math.cos(phi)*1.6);
+    p.userData = { theta, phi, speed:0.002+Math.random()*0.004 }; scene.add(p); flowParticles.push(p);
+  }
+
+  const rings = [];
+  for(let i=0;i<3;i++) {
+    const r = new THREE.Mesh(new THREE.TorusGeometry(1.85+i*0.12, 0.002, 6, 48), new THREE.MeshBasicMaterial({ color:[0x4488ff,0x88ddff,0x66aaff][i], transparent:true, opacity:0.06 }));
+    r.rotation.x = Math.PI/3+i*0.2; r.rotation.z = i*0.3; scene.add(r); rings.push(r);
+  }
+
+  function makeLabel(text, color, x, y, z) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256; canvas.height = 48;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.roundRect ? ctx.roundRect(0,0,256,48,20) : null; ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(0,0,256,48);
+    ctx.fillStyle = color; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(text, 128, 30);
+    const tex = new THREE.CanvasTexture(canvas);
+    const mat = new THREE.SpriteMaterial({ map:tex, transparent:true, depthTest:false });
+    const sprite = new THREE.Sprite(mat);
+    sprite.position.set(x, y, z); sprite.scale.set(1.2, 0.25, 1);
+    scene.add(sprite);
+  }
+  makeLabel('👁 Vision YOLO26+BEV','#34d399',1.8,0.6,0);
+  makeLabel('👂 Hearing Moonshine','#34d399',0,0.6,1.9);
+  makeLabel('🦾 Motion LeRobot','#f59e0b',0,-1.7,0.8);
+  makeLabel('🦿 Motor Control','#f59e0b',0,-1.9,-0.3);
+  makeLabel('🧠 19 Brain Regions','#ff66ff',0,1.5,-0.3);
+  makeLabel('🗣 TTS Voice','#34d399',0,-0.2,-1.9);
+
+  let clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    controls.update();
+    for(const p of flowParticles) {
+      p.userData.theta += p.userData.speed;
+      const rad = 1.6 + Math.sin(t*0.3+p.userData.phi)*0.03;
+      p.position.x = Math.sin(p.userData.phi)*Math.cos(p.userData.theta)*rad;
+      p.position.y = Math.sin(p.userData.phi)*Math.sin(p.userData.theta)*rad;
+      p.position.z = Math.cos(p.userData.phi)*rad;
+    }
+    rings.forEach((r,i) => { r.rotation.x += 0.0008*(i+1); r.rotation.z += 0.0004*(i+1); });
+    sphere.material.opacity = 0.12 + Math.sin(t*0.3)*0.03;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  const ro = new ResizeObserver(() => {
+    const r = panelContent.getBoundingClientRect();
+    camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+    renderer.setSize(r.width, r.height);
+  });
+  ro.observe(document.getElementById('panel-content'));
+
+  bodyScene = { scene, camera, renderer, controls, ro };
+}
+
+document.getElementById('chat-input')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+});
+
+// ============================================
+// Status polling (with reconnection detection)
+// ============================================
+// ============================================
+// 🟣 3D emotion sphere — real-time brain state reflection
+// ============================================
+let _actx = null; try { var _avc = document.getElementById("avatar-canvas"); _actx = _avc ? _avc.getContext("2d") : null; } catch(e) {}
+let _emotionState = { valence:0.5, arousal:0.5, dominance:0.5, da:0.5, energy:0.7, threat:0, fatigue:0.2, consciousness:'idle' };
+let _orbits = [];
+let _sparks = [];
+for (let i=0;i<12;i++) _orbits.push({a:Math.random()*Math.PI*2, r:0.55+Math.random()*0.2, speed:0.3+Math.random()*0.7, size:0.6+Math.random()*1.4});
+for (let i=0;i<8;i++) _sparks.push({x:Math.random(),y:Math.random(),life:0,speed:0.01+Math.random()*0.02});
+
+function _lerp(a,b,t){return a+(b-a)*t}
+function _emotionColor(v,a,d){
+  // v=valence, a=arousal, d=dominance
+  const r = Math.round(80+v*120+a*60+d*40);
+  const g = Math.round(60+v*100+a*20+d*80);
+  const b = Math.round(180+v*60-a*80+d*30);
+  return {r:Math.min(255,r),g:Math.min(255,g),b:Math.min(255,b)};
+}
+
+function updateEmotionState(data){
+  const s = _emotionState;
+  s.valence = _lerp(s.valence, data.emotion?.valence ?? 0.5, 0.3);
+  s.arousal = _lerp(s.arousal, data.emotion?.arousal ?? 0.5, 0.3);
+  s.dominance = _lerp(s.dominance, data.emotion?.dominance ?? 0.5, 0.3);
+  s.da = _lerp(s.da, data.reward?.dopamine ?? data.reward?.neuromodulators?.dopamine?.level ?? 0.5, 0.3);
+  s.energy = _lerp(s.energy, data.pineal?.energy ?? 0.7, 0.3);
+  s.threat = _lerp(s.threat, data.amygdala?.threatLevel ?? 0, 0.3);
+  s.fatigue = _lerp(s.fatigue, data.interoception?.feltSense?.fatigue ?? 0.2, 0.3);
+  s.consciousness = data.consciousness || 'idle';
+}
+
+function renderAvatarSphere(t){ if(!_actx) return;
+  const W=135, H=135, cx=W/2, cy=H/2;
+  _actx && _actx.clearRect(0,0,W,H);
+  const s = _emotionState;
+  const col = _emotionColor(s.valence, s.arousal, s.dominance);
+
+  // 1. Outer glow — emotion color
+  const glowR = 55 + Math.sin(t/1200)*3 + s.arousal*8;
+  const glow = _actx && _actx.createRadialGradient(cx,cy,38,cx,cy,glowR);
+  glow.addColorStop(0, 'rgba('+col.r+','+col.g+','+col.b+','+(0.25+s.da*0.3)+')');
+  glow.addColorStop(0.5, 'rgba('+col.r+','+col.g+','+col.b+',0.08)');
+  glow.addColorStop(1, 'rgba(0,0,0,0)');
+  if(_actx) _actx.fillStyle = glow; _actx && _actx.beginPath(); _actx && _actx.arc(cx,cy,glowR,0,Math.PI*2); _actx && _actx.fill();
+
+  // 2. Threat flicker
+  if (s.threat > 0.3) {
+    const flicker = Math.sin(t/200)*(s.threat*0.4);
+    const tw = _actx && _actx.createRadialGradient(cx,cy,40,cx,cy,65);
+    tw.addColorStop(0,'rgba(255,60,40,'+Math.max(0,flicker)+')');
+    tw.addColorStop(1,'rgba(0,0,0,0)');
+    _actx && (_actx.fillStyle = tw); _actx && _actx.beginPath(); _actx && _actx.arc(cx,cy,65,0,Math.PI*2); _actx && _actx.fill();
+  }
+
+  // 3. Sphere body — 3D gradient
+  const bodyR = 32 + s.dominance*5 - s.fatigue*4;
+  const lightX = cx - 10 + (s.valence-0.5)*8;
+  const lightY = cy - 12 - s.arousal*6;
+  const body = _actx && _actx.createRadialGradient(lightX, lightY, bodyR*0.05, cx, cy, bodyR);
+  const r=col.r,g=col.g,b=col.b;
+  body.addColorStop(0, 'rgb('+Math.min(255,r+80)+','+Math.min(255,g+80)+','+Math.min(255,b+80)+')');
+  body.addColorStop(0.2, 'rgb('+r+','+g+','+b+')');
+  body.addColorStop(0.6, 'rgb('+Math.round(r*0.5)+','+Math.round(g*0.5)+','+Math.round(b*0.5)+')');
+  body.addColorStop(1, 'rgb('+Math.round(r*0.2)+','+Math.round(g*0.2)+','+Math.round(b*0.25)+')');
+  if(_actx) _actx.fillStyle = body; _actx && _actx.beginPath(); _actx && _actx.arc(cx,cy,bodyR,0,Math.PI*2); _actx && _actx.fill();
+
+  // 4. Highlight
+  const hlGrad = _actx && _actx.createRadialGradient(lightX-3, lightY-3, 0, lightX, lightY, bodyR*0.55);
+  hlGrad.addColorStop(0,'rgba(255,255,255,'+(0.5+s.arousal*0.3)+')');
+  hlGrad.addColorStop(1,'rgba(0,0,0,0)');
+  _actx && (_actx.fillStyle = hlGrad); _actx && _actx.beginPath(); _actx && _actx.arc(cx,cy,bodyR,0,Math.PI*2); _actx && _actx.fill();
+
+  // 5. Sphere border
+  _actx && _actx.beginPath(); _actx && _actx.arc(cx,cy,bodyR,0,Math.PI*2);
+  _actx && (_actx.strokeStyle = 'rgba(255,255,255,'+(0.1+s.da*0.3)+')'); _actx && (_actx.lineWidth = 1.2); _actx && _actx.stroke();
+
+  // 6. Orbital particles
+  for (const o of _orbits){
+    o.a += o.speed * (0.5 + s.arousal) * 0.03;
+    const ox = cx + Math.cos(o.a)*bodyR*o.r;
+    const oy = cy + Math.sin(o.a)*bodyR*o.r*0.85;
+    _actx && _actx.beginPath(); _actx && _actx.arc(ox,oy,o.size,0,Math.PI*2);
+    _actx && (_actx.fillStyle = 'rgba(255,255,255,'+(0.15+s.arousal*0.3+s.energy*0.2)+')'); _actx && _actx.fill();
+  }
+
+  // 7. Dopamine sparks
+  for (const sp of _sparks){
+    if (sp.life<=0 && Math.random()<s.da*0.3){ sp.life=1; sp.angle=Math.random()*Math.PI*2; sp.dist=bodyR+3+Math.random()*18; }
+    if (sp.life>0){
+      sp.life-=sp.speed;
+      const sx = cx+Math.cos(sp.angle)*sp.dist;
+      const sy = cy+Math.sin(sp.angle)*sp.dist*0.85;
+      _actx && _actx.beginPath(); _actx && _actx.arc(sx,sy,1.5*sp.life,0,Math.PI*2);
+      _actx && (_actx.fillStyle = 'rgba(255,220,100,'+(sp.life*0.8)+')'); _actx && _actx.fill();
+    }
+  }
+
+  // 8. Consciousness focus ring
+  if (s.consciousness==='focusing'||s.consciousness!=='idle'){
+    const fR = bodyR+8+Math.sin(t/500)*3;
+    _actx && _actx.beginPath(); _actx && _actx.arc(cx,cy,fR,0,Math.PI*2);
+    _actx && (_actx.strokeStyle = 'rgba(255,255,255,'+(0.2+Math.sin(t/400)*0.15)+')');
+    _actx && (_actx.lineWidth = 1.5); _actx && _actx.setLineDash([4,4]); _actx && _actx.stroke(); _actx && _actx.setLineDash([]);
+  }
+
+  // 9. Breathing pulse
+  const breathe = 1 + Math.sin(t/1500)*0.04*(1+s.arousal);
+  // BodyR is fine-tuned through subsequent draw calls
+}
+
+(function _avatarLoop(t){ if(_actx){ try{renderAvatarSphere(t);}catch(e){} } requestAnimationFrame(_avatarLoop); })(0);
+
+// ============================================
+// Status polling (with reconnection detection)
+// ============================================
+let _serverOffline = false;
+
+async function fetchStatus() {
+  try {
+    const res = await fetch('/brain-status');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    brainStatus = data;
+
+    updateEmotionState(data);
+    document.getElementById('s-consciousness').textContent = data.consciousness || '—';
+    document.getElementById('s-energy').textContent = Math.round((data.pineal?.energy || 0) * 100) + '%';
+    document.getElementById('s-dopamine').textContent = (data.reward?.dopamine || '0.00');
+    document.getElementById('s-threat').textContent = Math.round((data.amygdala?.threatLevel || 0) * 100) + '%';
+    document.getElementById('s-regions').textContent = data.regionCount || 0;
+
+    const da = data.reward?.dopamine || 0.5;
+    document.getElementById('g-da').textContent = da.toFixed(2);
+    document.getElementById('gf-da').style.width = (da * 100) + '%';
+
+    const en = data.pineal?.energy || 0.7;
+    document.getElementById('g-energy').textContent = Math.round(en * 100) + '%';
+    document.getElementById('gf-energy').style.width = (en * 100) + '%';
+
+    const th = data.amygdala?.threatLevel || 0;
+    document.getElementById('g-threat').textContent = Math.round(th * 100) + '%';
+    document.getElementById('gf-threat').style.width = (th * 100) + '%';
+
+    const fa = data.interoception?.feltSense?.fatigue || 0.2;
+    document.getElementById('g-fatigue').textContent = Math.round(fa * 100) + '%';
+    document.getElementById('gf-fatigue').style.width = (fa * 100) + '%';
+
+    const gwt = data.gwt;
+    if (gwt?.consciousness?.region) {
+      const displayRegion = toDisplayRegion(gwt.consciousness.region);
+      document.getElementById('focus-content').textContent =
+        '[' + displayRegion + '] ' +
+        (typeof gwt.consciousness.content === 'string'
+          ? gwt.consciousness.content.substring(0, 60)
+          : JSON.stringify(gwt.consciousness.content).substring(0, 60));
+      const reg = REGIONS.find(r => r.name === displayRegion || r.name?.toLowerCase() === displayRegion);
+      if (reg) {
+        for (const [from] of CONNS.filter(c => c[1] === reg.name || c[0] === reg.name)) {
+          if (Math.random() > 0.7) emitSignal(from, reg.name, CLUSTERS[reg.cluster]?.color || '#818cf8');
+        }
+      }
+    }
+    _serverOffline = false;
+    document.getElementById('avatar-status').innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block"></span>Online';
+    // Learning mode flag takes priority (rule engine when chat timeout downgraded, auto-recover after 30s)
+    if (window._learningMode && Date.now() - window._learningMode < 30000) {
+      document.getElementById('avatar-mode').textContent = 'Rule Engine';
+      document.getElementById('avatar-mode').style.color = '#f59e0b';
+    } else {
+      window._learningMode = 0;
+      document.getElementById('avatar-mode').textContent = data.llmMode || (data.llmReady ? 'Built-in Model' : 'Rule Engine');
+      document.getElementById('avatar-mode').style.color = data.llmReady ? '#34d399' : '#f59e0b';
+    }
+  } catch(e) {
+    if (!_serverOffline) {
+      _serverOffline = true;
+      document.getElementById('avatar-status').innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#ff6b6b;display:inline-block"></span>Offline';
+      document.getElementById('avatar-mode').textContent = 'Disconnected';
+      // Don't auto-reload — wait for server recovery, preserve chat history
+    }
+  }
+}
+
+setTimeout(() => {
+  if (_serverOffline === undefined)
+    document.getElementById('avatar-status').innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block"></span>Connecting...';
+}, 3000);
+
+function animate() {
+  updateParticles();
+  drawBrain();
+  animFrame = requestAnimationFrame(animate);
+}
+
+// ============================================
+// Session management & chat
+// ============================================
+let _currentSessionId = null;
+let _taskPollTimer = null;
+let _unusedMsgIds = new Set(); // Track "new message" status for async task feedback
+
+async function ensureSession() {
+  if (!_currentSessionId) {
+    // --- First try to restore the last session from sessionStorage ---
+    try {
+      const saved = sessionStorage.getItem('legal_session_id');
+      if (saved) {
+        // Verify session is still valid
+        const checkRes = await fetch('/chat/session/' + saved);
+        if (checkRes.ok) {
+          _currentSessionId = saved;
+          startTaskPolling();
+          return _currentSessionId;
+        }
+      }
+    } catch(e) { /* Create new if restore fails */ }
+
+    // Create new session
+    try {
+      const res = await fetch('/chat/session/new', { method: 'POST' });
+      const data = await res.json();
+      _currentSessionId = data.sessionId;
+      // Persist to sessionStorage
+      try { sessionStorage.setItem('legal_session_id', _currentSessionId); } catch(e) {}
+      startTaskPolling();
+    } catch(e) {
+      _currentSessionId = 'session_' + Date.now();
+    }
+  }
+  return _currentSessionId;
+}
+
+async function newChat() {
+  const msgs = document.getElementById('chat-msgs');
+  // Save old session messages
+  try {
+    const oldHtml = msgs.innerHTML;
+    if (oldHtml && oldHtml.trim()) {
+      sessionStorage.setItem("chat_history_prev", oldHtml);
+    }
+  } catch(e) {}
+  _currentSessionId = null;
+  msgs.innerHTML = '';
+  try { sessionStorage.removeItem("chat_history"); } catch(e) {}
+  try { sessionStorage.removeItem("legal_session_id"); } catch(e) {}
+  // Create new session
+  await ensureSession();
+  // Update sessionStorage
+  try { sessionStorage.setItem("legal_session_id", _currentSessionId); } catch(e) {}
+  msgs.innerHTML += '<div style="text-align:center;padding:16px;color:#4a5a7a;font-size:11px;border-bottom:1px solid #151f35;margin-bottom:8px">── New Chat Start ──</div>';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  await ensureSession();
+  const sessionId = _currentSessionId;
+
+  const msgs = document.getElementById('chat-msgs');
+  msgs.innerHTML += '<div class="msg user"><div class="msg-bubble">' + escapeHtml(msg) + '</div></div>';
+  msgs.scrollTop = msgs.scrollHeight;
+      try { if (msgs.innerHTML.length < 500000) sessionStorage.setItem("chat_history", msgs.innerHTML); } catch(e) {}
+
+  document.getElementById('chat-btn').disabled = true;
+  let success = false;
+  for (let attempt = 0; attempt < 2 && !success; attempt++) {
+    if (attempt > 0) await new Promise(r => setTimeout(r, 2000));
+    try {
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ message: msg, sessionId: sessionId }),
+      });
+      if (!res.ok) { try { const e = await res.json(); throw new Error(e.error || 'HTTP ' + res.status); } catch(e) { throw e; } }
+      const data = await res.json();
+      // Robot arm animation: trigger 3D visualization when arm command returns trajectory data
+      if (data.actions && data.actions.length > 0 && data.cmd && data.cmd.indexOf('arm_')===0) {
+        try { if (window.__animateArm) { window.__animateArm(data.actions, 200); document.title = '🤖Grabbing...'; setTimeout(function(){document.title='BrainAgent · General Agent';},4000); } else { console.log('[Arm] body tab not open, skipping animation'); } } catch(e) { console.log('[Arm] animation error:', e); }
+      }
+      // Show rule engine status on timeout fallback
+      if (data.state?._fallback === 'learning') {
+        window._learningMode = Date.now();
+        document.getElementById('avatar-mode').textContent = 'Rule Engine';
+        document.getElementById('avatar-mode').style.color = '#f59e0b';
+      }
+      try { const saved = sessionStorage.getItem("chat_history"); if (saved) msgs.innerHTML = saved; } catch(e) {}
+  msgs.innerHTML += '<div class="msg brain"><div class="msg-avatar"><svg viewBox="0 0 32 32" width="28" height="28"><defs><radialGradient id="sg" cx="40%" cy="35%"><stop offset="0%" stop-color="#b8c8ff"/><stop offset="40%" stop-color="#6880e0"/><stop offset="100%" stop-color="#2a3050"/></radialGradient></defs><circle cx="16" cy="15" r="13" fill="url(#sg)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/><circle cx="12" cy="10" r="3" fill="rgba(255,255,255,0.3)"/></svg></div><div class="msg-bubble">' + escapeHtml(data.reply || '') + '</div></div>';
+      try { if (msgs.innerHTML.length < 500000) sessionStorage.setItem("chat_history", msgs.innerHTML); } catch(e) {}
+      // Update session ID (if server returned a new one)
+      if (data.sessionId) _currentSessionId = data.sessionId;
+      success = true;
+    } catch(e) {
+      if (attempt === 0) continue;
+      msgs.innerHTML += '<div class="msg brain"><div class="msg-avatar"><svg viewBox="0 0 32 32" width="28" height="28"><defs><radialGradient id="sg" cx="40%" cy="35%"><stop offset="0%" stop-color="#b8c8ff"/><stop offset="40%" stop-color="#6880e0"/><stop offset="100%" stop-color="#2a3050"/></radialGradient></defs><circle cx="16" cy="15" r="13" fill="url(#sg)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/><circle cx="12" cy="10" r="3" fill="rgba(255,255,255,0.3)"/></svg></div><div class="msg-bubble" style="color:#ff6b6b">Connection failed, <a href="javascript:sendChat()" style="color:#4a7dff">click to retry</a> (' + e.message.substring(0,30) + ')</div></div>';
+    }
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('chat-btn').disabled = false;
+}
+
+// Async task polling — check if any agent background tasks need feedback
+function startTaskPolling() {
+  if (_taskPollTimer) return;
+  _taskPollTimer = setInterval(async () => {
+    if (!_currentSessionId) return;
+    try {
+      const res = await fetch('/chat/tasks?sessionId=' + encodeURIComponent(_currentSessionId));
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.tasks && data.tasks.length > 0) {
+        for (const task of data.tasks) {
+          if (task.status === 'done' && !task._feedbackSent) {
+            const msgs = document.getElementById('chat-msgs');
+            // Check if this task result has already been displayed
+            if (_unusedMsgIds && _unusedMsgIds.has(task.id)) continue;
+            if (!_unusedMsgIds) _unusedMsgIds = new Set();
+            _unusedMsgIds.add(task.id);
+            const feedbackMsg = '📋 Background task completed: ' + escapeHtml(task.description) + '\\n\\n' + escapeHtml(task.result || '');
+            msgs.innerHTML += '<div class="msg brain"><div class="msg-avatar"><svg viewBox="0 0 32 32" width="28" height="28"><defs><radialGradient id="sg" cx="40%" cy="35%"><stop offset="0%" stop-color="#b8c8ff"/><stop offset="40%" stop-color="#6880e0"/><stop offset="100%" stop-color="#2a3050"/></radialGradient></defs><circle cx="16" cy="15" r="13" fill="url(#sg)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/><circle cx="12" cy="10" r="3" fill="rgba(255,255,255,0.3)"/></svg></div><div class="msg-bubble" style="border-color:#34d399">' + feedbackMsg.replace(/\\n/g, '<br>') + '</div></div>';
+            msgs.scrollTop = msgs.scrollHeight;
+            try { sessionStorage.setItem("chat_history", msgs.innerHTML); } catch(e) {}
+            // Mark this task as feedback sent
+            try {
+              await fetch('/chat/task/feedback', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ sessionId: _currentSessionId, taskId: task.id }),
+              });
+            } catch(e) {}
+          }
+        }
+      }
+    } catch(e) {}
+  }, 5000); // Check every 5 seconds
+}
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// File upload feeding
+async function uploadFiles() {
+  const files = document.getElementById('file-upload').files;
+  if (!files.length) return;
+  const msgs = document.getElementById('chat-msgs');
+  for (const file of files) {
+    const formData = new FormData();
+    formData.append('file', file);
+    msgs.innerHTML += '<div class="msg user"><div class="msg-bubble">📎 ' + escapeHtml(file.name) + ' (' + (file.size/1024).toFixed(0) + 'KB)</div></div>';
+    try {
+      const res = await fetch('/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      msgs.innerHTML += '<div class="msg bot"><div class="msg-bubble">' + (data.message || data.error || 'Done') + '</div></div>';
+    } catch(e) {
+      msgs.innerHTML += '<div class="msg bot"><div class="msg-bubble">Upload failed: ' + e.message + '</div></div>';
+    }
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('file-upload').value = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('chat-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+  });
+});
+
+// ============================================
+// Startup
+// ============================================
+resize();
+window.addEventListener('resize', resize);
+animate();
+// Smart polling: 2s when active, 5s when idle
+let _pollInterval = 2000;
+let _lastActivity = Date.now();
+let _pollTimer = setInterval(fetchStatus, _pollInterval);
+// Rate adapt: check every 10 seconds if adjustment needed
+setInterval(() => {
+  const idleTime = Date.now() - _lastActivity;
+  const newInterval = idleTime > 30000 ? 5000 : 2000;
+  if (newInterval !== _pollInterval) {
+    _pollInterval = newInterval;
+    clearInterval(_pollTimer);
+    _pollTimer = setInterval(fetchStatus, _pollInterval);
+  }
+}, 10000);
+
+// Track user activity
+document.getElementById('chat-input')?.addEventListener('input', () => {
+  _lastActivity = Date.now();
+});
+
+// --- Auto-clean session when dialog closes ---
+window.addEventListener('beforeunload', () => {
+  if (_currentSessionId) {
+    try {
+      navigator.sendBeacon('/chat/session/end', JSON.stringify({ sessionId: _currentSessionId }));
+    } catch(e) {}
+  }
+});
+
+// Initial greeting + session initialization
+setTimeout(async () => {
+  await ensureSession();
+  const msgs = document.getElementById('chat-msgs');
+  if (msgs.children.length === 0) {
+    msgs.innerHTML += '<div class="msg brain"><div class="msg-avatar"><svg viewBox="0 0 32 32" width="28" height="28"><defs><radialGradient id="sg" cx="40%" cy="35%"><stop offset="0%" stop-color="#b8c8ff"/><stop offset="40%" stop-color="#6880e0"/><stop offset="100%" stop-color="#2a3050"/></radialGradient></defs><circle cx="16" cy="15" r="13" fill="url(#sg)" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/><circle cx="12" cy="10" r="3" fill="rgba(255,255,255,0.3)"/></svg></div><div class="msg-bubble">19 brain regions activated, sensing the world.<br><span style="font-size:10px;color:#4a5a7a">Conversation context memory enabled (auto-cleared when dialog closes)</span></div></div>';
+  }
+}, 1000);
+</script>
+<script src="/web_settings.js"></script>
+</body></html>

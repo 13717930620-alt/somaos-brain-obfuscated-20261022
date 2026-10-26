@@ -1,0 +1,32 @@
+{
+  "name": "somaos-base-motion",
+  "version": "1.0.0",
+  "description": "SomaOS 运动脑大底座 — 混淆字节码发布件（不含权重、不含第三方二进制、不含明文源码）",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "private": false,
+  "engines": {
+    "node": "v24.15.0"
+  },
+  "os": [
+    "win32",
+    "linux",
+    "darwin"
+  ],
+  "scripts": {
+    "verify-abi": "node ../../scripts/verify-abi.js"
+  },
+  "dependencies": {
+    "bytenode": "^2.1.0"
+  },
+  "somaosRelease": {
+    "dist": "base-motion",
+    "sourceTree": "base-motion",
+    "node": "v24.15.0",
+    "v8": "13.6.233.17-node.48",
+    "python": "3.11.9",
+    "pythonMagic": "a70d0d0a",
+    "obfuscator": "javascript-obfuscator@5.9.0 (medium: stringArray+base64, hexadecimal identifiers, no control-flow flattening)",
+    "bytecode": "bytenode@2.1.0 (.jsc, Node v24.15.0 / V8 13.6.233.17-node.48 only)",
+    "builtAt": "2026-10-26T11:56:06.263Z"
+  }
+}

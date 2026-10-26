@@ -1,0 +1,28 @@
+[
+  {
+    "file": "seg_v2.0.npz",
+    "checks": {
+      "G1_finiteness": {
+        "status": "PASS",
+        "detail": "全部有限"
+      },
+      "G2_physics_bounds": {
+        "status": "SKIP",
+        "detail": "无 flow 场"
+      },
+      "G3_distribution": {
+        "status": "SKIP",
+        "detail": "无 action 场"
+      },
+      "G4_class_balance": {
+        "status": "PASS",
+        "detail": "53 类, 最大类 52 占比 18.7%"
+      },
+      "G5_split_embedded": {
+        "status": "PASS",
+        "detail": "含切分字段"
+      }
+    },
+    "verdict": "PASS"
+  }
+]

@@ -1,0 +1,8 @@
+﻿{
+  "server": { "host": "127.0.0.1", "port": 8000, "timeout": 5000, "retry": 3 },
+  "robot": { "type": "unitree_g1", "dof": 29, "state_dim": 29 },
+  "mock": { "enabled": false, "mock_server_port": 8001 },
+  "safety": { "max_joint_velocity": 5.0, "max_gripper_force": 0 },
+  "paths": { "fast_reflex": { "frequency_hz": 20 }, "slow_cognitive": { "frequency_hz": 2 } },
+  "logging": { "experience_store": "experience_store" }
+}

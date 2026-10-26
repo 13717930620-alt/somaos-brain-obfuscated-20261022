@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SomaOS 大脑监控面板</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Segoe UI', monospace; background:#0a0a1a; color:#c0e0ff; padding:10px; }
+h1 { color:#00ccff; text-align:center; margin:5px 0; font-size:20px; }
+.grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:10px; }
+.card { background:#111133; border:1px solid #223366; border-radius:8px; padding:12px; }
+.card h3 { color:#00aaff; font-size:14px; margin-bottom:8px; border-bottom:1px solid #223; padding-bottom:4px; }
+.row { display:flex; justify-content:space-between; margin:3px 0; font-size:12px; }
+.val { color:#55ff55; font-weight:bold; }
+.warn { color:#ffaa00; }
+.danger { color:#ff4444; }
+.info { color:#00ccff; }
+.meter { height:8px; background:#222; border-radius:4px; margin:3px 0; overflow:hidden; }
+.meter-fill { height:100%; border-radius:4px; transition:width 0.5s; }
+.estop-btn { background:#ff2222; color:white; border:none; padding:12px 24px;
+  font-size:18px; font-weight:bold; border-radius:8px; cursor:pointer; width:100%; margin:10px 0; }
+.estop-btn:active { background:#880000; }
+#cam { width:100%; max-width:320px; border-radius:4px; }
+.heatmap { display:flex; gap:2px; flex-wrap:wrap; }
+.heatmap .region { padding:2px 6px; border-radius:3px; font-size:10px; color:#000; }
+.refresh { text-align:right; color:#666; font-size:10px; }
+</style>
+</head>
+<body>
+<h1>🧠 SomaOS 监控面板</h1>
+<button class="estop-btn" onclick="emergencyStop()">🛑 紧急停止</button>
+<div class="grid">
+  <!-- 脑区状态 -->
+  <div class="card">
+    <h3>🧠 脑区活跃度</h3>
+    <div class="heatmap" id="regions"></div>
+    <div class="row"><span>当前意识焦点:</span><span class="info" id="consciousness">-</span></div>
+    <div class="row"><span>GWT胜出:</span><span class="val" id="gwtWinner">-</span></div>
+    <div class="row"><span>循环计数:</span><span id="cycles">0</span></div>
+  </div>
+
+  <!-- GPU/推理 -->
+  <div class="card">
+    <h3>🖥️ GPU / 推理</h3>
+    <div class="row"><span>GR00T延迟:</span><span id="grootLatency" class="val">0ms</span></div>
+    <div class="meter"><div class="meter-fill" id="gpuFill" style="width:0%;background:#55ff55"></div></div>
+    <div class="row"><span>GPU温度:</span><span id="gpuTemp">-</span></div>
+    <div class="row"><span>推理模式:</span><span id="inferMode">-</span></div>
+  </div>
+
+  <!-- 机器人状态 -->
+  <div class="card">
+    <h3>🤖 机器人状态</h3>
+    <div class="row"><span>关节角度:</span><span class="val" id="joints">-</span></div>
+    <div class="row"><span>末端位置:</span><span class="info" id="eePos">-</span></div>
+    <div class="row"><span>夹爪:</span><span id="gripper">-</span></div>
+    <div class="row"><span>当前动作:</span><span class="val" id="currentAction">-</span></div>
+  </div>
+
+  <!-- 安全 -->
+  <div class="card">
+    <h3>🛡️ 安全</h3>
+    <div class="row"><span>E-Stop:</span><span id="estopStatus" class="val">正常</span></div>
+    <div class="row"><span>威胁等级:</span><span id="threatLevel">0%</span></div>
+    <div class="row"><span>虚拟墙:</span><span id="virtWalls">0</span></div>
+    <div class="row"><span>碰撞事件:</span><span id="collisions">0</span></div>
+  </div>
+
+  <!-- 内感觉 -->
+  <div class="card">
+    <h3>🔋 系统健康</h3>
+    <div class="row"><span>电池电量:</span><span id="battery">100%</span></div>
+    <div class="meter"><div class="meter-fill" id="batFill" style="width:100%;background:#55ff55"></div></div>
+    <div class="row"><span>网络延迟:</span><span id="netLatency">0ms</span></div>
+    <div class="row"><span>运行时间:</span><span id="uptime">-</span></div>
+    <div class="row"><span>电机最高温度:</span><span id="maxMotorTemp">-</span></div>
+  </div>
+
+  <!-- 视觉 -->
+  <div class="card">
+    <h3>👁️ 视觉场景</h3>
+    <div class="row"><span>场景:</span><span id="sceneDesc">-</span></div>
+    <div class="row"><span>检测物体:</span><span id="objects" class="info">-</span></div>
+    <div class="row"><span>空间告警:</span><span id="spatialAlert" class="warn">-</span></div>
+    <div id="camPreview"></div>
+  </div>
+
+  <!-- 学习统计 -->
+  <div class="card">
+    <h3>📊 学习统计</h3>
+    <div class="row"><span>累计动作:</span><span id="totalActions">0</span></div>
+    <div class="row"><span>固化技能:</span><span id="cachedSkills">0</span></div>
+    <div class="row"><span>经验记录:</span><span id="xpCount">0</span></div>
+    <div class="row"><span>失败分析:</span><span id="failAnalyses">0</span></div>
+  </div>
+
+  <!-- 元认知行为反馈 (Layer Φ) -->
+  <div class="card">
+    <h3>🧠 元认知策略 (GNW / IIT)</h3>
+    <div class="row"><span>当前认知策略:</span><span class="info" id="cogStrategy">-</span></div>
+    <div class="row"><span>IWMT整合信息 Φ:</span><span class="val" id="cogPhi">-</span></div>
+    <div class="row"><span>IIT 整合信息(精确MIP):</span><span class="val" id="cogIITPhi">-</span></div>
+    <div class="row"><span>GNW 全局广播:</span><span id="cogGNW">-</span></div>
+    <div class="row"><span>IIT 后部热区维持:</span><span id="cogIIT">-</span></div>
+    <div class="meter"><div class="meter-fill" id="cogBalance" style="width:50%;background:#00ccff"></div></div>
+    <div class="row" style="justify-content:center;"><span class="info" style="font-size:10px;">← GNW ─── IIT →</span></div>
+    <div class="row"><span>元认知干预次数:</span><span id="cogInterventions">0</span></div>
+    <div class="row"><span>语义绑定脑区:</span><span id="cogBindings" class="info">-</span></div>
+    <div class="row"><span>跨会话恢复脑区:</span><span id="cogRestored">0</span></div>
+  </div>
+</div>
+<div class="refresh" id="refresh">刷新: 0s前</div>
+
+<script>
+const API = 'http://127.0.0.1:3001';
+let autoRefresh = true;
+
+async function fetchStatus() {
+  try {
+    const r = await fetch(API + '/robot/status');
+    // 修复(2026-10-08, #8): /robot/status 与 /robot/estop 是本页单方面的契约，
+    //   3001 上从未实现(只有 /robot/console/status|estop，且返回结构不同)。
+    //   原实现里 fetchStatus 靠 r.json() 解析 404 文本抛异常才间接显出失败，
+    //   而 emergencyStop 连 try/catch 都没有——点"急停"对不存在的路由发 POST，
+    //   页面不报任何错，看起来像已经停了。这里把两条路径都改成显式判 HTTP 状态。
+    //   (是否要在服务端补这个聚合端点属于新功能，需单独决策，见审计 #8 清单)
+    if (!r.ok) {
+      document.getElementById('refresh').textContent =
+        '刷新失败: HTTP ' + r.status + ' (服务端无 /robot/status)';
+      return;
+    }
+    const s = await r.json();
+    updateUI(s);
+    document.getElementById('refresh').textContent = '刷新: 0s前';
+  } catch(e) {
+    document.getElementById('refresh').textContent = '刷新失败: ' + e.message;
+  }
+}
+
+function updateUI(s) {
+  // Consciousness
+  document.getElementById('consciousness').textContent = s.consciousness || '-';
+  document.getElementById('gwtWinner').textContent = s.gwtWinner || '-';
+  document.getElementById('cycles').textContent = s.cycles || '0';
+
+  // GPU
+  document.getElementById('grootLatency').textContent = (s.grootLatency || 0) + 'ms';
+  document.getElementById('gpuTemp').textContent = s.gpuTemp ? s.gpuTemp + '°C' : '-';
+  document.getElementById('inferMode').textContent = s.mockMode ? 'Mock' : 'GPU';
+
+  // Robot
+  document.getElementById('joints').textContent = s.joints ? s.joints.map(j=>j.toFixed(2)).join(', ') : '-';
+  document.getElementById('gripper').textContent = s.gripperPos ? s.gripperPos.toFixed(2) : '-';
+  document.getElementById('currentAction').textContent = s.currentAction || '-';
+
+  // Safety
+  const estop = document.getElementById('estopStatus');
+  estop.textContent = s.estopped ? '⚠️ 已急停' : '✅ 正常';
+  estop.className = s.estopped ? 'danger' : 'val';
+  document.getElementById('threatLevel').textContent = Math.round((s.threatLevel||0)*100) + '%';
+  document.getElementById('virtWalls').textContent = s.virtualWalls || '0';
+  document.getElementById('collisions').textContent = s.collisionEvents || '0';
+
+  // Health
+  const bat = s.batteryLevel || 100;
+  document.getElementById('battery').textContent = bat + '%';
+  document.getElementById('batFill').style.width = bat + '%';
+  document.getElementById('batFill').style.background = bat < 20 ? '#ff4444' : bat < 50 ? '#ffaa00' : '#55ff55';
+  document.getElementById('netLatency').textContent = (s.networkLatency || 0) + 'ms';
+  document.getElementById('uptime').textContent = formatUptime(s.uptime || 0);
+
+  // Vision
+  document.getElementById('sceneDesc').textContent = s.sceneDescription || '-';
+  document.getElementById('objects').textContent = s.objectsDetected || '-';
+  document.getElementById('spatialAlert').textContent = s.spatialAlert || '-';
+
+  // Learning
+  document.getElementById('totalActions').textContent = s.totalActions || '0';
+  document.getElementById('cachedSkills').textContent = s.cachedSkills || '0';
+  document.getElementById('xpCount').textContent = s.xpCount || '0';
+
+  // Regions heatmap
+  const regions = s.regions || {};
+  const div = document.getElementById('regions');
+  div.innerHTML = Object.entries(regions).map(([name, r]) =>
+    `<span class="region" style="background:rgba(0,${Math.round(255*r.activation||0)},255,0.7)">${name} ${((r.activation||0)*100).toFixed(0)}%</span>`
+  ).join('');
+
+  // ── Layer Φ: 元认知行为反馈 ──
+  const c = s.cognition;
+  if (c) {
+    const strategy = document.getElementById('cogStrategy');
+    strategy.textContent = c.currentStrategy || '-';
+    strategy.className = c.probe && c.probe.winner === 'IIT' ? 'val' : c.probe && c.probe.winner === 'GNW' ? 'warn' : 'info';
+    document.getElementById('cogPhi').textContent = (c.phi != null ? c.phi : 0).toFixed(3);
+    document.getElementById('cogIITPhi').textContent = (c.iitPhi != null ? c.iitPhi : 0).toFixed(3);
+    document.getElementById('cogGNW').textContent = c.probe ? (c.probe.gnwScore||0).toFixed(2) : '-';
+    document.getElementById('cogIIT').textContent = c.probe ? (c.probe.iitScore||0).toFixed(2) : '-';
+    const gnw = c.probe ? (c.probe.gnwScore||0) : 0.5;
+    const iit = c.probe ? (c.probe.iitScore||0) : 0.5;
+    // GNW-IIT 平衡条: 0% = 纯GNW, 100% = 纯IIT
+    const bal = Math.round(((iit - gnw + 1) / 2) * 100);
+    const bar = document.getElementById('cogBalance');
+    bar.style.width = bal + '%';
+    bar.style.background = iit > gnw ? '#55ff55' : '#ffaa00';
+    document.getElementById('cogInterventions').textContent = c.metacognitiveInterventions || 0;
+    document.getElementById('cogBindings').textContent = (c.semanticBindings || []).slice(0,3).join(', ') || '-';
+    document.getElementById('cogRestored').textContent = c.restoredRegions || 0;
+  }
+}
+
+function formatUptime(s) {
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+  return h + 'h ' + m + 'm ' + sec + 's';
+}
+
+async function emergencyStop() {
+  if (!confirm('确认紧急停止?')) return;
+  const badge = document.getElementById('estopStatus');
+  try {
+    const r = await fetch(API + '/robot/estop', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ estopped: true, reason: 'user_manual' }),
+    });
+    if (!r.ok) {
+      badge.textContent = '⛔ 急停未送达 (HTTP ' + r.status + ')';
+      badge.className = 'danger';
+      return;
+    }
+    badge.textContent = '⚠️ 已急停';
+    badge.className = 'danger';
+  } catch (e) {
+    badge.textContent = '⛔ 急停请求失败: ' + e.message;
+    badge.className = 'danger';
+  }
+}
+
+fetchStatus();
+setInterval(() => { if (autoRefresh) fetchStatus(); }, 2000);
+</script>
+</body>
+</html>

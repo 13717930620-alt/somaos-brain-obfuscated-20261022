@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SomaOS L4 机器人控制台</title>
+<style>
+  :root{
+    --bg:#060a16; --panel:#0c1425; --panel2:#0e1a2e; --line:#151f35;
+    --line2:#1a2a45; --fg:#d0d8e8; --fg2:#5a6a8a; --fg3:#8a9ab8;
+    --accent:#4a7dff; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+       font:13px/1.5 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+  header{display:flex;align-items:center;gap:14px;padding:10px 16px;
+         border-bottom:1px solid var(--line);background:var(--panel)}
+  header h1{font-size:15px;margin:0;font-weight:600;letter-spacing:.5px}
+  .pill{padding:3px 10px;border-radius:999px;font-size:11px;border:1px solid var(--line2)}
+  .pill.sim{background:rgba(74,125,255,.14);color:#8fb0ff;border-color:#27406e}
+  .pill.real{background:rgba(239,68,68,.16);color:#ff9d9d;border-color:#6e2727}
+  .pill.ok{background:rgba(34,197,94,.14);color:#7ee2a8;border-color:#1f5c39}
+  .pill.err{background:rgba(239,68,68,.14);color:#ff9d9d;border-color:#6e2727}
+  .pill.warn{background:rgba(245,158,11,.14);color:#fbd38d;border-color:#6b4a12}
+  .spacer{flex:1}
+  main{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;padding:14px;align-items:start}
+  @media (max-width:1080px){main{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .card > h2{margin:0;padding:9px 13px;font-size:12px;font-weight:600;color:var(--fg3);
+             border-bottom:1px solid var(--line);background:var(--panel2);letter-spacing:.4px}
+  .card .body{padding:13px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  button{background:#16233d;color:var(--fg);border:1px solid var(--line2);border-radius:7px;
+         padding:7px 13px;font-size:12px;cursor:pointer;transition:.15s}
+  button:hover:not(:disabled){background:#1d2d4d;border-color:#2b4573}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  button.primary{background:rgba(74,125,255,.2);border-color:#2f5296;color:#b7ccff}
+  button.danger{background:rgba(239,68,68,.22);border-color:#7f2b2b;color:#ffb3b3;font-weight:700}
+  button.warn{background:rgba(245,158,11,.18);border-color:#7a5410;color:#fbd38d}
+  .grid2{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px}
+  .grid2 dt{color:var(--fg2)}
+  .grid2 dd{margin:0;font-variant-numeric:tabular-nums}
+  video,img#cam{width:100%;background:#000;border-radius:6px;min-height:180px;display:block}
+  table{width:100%;border-collapse:collapse;font-size:11px;font-variant-numeric:tabular-nums}
+  th,td{padding:3px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+  th{color:var(--fg2);font-weight:500;position:sticky;top:0;background:var(--panel2)}
+  .scroll{max-height:270px;overflow:auto}
+  .mut{color:var(--fg2)}
+  .mono{font-family:ui-monospace,Consolas,monospace}
+  .audit-ok{color:#7ee2a8}.audit-bad{color:#ff9d9d}
+  #toast{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:99}
+  .toast{padding:9px 13px;border-radius:8px;background:#16233d;border:1px solid var(--line2);
+         font-size:12px;max-width:380px;box-shadow:0 6px 22px rgba(0,0,0,.5)}
+  .toast.err{background:rgba(239,68,68,.2);border-color:#7f2b2b}
+  .toast.ok{background:rgba(34,197,94,.18);border-color:#1f5c39}
+  .kbd{background:#16233d;border:1px solid var(--line2);border-radius:4px;padding:0 5px;font-size:11px}
+</style>
+</head>
+<body>
+<header>
+  <h1>SomaOS · L4 机器人控制台</h1>
+  <span id="modePill" class="pill sim">仿真</span>
+  <span id="connPill" class="pill err">未连接</span>
+  <span id="estopPill" class="pill ok">无急停</span>
+  <span id="motionPill" class="pill warn">运动未许可</span>
+  <span class="spacer"></span>
+  <span class="mut mono" id="epLabel">—</span>
+  <button onclick="loadAll()">刷新</button>
+</header>
+
+<main>
+  <section class="card">
+    <h2>状态</h2>
+    <div class="body">
+      <dl class="grid2">
+        <dt>目标端点</dt><dd class="mono" id="sEndpoint">—</dd>
+        <dt>驱动后端</dt><dd id="sBackend">—</dd>
+        <dt>心跳年龄</dt><dd id="sHeartbeat">—</dd>
+        <dt>自由度</dt><dd id="sDof">—</dd>
+        <dt>驱动已执行</dt><dd id="sCommands">—</dd>
+        <dt>驱动已拒绝</dt><dd id="sRejected">—</dd>
+        <dt>相机帧数</dt><dd id="sFrames">—</dd>
+        <dt>急停原因</dt><dd id="sEstopReason">—</dd>
+      </dl>
+      <div class="row" style="margin-top:12px">
+        <span class="mut">切换目标：</span>
+        <button id="btnSim" onclick="setMode('sim')">仿真</button>
+        <button id="btnReal" class="danger" onclick="setMode('real')">真机（需二次确认）</button>
+        <span class="mut" id="allowRealHint"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>急停</h2>
+    <div class="body">
+      <div class="row">
+        <button class="danger" style="flex:1;padding:14px" onclick="estop()">■ 一键急停</button>
+        <button class="warn" style="flex:1;padding:14px" onclick="clearEstop()">复位急停</button>
+      </div>
+      <p class="mut" style="margin:10px 0 0">
+        急停会调用驱动 <span class="mono">/estop</span>（停机 + 阻尼），并置本地急停镜像；
+        复位前所有运动指令都会被本地拦截。
+      </p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>摄像头（ZMQ 5559 · MJPEG）</h2>
+    <div class="body">
+      <img id="cam" alt="等待相机帧…" src="/robot/camera.mjpg" onerror="this.style.opacity=.35" />
+      <p class="mut" style="margin:8px 0 0">
+        无画面时请确认：<span class="mono">robot/camera_capture.pyc</span> 已启动并 PUB 到 5559。
+      </p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>动作下发</h2>
+    <div class="body">
+      <div class="row">
+        <button class="primary" onclick="act('standUp')">站立</button>
+        <button onclick="act('balanceStand')">平衡站立</button>
+        <button onclick="act('sitDown')">坐下</button>
+        <button onclick="act('damp')">阻尼</button>
+        <button onclick="act('stop')">停止移动</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <span class="mut">移动 vx/vy/ω：</span>
+        <input id="vx" class="mono" value="0.3" size="4" />
+        <input id="vy" class="mono" value="0" size="4" />
+        <input id="om" class="mono" value="0" size="4" />
+        <button onclick="move()">下发移动</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <span class="mut">姿态（需驱动 <span class="kbd">--enable-lowlevel</span>）：</span>
+        <button onclick="act('armsOut')">张开双臂</button>
+        <button onclick="act('wave')">挥手</button>
+        <button onclick="act('bow')">鞠躬</button>
+        <button onclick="act('waistTwist')">转腰</button>
+        <button onclick="act('neutral')">回中</button>
+      </div>
+      <p class="mut" style="margin:10px 0 0">
+        <span class="kbd">march</span> 原地踏步在真机上不可用（必须由 G1 自带步态控制器执行）。
+      </p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>关节（29 DoF · 真机仅腰+双臂可直驱）</h2>
+    <div class="body">
+      <div class="scroll">
+        <table>
+          <thead><tr><th>#</th><th>关节</th><th>位置(rad)</th><th>速度</th><th>直驱</th></tr></thead>
+          <tbody id="jointBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>指令审计 <span class="mut" id="auditCount"></span></h2>
+    <div class="body">
+      <div class="row" style="margin-bottom:8px">
+        <button onclick="loadAudit()">刷新审计</button>
+        <span class="mut">落盘：<span class="mono">logs/robot_audit.jsonl</span></span>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>时间</th><th>模式</th><th>来源</th><th>动作</th><th>结果</th><th>说明</th></tr></thead>
+          <tbody id="auditBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+function toast(msg, kind) {
+  const d = document.createElement('div');
+  d.className = 'toast ' + (kind || '');
+  d.textContent = msg;
+  $('toast').appendChild(d);
+  setTimeout(() => d.remove(), 5200);
+}
+
+async function api(path, opts) {
+  const r = await fetch(path, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts || {}));
+  let j = null;
+  try { j = await r.json(); } catch (e) { j = { error: '响应不是 JSON' }; }
+  if (!r.ok && j && j.error) toast(j.error, 'err');
+  return j;
+}
+
+function pill(el, cls, text) { el.className = 'pill ' + cls; el.textContent = text; }
+
+async function loadAll() {
+  const st = await api('/robot/console/status');
+  if (!st || st.error) return;
+
+  pill($('modePill'), st.mode === 'real' ? 'real' : 'sim', st.mode === 'real' ? '真机' : '仿真');
+  pill($('connPill'),
+       st.robot.connected ? 'ok' : 'err',
+       st.robot.connected ? '机器人已连接' : '机器人未连接');
+  pill($('estopPill'), st.robot.estop ? 'err' : 'ok', st.robot.estop ? '急停中' : '无急停');
+  pill($('motionPill'), st.robot.motionEnabled ? 'ok' : 'warn',
+       st.robot.motionEnabled ? '运动已许可' : '运动未许可');
+
+  $('epLabel').textContent = st.activeEndpoint || '—';
+  $('sEndpoint').textContent = st.activeEndpoint || '—';
+  $('sBackend').textContent = st.robot.backend || '—';
+  $('sHeartbeat').textContent = st.robot.heartbeatAgeMs == null ? '—'
+    : st.robot.heartbeatAgeMs + ' ms / 超时 ' + (st.robot.heartbeatTimeoutMs ?? '?') + ' ms';
+  $('sDof').textContent = st.robot.dof ?? '—';
+  $('sCommands').textContent = st.robot.commands ?? '—';
+  $('sRejected').textContent = st.robot.rejected ?? '—';
+  $('sFrames').textContent = st.camera.frames + (st.camera.hasFrame ? '' : '（暂无画面）');
+  $('sEstopReason').textContent = st.robot.estopReason || '—';
+
+  const mi = st.modeInfo || {};
+  $('allowRealHint').textContent = mi.allowReal
+    ? '（真机已解锁）'
+    : '（需 SOMAOS_ALLOW_REAL_ROBOT=true）';
+  $('btnReal').disabled = st.mode === 'real';
+  $('btnSim').disabled = st.mode === 'sim';
+
+  const tb = $('jointBody');
+  tb.innerHTML = '';
+  (st.joints || []).forEach((j) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="mut">' + j.index + '</td>' +
+      '<td class="mono">' + j.name + '</td>' +
+      '<td>' + (j.position == null ? '<span class="mut">—</span>' : Number(j.position).toFixed(4)) + '</td>' +
+      '<td>' + (j.velocity == null ? '<span class="mut">—</span>' : Number(j.velocity).toFixed(3)) + '</td>' +
+      '<td>' + (j.lowlevelAllowed ? '<span style="color:#7ee2a8">可</span>' : '<span class="mut">否</span>') + '</td>';
+    tb.appendChild(tr);
+  });
+}
+
+async function setMode(mode) {
+  let confirmToken = '';
+  if (mode === 'real') {
+    const typed = prompt(
+      '切换到【真机】会向真实机器人下发指令。\n' +
+      '请确认：机器人已吊装/在安全区域、现场有人、硬件急停可用。\n\n' +
+      '输入 REAL 继续：');
+    if (typed !== 'REAL') { toast('已取消切换', ''); return; }
+    confirmToken = 'REAL';
+  }
+  const r = await api('/robot/console/mode', {
+    method: 'POST', body: JSON.stringify({ mode, confirm: confirmToken }),
+  });
+  if (r && r.ok) toast('已切换到 ' + (mode === 'real' ? '真机' : '仿真'), 'ok');
+  loadAll();
+}
+
+async function act(action) {
+  const r = await api('/robot/console/action', {
+    method: 'POST', body: JSON.stringify({ action }),
+  });
+  if (r && r.ok) toast('已下发：' + action, 'ok');
+  loadAll(); loadAudit();
+}
+
+async function move() {
+  const vx = parseFloat($('vx').value) || 0;
+  const vy = parseFloat($('vy').value) || 0;
+  const omega = parseFloat($('om').value) || 0;
+  const r = await api('/robot/console/action', {
+    method: 'POST', body: JSON.stringify({ action: 'move', value: { vx, vy, omega } }),
+  });
+  if (r && r.ok) toast('已下发移动 vx=' + vx + ' vy=' + vy + ' ω=' + omega, 'ok');
+  loadAll(); loadAudit();
+}
+
+async function estop() {
+  const r = await api('/robot/console/estop', {
+    method: 'POST', body: JSON.stringify({ reason: 'web 一键急停' }),
+  });
+  if (r && r.ok) toast('已急停', 'ok');
+  loadAll(); loadAudit();
+}
+
+async function clearEstop() {
+  // 复位危险动作: 服务端要求 SOMAOS_SAFETY_RESET_TOKEN, 未配置时一律拒绝(失败关闭)。
+  const token = prompt('输入安全复位令牌 (SOMAOS_SAFETY_RESET_TOKEN):');
+  if (!token) return;
+  const operatorId = prompt('操作员 ID (可留空):') || '';
+  const r = await api('/robot/console/clear-estop', {
+    method: 'POST', body: JSON.stringify({ token, operatorId }),
+  });
+  if (r && r.ok) toast('已复位急停', 'ok');
+  else toast('复位失败: ' + ((r && r.error) || '未知错误'), 'bad');
+  loadAll(); loadAudit();
+}
+
+async function loadAudit() {
+  const r = await api('/robot/console/audit?limit=120');
+  if (!r || !r.entries) return;
+  $('auditCount').textContent = '（最近 ' + r.entries.length + ' 条）';
+  const tb = $('auditBody');
+  tb.innerHTML = '';
+  r.entries.forEach((e) => {
+    const okResult = ['ok'].includes(e.result);
+    const detail = e.reason || e.error || (e.value ? JSON.stringify(e.value) : '') || '';
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="mut mono">' + (e.ts || '').replace('T', ' ').slice(11, 19) + '</td>' +
+      '<td>' + (e.mode || '') + '</td>' +
+      '<td class="mut">' + (e.source || '') + '</td>' +
+      '<td class="mono">' + (e.action || '') + '</td>' +
+      '<td class="' + (okResult ? 'audit-ok' : 'audit-bad') + '">' + (e.result || '') + '</td>' +
+      '<td class="mut mono">' + String(detail).slice(0, 90) + '</td>';
+    tb.appendChild(tr);
+  });
+}
+
+loadAll();
+loadAudit();
+setInterval(loadAll, 2000);
+setInterval(loadAudit, 5000);
+</script>
+</body>
+</html>

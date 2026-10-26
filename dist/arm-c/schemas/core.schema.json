@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://somaos.local/schemas/core.schema.json",
+  "title": "SomaOS Brain Next Core Envelope",
+  "type": "object",
+  "required": ["schema", "version", "traceId", "timestamp", "payload"],
+  "properties": {
+    "schema": { "type": "string" },
+    "version": { "const": 1 },
+    "traceId": { "type": "string", "minLength": 8 },
+    "sessionId": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "source": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "degradation": { "type": "array", "items": { "type": "string" } },
+    "payload": {}
+  }
+}

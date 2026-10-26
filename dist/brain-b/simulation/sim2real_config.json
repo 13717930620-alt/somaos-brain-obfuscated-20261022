@@ -1,0 +1,68 @@
+{
+  "description": "SomaOS 仿真→真实迁移管道配置 (Sim2Real Transfer Pipeline)",
+  "version": "1.0",
+  "stages": {
+    "stage1_sim_training": {
+      "description": "在MuJoCo仿真中安全训练",
+      "env": "mujoco",
+      "episodes": 1000,
+      "safety": "no_risk",
+      "speed": "realtime_x10",
+      "domain_randomization": false
+    },
+    "stage2_domain_randomization": {
+      "description": "仿真参数随机化以提高迁移鲁棒性",
+      "randomization_params": {
+        "visual": {
+          "lighting": { "range": [0.5, 1.5], "distribution": "uniform" },
+          "camera_noise": { "sigma": [0.0, 0.05], "distribution": "gaussian" },
+          "texture_variation": true,
+          "background_variation": true
+        },
+        "physics": {
+          "mass": { "scale_range": [0.8, 1.2], "distribution": "uniform" },
+          "friction": { "range": [0.3, 1.5], "distribution": "uniform" },
+          "damping": { "range": [0.5, 2.0], "distribution": "log_uniform" },
+          "joint_backlash": { "max": 0.002, "distribution": "gaussian" },
+          "gravity_variation": { "range": [9.78, 9.82], "distribution": "uniform" }
+        },
+        "actuator": {
+          "torque_noise": { "sigma": [0.0, 0.1], "distribution": "gaussian" },
+          "delay": { "max_ms": 5, "distribution": "uniform" },
+          "gear_ratio_error": { "max_percent": 2, "distribution": "gaussian" }
+        }
+      },
+      "episodes": 2000
+    },
+    "stage3_policy_transfer": {
+      "description": "将仿真策略迁移到真实机器人",
+      "method": "direct_transfer_with_fine_tuning",
+      "adaptation_layers": ["joint_offsets", "force_scaling", "visual_encoder"],
+      "initial_safety": {
+        "max_velocity": 0.3,
+        "max_force": 15,
+        "virtual_walls_enabled": true,
+        "human_supervision_required": true
+      }
+    },
+    "stage4_real_fine_tuning": {
+      "description": "真实机器人少量交互微调",
+      "max_episodes": 50,
+      "success_threshold": 0.85,
+      "safety_ramp_up": {
+        "velocity_ramp": [0.3, 0.5, 0.7, 1.0],
+        "force_ramp": [15, 25, 35, 50],
+        "episodes_per_level": 12
+      }
+    }
+  },
+  "validation": {
+    "sim_validation_episodes": 100,
+    "real_validation_episodes": 20,
+    "metrics": ["success_rate", "completion_time", "force_smoothness", "collision_rate"],
+    "automatic_rollback": {
+      "condition": "success_rate < 0.5 after 10 real episodes",
+      "action": "revert_to_stage3"
+    }
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "history": [
+    {
+      "step": 1,
+      "module": "LearnedSaliency",
+      "norm": 0.6458702509012244
+    },
+    {
+      "step": 1,
+      "module": "LiquidFeed",
+      "norm": 0.7140598844355635
+    },
+    {
+      "step": 1,
+      "module": "LiquidDownstream",
+      "norm": 5.288682289799717
+    },
+    {
+      "step": 1,
+      "module": "MappingNetwork",
+      "norm": 5.4975937469588345
+    },
+    {
+      "step": 1,
+      "module": "UnifiedPlasticityRule",
+      "norm": 5.434916509446637
+    },
+    {
+      "step": 1,
+      "module": "MotorAdaptationLayer",
+      "norm": 0.0
+    },
+    {
+      "step": 1,
+      "module": "NeuromodulatorGate",
+      "norm": 0.8660254037844386
+    },
+    {
+      "step": 501,
+      "module": "LearnedSaliency",
+      "norm": 0.6838442881362733
+    },
+    {
+      "step": 501,
+      "module": "LiquidFeed",
+      "norm": 0.7693019540756745
+    },
+    {
+      "step": 501,
+      "module": "LiquidDownstream",
+      "norm": 5.271411997082003
+    },
+    {
+      "step": 501,
+      "module": "MappingNetwork",
+      "norm": 3.002201532490734
+    },
+    {
+      "step": 501,
+      "module": "UnifiedPlasticityRule",
+      "norm": 5.434916509144081
+    },
+    {
+      "step": 501,
+      "module": "MotorAdaptationLayer",
+      "norm": 0.0
+    },
+    {
+      "step": 501,
+      "module": "NeuromodulatorGate",
+      "norm": 0.8660254037844386
+    },
+    {
+      "step": 1001,
+      "module": "LearnedSaliency",
+      "norm": 0.7418200024888008
+    },
+    {
+      "step": 1001,
+      "module": "LiquidFeed",
+      "norm": 0.8787376725708664
+    },
+    {
+      "step": 1001,
+      "module": "LiquidDownstream",
+      "norm": 5.288164745625437
+    },
+    {
+      "step": 1001,
+      "module": "MappingNetwork",
+      "norm": 2.5990171866247223
+    },
+    {
+      "step": 1001,
+      "module": "UnifiedPlasticityRule",
+      "norm": 5.434916509157739
+    },
+    {
+      "step": 1001,
+      "module": "MotorAdaptationLayer",
+      "norm": 0.0
+    },
+    {
+      "step": 1001,
+      "module": "NeuromodulatorGate",
+      "norm": 0.8660254037844386
+    }
+  ],
+  "summary": {
+    "LiquidFeed": {
+      "first": 0.7140598844355635,
+      "last": 0.8787376725708664,
+      "ratio": 1.2306218171960106,
+      "n_samples": 3
+    },
+    "LiquidDownstream": {
+      "first": 5.288682289799717,
+      "last": 5.288164745625437,
+      "ratio": 0.9999021411864202,
+      "n_samples": 3
+    },
+    "NeuromodulatorGate": {
+      "first": 0.8660254037844386,
+      "last": 0.8660254037844386,
+      "ratio": 1.0,
+      "n_samples": 3
+    },
+    "UnifiedPlasticityRule": {
+      "first": 5.434916509446637,
+      "last": 5.434916509157739,
+      "ratio": 0.9999999999468441,
+      "n_samples": 3
+    },
+    "MappingNetwork": {
+      "first": 5.4975937469588345,
+      "last": 2.5990171866247223,
+      "ratio": 0.4727554101396542,
+      "n_samples": 3
+    },
+    "LearnedSaliency": {
+      "first": 0.6458702509012244,
+      "last": 0.7418200024888008,
+      "ratio": 1.1485588652731589,
+      "n_samples": 3
+    },
+    "MotorAdaptationLayer": {
+      "first": 0.0,
+      "last": 0.0,
+      "ratio": 1.0,
+      "n_samples": 3
+    }
+  }
+}

@@ -1,0 +1,33 @@
+
+P1_Conversation:
+  primary: local_qwen_vl_32b      # GPU0 pinned
+  fallback_1: local_qwen_14b
+  fallback_2: cloud_api_qwen_max
+  timeout_ms: 500
+
+Complex_Cognition:
+  primary: cloud_api_qwen_max
+  fallback_1: local_qwen_vl_32b
+  fallback_2: local_qwen_14b
+  timeout_ms: 3000
+  gate: "has_network && !sensitive_data"
+
+P0_Motor:
+  primary: local_groot_motor      # GPU1 pinned
+  fallback_1: rule_based_motor
+  timeout_ms: 60
+
+P1_Vision:
+  primary: local_qwen_vl_32b
+  fallback_1: lightweight_detector
+  timeout_ms: 800
+
+P2_WorldModel:
+  primary: local_dreamzero
+  fallback_1: jepa_latent_predict
+  timeout_ms: 5000
+
+P2_3DReconstruction:
+  primary: local_gush3r
+  fallback_1: depth_anything_v2
+  timeout_ms: 5000

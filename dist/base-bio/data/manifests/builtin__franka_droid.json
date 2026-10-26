@@ -1,0 +1,136 @@
+{
+  "manifestVersion": 1,
+  "embodimentId": "builtin:franka_droid",
+  "signature": "70fbd7f303e7",
+  "name": "Franka Emika Panda",
+  "manufacturer": "builtin",
+  "type": "arm",
+  "dof": 7,
+  "brainVersion": 1,
+  "controlFreqHz": null,
+  "interfaces": {
+    "health": "/health",
+    "state": "/state",
+    "command": "/command",
+    "estop": "/estop"
+  },
+  "state": {
+    "joints": [
+      "panda_joint1",
+      "panda_joint2",
+      "panda_joint3",
+      "panda_joint4",
+      "panda_joint5",
+      "panda_joint6",
+      "panda_joint7"
+    ],
+    "observationDim": null,
+    "actionDim": 7
+  },
+  "commands": {
+    "allowed": [
+      "stop",
+      "standUp",
+      "armTo",
+      "wave",
+      "armsOut",
+      "grasp"
+    ],
+    "conditional": [],
+    "blocked": [
+      "sitDown",
+      "bow",
+      "waistTwist",
+      "march",
+      "walk",
+      "turn",
+      "moveTo"
+    ]
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "panda_joint1",
+        "min": -2.8973,
+        "max": 2.8973
+      },
+      {
+        "name": "panda_joint2",
+        "min": -1.7628,
+        "max": 1.7628
+      },
+      {
+        "name": "panda_joint3",
+        "min": -2.8973,
+        "max": 2.8973
+      },
+      {
+        "name": "panda_joint4",
+        "min": -3.0718,
+        "max": -0.0698
+      },
+      {
+        "name": "panda_joint5",
+        "min": -2.8973,
+        "max": 2.8973
+      },
+      {
+        "name": "panda_joint6",
+        "min": -0.0175,
+        "max": 3.7525
+      },
+      {
+        "name": "panda_joint7",
+        "min": -2.8973,
+        "max": 2.8973
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "panda_joint1",
+        "max": null
+      },
+      {
+        "name": "panda_joint2",
+        "max": null
+      },
+      {
+        "name": "panda_joint3",
+        "max": null
+      },
+      {
+        "name": "panda_joint4",
+        "max": null
+      },
+      {
+        "name": "panda_joint5",
+        "max": null
+      },
+      {
+        "name": "panda_joint6",
+        "max": null
+      },
+      {
+        "name": "panda_joint7",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "controller": {
+    "overall": "ready-real",
+    "simTier": "none",
+    "realTier": "joint-target-driver",
+    "note": "指令通路证据为驱动脚本存在，尚未真机验证"
+  },
+  "readiness": "commandable",
+  "provenance": {
+    "builtin": "services/MultiRobotAdapter.js",
+    "jointMatch": null
+  },
+  "generatedBy": "SOMAOS大底座/cloudBrainManifest",
+  "generatedAt": "2026-10-11T13:02:05.419Z",
+  "savedAt": "2026-10-11T13:02:05.466Z",
+  "storedUnder": ".."
+}

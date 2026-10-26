@@ -1,0 +1,74 @@
+{
+  "model": "Cosmos3-Edge-Policy-DROID",
+  "lora_config": {
+    "rank": 16,
+    "alpha": 32,
+    "target_modules": [
+      "to_q",
+      "to_k",
+      "to_v",
+      "to_out"
+    ]
+  },
+  "trainable_params": 6422528,
+  "total_params": 4433047744,
+  "trainable_pct": 0.1448783855010969,
+  "num_epochs": 3,
+  "num_samples": 3,
+  "loss_history": [
+    {
+      "epoch": 1,
+      "batch": 1,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 1,
+      "batch": 2,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 1,
+      "batch": 3,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 2,
+      "batch": 1,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 2,
+      "batch": 2,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 2,
+      "batch": 3,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 3,
+      "batch": 1,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 3,
+      "batch": 2,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    },
+    {
+      "epoch": 3,
+      "batch": 3,
+      "loss": null,
+      "error": "'PeftModel' object has no attribute '_hf_hook'"
+    }
+  ]
+}

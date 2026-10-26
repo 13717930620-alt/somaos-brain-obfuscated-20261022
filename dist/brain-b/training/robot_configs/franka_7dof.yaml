@@ -1,0 +1,27 @@
+# Franka Emika Panda Configuration (7-DOF)
+robot_name: Franka
+manufacturer: Franka_Emika
+dof: 7
+control_freq_hz: 1000
+obs_dim: 20
+act_dim: 7
+
+joints:
+  - {name: joint_1, id: 0, min: -2.9, max: 2.9, init: 0.0}
+  - {name: joint_2, id: 1, min: -1.8, max: 1.8, init: 0.0}
+  - {name: joint_3, id: 2, min: -2.9, max: 2.9, init: 0.0}
+  - {name: joint_4, id: 3, min: -3.1, max: -0.1, init: -1.6}
+  - {name: joint_5, id: 4, min: -2.9, max: 2.9, init: 0.0}
+  - {name: joint_6, id: 5, min: -1.6, max: 1.6, init: 0.0}
+  - {name: joint_7, id: 6, min: -2.9, max: 2.9, init: 0.0}
+
+domain_randomize:
+  mass_range: [0.92, 1.08]
+  damping_range: [0.90, 1.10]
+  gear_range: [0.92, 1.08]
+  friction_range: [0.90, 1.10]
+
+lora:
+  rank: 16
+  alpha: 32
+  target_modules: ["action_net", "mlp_extractor"]

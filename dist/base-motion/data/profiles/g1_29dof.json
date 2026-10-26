@@ -1,0 +1,112 @@
+{
+  "id": "g1_29dof",
+  "name": "G1",
+  "manufacturer": "Unitree",
+  "dof": 29,
+  "family": "humanoid",
+  "capabilities": {
+    "id": "g1_29dof",
+    "type": "humanoid",
+    "dof": 29,
+    "hasLegs": true,
+    "bipedal": true,
+    "hasArms": true,
+    "armDof": 14,
+    "hasWaist": true,
+    "hasHead": false,
+    "hasWheels": false,
+    "hasGripper": false,
+    "canWalk": true,
+    "canManipulate": true,
+    "controlFreqHz": 100,
+    "actionDim": 29,
+    "observationDim": 102,
+    "cameras": [],
+    "groups": {
+      "leg": 12,
+      "waist": 3,
+      "arm": 14
+    },
+    "unnamedArmDof": 0
+  },
+  "controller": {
+    "id": "g1_29dof",
+    "dof": 29,
+    "tokens": [
+      "g1",
+      "29dof",
+      "unitree"
+    ],
+    "family": "humanoid",
+    "overall": "needs-training",
+    "note": "腿式/全身运动本体：运动能力需训练或厂商控制器，大模型无法从规格直接生成",
+    "sim": {
+      "tier": "none",
+      "ready": false,
+      "evidence": [],
+      "missing": [
+        "mjcf_or_urdf_physics_model"
+      ]
+    },
+    "real": {
+      "tier": "no_transport_driver",
+      "ready": false,
+      "evidence": [],
+      "missing": [
+        "transport_driver_or_vendor_api",
+        "whole_body_balance_controller"
+      ]
+    },
+    "rootsUsed": [
+      "大脑项目运动脑具身人形版无权重模型"
+    ],
+    "artifacts": {
+      "family": "humanoid",
+      "roots": [
+        "D-humanoid"
+      ],
+      "relevant": [],
+      "countedForReadiness": 0,
+      "unboundLoadUnverified": [],
+      "datasetEmbedded": 0,
+      "withoutEvalReport": [],
+      "ledgerMissingRecords": 0,
+      "ledgerMissingBytes": 0
+    },
+    "evidenceSurface": {
+      "declared": [
+        {
+          "id": "C-arm",
+          "family": "arm",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": [
+            "robot",
+            "simulation"
+          ],
+          "hasDriveSurface": false
+        },
+        {
+          "id": "D-humanoid",
+          "family": "humanoid",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": [
+            "robot",
+            "simulation"
+          ],
+          "hasDriveSurface": false
+        }
+      ],
+      "missing": [],
+      "degraded": false
+    }
+  },
+  "builtAt": "2026-10-11T13:02:22.810Z"
+}

@@ -1,0 +1,48 @@
+
+watermarks:
+  high: 0.90
+  low: 0.75
+
+eviction:
+  algorithm: LRU-K
+  k: 2
+  scan_batch: 4
+
+pinned:
+  - groot_motor
+  - qwen_vl_32b
+  - whisper          # GPU0, STT
+
+prefetch:
+  enabled: true
+  max_concurrent: 2
+  zone_mb: 4096
+
+gpus:
+  - id: 0
+    role: llm_multimodal
+    total_vram_gb: 24
+    pinned:
+      - model: qwen_vl_32b
+        vram_gb: 20.0
+        quant: int4
+      - model: whisper
+        vram_gb: 1.3
+    low_water:
+      - model: embedding
+        vram_gb: 0.9
+  - id: 1
+    role: motor_world
+    total_vram_gb: 24
+    pinned:
+      - model: groot_motor
+        vram_gb: 5.1
+    low_water:
+      - model: gush3r
+        vram_gb: 5.0
+      - model: dreamzero
+        vram_gb: 2.1
+      - model: qwen_14b
+        vram_gb: 8.4
+        role: fallback
+

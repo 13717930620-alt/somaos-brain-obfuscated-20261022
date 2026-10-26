@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "lib": ["ES2022"],
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "@types/*": ["./types/*"]
+    }
+  },
+  "include": [
+    "*.js",
+    "cortex/**/*.js",
+    "corpus_callosum/**/*.js",
+    "hippocampus/**/*.js",
+    "amygdala/**/*.js",
+    "brainstem/**/*.js",
+    "basal_ganglia/**/*.js",
+    "cerebellum/**/*.js",
+    "thalamus/**/*.js",
+    "prefrontal_cortex/**/*.js",
+    "language_cortex/**/*.js",
+    "sensory_cortex/**/*.js",
+    "motor_cortex/**/*.js",
+    "default_mode_network/**/*.js",
+    "reward_system/**/*.js",
+    "mirror_neurons/**/*.js",
+    "interoception/**/*.js",
+    "pineal_gland/**/*.js",
+    "hypothalamus/**/*.js",
+    "cingulate_gyrus/**/*.js",
+    "memory/**/*.js",
+    "services/**/*.js",
+    "data/**/*.js",
+    "types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "desktop_app/node_modules",
+    ".brain-memory",
+    "hippocampus_store",
+    "memory_store",
+    "logs",
+    "models",
+    "dist",
+    "scripts/generated"
+  ]
+}

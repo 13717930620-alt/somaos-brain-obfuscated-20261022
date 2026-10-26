@@ -1,0 +1,140 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SomaOS Humanoid Brain Console</title>
+<style>
+:root{--bg:#050814;--p1:#0b1324;--p2:#101a2f;--ln:#223253;--tx:#e9efff;--mu:#93a4c7;--ac:#5eead4;--bu:#60a5fa;--wa:#fbbf24;--da:#fb7185}*{box-sizing:border-box}body{margin:0;height:100vh;overflow:hidden;font-family:Inter,"Microsoft YaHei",system-ui,sans-serif;background:#050814;color:var(--tx);display:flex}
+#left{width:min(400px,31vw);min-width:310px;display:flex;flex-direction:column;border-right:1px solid var(--ln);background:#070d1c}
+#center{flex:1;display:flex;flex-direction:column;min-width:300px;background:radial-gradient(900px 500px at 70% -10%,#12234a,#050814)}
+#right{width:min(420px,32vw);min-width:320px;border-left:1px solid var(--ln);background:#070d1c;overflow:auto}
+header{padding:12px 16px;border-bottom:1px solid var(--ln);display:flex;justify-content:space-between;align-items:center;background:#081021}
+h1{margin:0;font-size:15px}.sub{font-size:11px;color:var(--mu);margin-top:2px}.badge{padding:5px 10px;border-radius:99px;font-size:11px;background:#102036;border:1px solid var(--ln)}
+.tabs{display:flex;gap:4px;padding:10px 12px}.tab{flex:1;padding:8px;border-radius:8px;background:#0e172c;border:1px solid var(--ln);color:var(--mu)}.tab.on{background:#173258;color:#fff}
+.panel{flex:1;display:none;padding:14px;overflow:auto}.panel.on{display:block}
+.chat{height:calc(100vh - 225px);overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px;background:#081120;border:1px solid var(--ln);border-radius:12px}
+.msg{max-width:88%;padding:8px 10px;border-radius:12px;font-size:12px;line-height:1.45;white-space:pre-wrap}.u{align-self:end;background:#173258}.a{align-self:start;background:#112038}.s{align-self:center;color:var(--mu);background:#152238;font-size:11px}
+label{display:block;font-size:11px;color:var(--mu);margin-bottom:3px}input,textarea,select{width:100%;min-height:35px;margin-bottom:8px;background:#081120;border:1px solid var(--ln);color:var(--tx);border-radius:9px;padding:8px;font:inherit}textarea{min-height:72px;resize:vertical}
+button{cursor:pointer;border:0;border-radius:9px;padding:9px 10px;background:#223757;color:#fff;font-size:12px;font-weight:650;width:100%}button:hover{filter:brightness(1.13)}button.pri{background:var(--ac);color:#03201b}button.blu{background:var(--bu);color:#04142c}button.war{background:var(--wa);color:#332002}button.dan{background:var(--da);color:#36060f}.row{display:flex;gap:7px}.row>*{flex:1}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stage{position:relative;flex:1;margin:12px;background:#071020;border:1px solid var(--ln);border-radius:18px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+svg{width:min(94%,560px);max-height:94%}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:0 12px 12px}.m{background:#081120;border:1px solid var(--ln);border-radius:10px;padding:8px;text-align:center}.m b{display:block;font-size:16px}.m small{color:var(--mu);font-size:10px}
+.card{background:var(--p1);border:1px solid var(--ln);border-radius:12px;padding:11px;margin:10px}.card h3{margin:0 0 8px;font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.09em}
+.jgroup{margin:8px 0 4px;font-size:10px;color:var(--ac);letter-spacing:.08em;text-transform:uppercase;border-top:1px solid var(--ln);padding-top:6px}
+.slider{margin:5px 0}.slider label{display:flex;justify-content:space-between}input[type=range]{padding:0;height:24px;accent-color:var(--ac)}pre{margin:8px 0 0;padding:9px;background:#070d19;border:1px solid var(--ln);border-radius:9px;max-height:170px;overflow:auto;font-size:11px;white-space:pre-wrap}
+@media(max-width:1000px){body{flex-direction:column;height:auto;overflow:auto}#left,#right{width:auto;min-width:0;border:0}.chat{height:280px}.stage{height:360px}}
+</style>
+</head>
+<body>
+<div id="left">
+<header><div><h1>SomaOS 人形大脑</h1><div class="sub">对话 · 控制 · 具身状态</div></div><div class="badge" id="badge">CONNECTING</div></header>
+<div class="tabs"><button class="tab on" onclick="tab('chat')">AI 对话控制</button><button class="tab" onclick="tab('api')">接口配置</button></div>
+<div id="panel-chat" class="panel on" style="padding:0">
+ <div style="padding:12px"><div class="chat" id="chat"></div>
+ <input id="chatInput" placeholder="输入：站立 / 往前走 / 左转 / 挥手 / 鞠躬 / 抓取红色杯子 / 回家" onkeydown="if(event.key==='Enter')sendChat()">
+ <div class="row"><button class="pri" onclick="sendChat()">发送并执行</button><button onclick="resetAI()">清空上下文</button></div></div>
+</div>
+<div id="panel-api" class="panel">
+ <div class="card"><h3>AI Provider</h3><label>API Key</label><input id="apiKey" type="password" placeholder="sk-or-v1-..."><label>Local Base URL</label><input id="localBaseUrl" value="http://127.0.0.1:18080/v1"><label>Model ID</label><input id="modelId" value="qwen3-14b-instruct-q4_k_m"><button class="pri" onclick="configureAI()">保存并连接模型</button><pre id="aiOut">未配置</pre></div>
+ <div class="card"><h3>安全重置令牌</h3><label>SOMAOS_SAFETY_RESET_TOKEN</label><input id="resetToken" type="password"><button class="war" onclick="resetSafety()">恢复运行</button></div>
+</div>
+</div>
+
+<div id="center">
+<header><div><h1>具身人形实时显示</h1><div class="sub">24 DOF · 头/腰/双臂/双手/双腿 · 逐关节安全过滤</div></div><div class="badge" id="estop">READY</div></header>
+<div class="stage">
+<svg viewBox="-150 -260 300 480" aria-label="humanoid robot">
+<defs>
+<linearGradient id="gL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bae6fd"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
+<linearGradient id="gR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a5f3fc"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+</defs>
+<ellipse cx="0" cy="196" rx="86" ry="14" fill="#0e1a33"/>
+<polyline id="ln_spine" fill="none" stroke="#7dd3fc" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline id="ln_head" fill="none" stroke="#bae6fd" stroke-width="20" stroke-linecap="round"/>
+<circle id="pt_head" r="15" fill="#bae6fd" stroke="#38bdf8" stroke-width="2"/>
+<polyline id="ln_arm_l" fill="none" stroke="url(#gL)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline id="ln_arm_r" fill="none" stroke="url(#gR)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline id="ln_leg_l" fill="none" stroke="#4ade80" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline id="ln_leg_r" fill="none" stroke="#34d399" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline id="grip_l" fill="none" stroke="#fb7185" stroke-width="5" stroke-linecap="round"/>
+<polyline id="grip_r" fill="none" stroke="#fb7185" stroke-width="5" stroke-linecap="round"/>
+<circle id="pt_pelvis" r="9" fill="#fbbf24"/>
+<circle id="pt_shoulder" r="8" fill="#fbbf24"/>
+<circle id="pt_elbow_l" r="6" fill="#e0f2fe"/><circle id="pt_elbow_r" r="6" fill="#e0f2fe"/>
+<circle id="pt_wrist_l" r="5" fill="#e0f2fe"/><circle id="pt_wrist_r" r="5" fill="#e0f2fe"/>
+<circle id="pt_hip_l" r="6" fill="#bbf7d0"/><circle id="pt_hip_r" r="6" fill="#bbf7d0"/>
+<circle id="pt_knee_l" r="6" fill="#bbf7d0"/><circle id="pt_knee_r" r="6" fill="#bbf7d0"/>
+<circle id="pt_ankle_l" r="6" fill="#bbf7d0"/><circle id="pt_ankle_r" r="6" fill="#bbf7d0"/>
+</svg>
+</div>
+<div class="metrics"><div class="m"><small>HEALTH</small><b id="mh">—</b></div><div class="m"><small>DOF</small><b id="mdof">24</b></div><div class="m"><small>QUEUE</small><b id="mq">0</b></div><div class="m"><small>MODE</small><b id="mm">SAFE</b></div></div>
+</div>
+
+<div id="right">
+<header><div><h1>手动控制台</h1><div class="sub">每个动作都经过逐关节安全过滤</div></div><button class="dan" style="width:auto" onclick="stopAll()">急停</button></header>
+<div class="card"><h3>关节控制 (24 DOF)</h3><div id="sliders"></div>
+<label>Velocity rad/s<input id="vel" type="number" step=".05" min=".05" max="2.5" value=".4"></label>
+<label>Torque N·m<input id="tor" type="number" step="1" min="1" max="120" value="12"></label>
+<div class="grid2"><button class="pri" onclick="sendManual()">执行当前姿态</button><button onclick="homePose()">站立复位</button></div>
+<div class="grid2" style="margin-top:7px"><button class="blu" onclick="demoPose()">挥手演示</button><button onclick="kick()">喂看门狗</button></div></div>
+<div class="card"><h3>任务目标</h3><input id="goalText" value="往前走"><button class="pri" onclick="runGoal()">安全执行任务</button><pre id="goalOut">ready</pre></div>
+<div class="card"><h3>感知输入</h3><textarea id="observeBody">{"modality":"point_cloud","confidence":.92,"points":[[.08,0,0],[1,1,1]],"targetPosition":[0,0,0],"objects":[{"id":"red-cup","label":"red cup","reachable":true}]}</textarea><button onclick="post('/observe','observeBody','goalOut')">注入点云观察</button></div>
+<div class="card"><h3>系统状态</h3><button onclick="refresh(true)">刷新全量状态</button><pre id="statusOut">loading…</pre></div>
+</div>
+<script>window.CONSOLE_VERSION='2026-10-10-humanoid';
+const $=id=>document.getElementById(id);
+const NAMES=['head_yaw','head_pitch','waist_yaw','waist_pitch','l_shoulder_pitch','l_shoulder_roll','l_elbow_pitch','l_wrist_pitch','r_shoulder_pitch','r_shoulder_roll','r_elbow_pitch','r_wrist_pitch','l_hip_pitch','l_hip_roll','l_knee_pitch','l_ankle_pitch','l_ankle_roll','r_hip_pitch','r_hip_roll','r_knee_pitch','r_ankle_pitch','r_ankle_roll','l_gripper','r_gripper'];
+const GROUPS=[['头部',[0,1]],['腰部',[2,3]],['左臂',[4,5,6,7]],['右臂',[8,9,10,11]],['左手',[22]],['右手',[23]],['左腿',[12,13,14,15,16]],['右腿',[17,18,19,20,21]]];
+let limits=NAMES.map((n,i)=>(i>=22?[0,1.2]:[-3.05,3.05]));
+let joints=NAMES.map((n,i)=>i>=22?0.6:0);
+const R=(v,a)=>({x:v.x*Math.cos(a)-v.y*Math.sin(a),y:v.x*Math.sin(a)+v.y*Math.cos(a)});
+const A=(a,b)=>({x:a.x+b.x,y:a.y+b.y});
+function setPts(id,pts){$(id).setAttribute('points',pts.map(p=>p.x.toFixed(1)+','+p.y.toFixed(1)).join(' '));}
+function setC(id,p){$(id).setAttribute('cx',p.x.toFixed(1));$(id).setAttribute('cy',p.y.toFixed(1));}
+function render(){
+ const J=joints, wa=J[3], dy=J[2]*22, hy=J[0]*14;
+ const pelvis={x:0,y:60};
+ const shoulder=A(A(pelvis,R({x:0,y:-110},wa)),{x:dy,y:0});
+ const head=A(A(shoulder,R({x:0,y:-40},wa+J[1])),{x:hy,y:0});
+ const shL=A(shoulder,R({x:-32,y:0},wa)), shR=A(shoulder,R({x:32,y:0},wa));
+ const aL=wa-J[5]-J[4]*0.3, aR=wa+J[9]+J[8]*0.3;
+ const elL=A(shL,R({x:0,y:46},aL)), wrL=A(elL,R({x:0,y:40},aL-J[6]*0.6));
+ const elR=A(shR,R({x:0,y:46},aR)), wrR=A(elR,R({x:0,y:40},aR-J[10]*0.6));
+ const hipL=A(pelvis,{x:-18,y:0}), hipR=A(pelvis,{x:18,y:0});
+ const gL=-J[13], gR=J[18];
+ const knL=A(hipL,R({x:0,y:60},gL)), anL=A(knL,R({x:0,y:56},gL-J[14]*0.5));
+ const knR=A(hipR,R({x:0,y:60},gR)), anR=A(knR,R({x:0,y:56},gR-J[19]*0.5));
+ setPts('ln_spine',[pelvis,shoulder]); setPts('ln_head',[shoulder,head]); setC('pt_head',head);
+ setC('pt_pelvis',pelvis); setC('pt_shoulder',shoulder);
+ setPts('ln_arm_l',[shL,elL,wrL]); setPts('ln_arm_r',[shR,elR,wrR]);
+ setC('pt_elbow_l',elL); setC('pt_elbow_r',elR); setC('pt_wrist_l',wrL); setC('pt_wrist_r',wrR);
+ setPts('ln_leg_l',[hipL,knL,anL]); setPts('ln_leg_r',[hipR,knR,anR]);
+ setC('pt_hip_l',hipL); setC('pt_hip_r',hipR); setC('pt_knee_l',knL); setC('pt_knee_r',knR); setC('pt_ankle_l',anL); setC('pt_ankle_r',anR);
+ const spL=(J[22]*11).toFixed(1), spR=(J[23]*11).toFixed(1);
+ const cl=A(wrL,R({x:-8,y:16},aL)), cr=A(wrL,R({x:8,y:16},aL));
+ const dl=A(wrR,R({x:-8,y:16},aR)), dr=A(wrR,R({x:8,y:16},aR));
+ setPts('grip_l',[cl,wrL,cr]); setPts('grip_r',[dl,wrR,dr]);
+}
+async function api(p,m='GET',b){try{const r=await fetch(p,{method:m,headers:{'content-type':'application/json'},body:b?JSON.stringify(b):undefined});return{ok:r.ok,s:r.status,d:await r.json().catch(()=>({error:'bad response'}))}}catch(e){return{ok:false,s:0,d:{error:String(e)}}}}
+function msg(t,c='a'){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;$('chat').append(d);$('chat').scrollTop=999999;}
+function tab(id){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));$('panel-'+id).classList.add('on');document.querySelectorAll('.tab').forEach((x,i)=>x.classList.toggle('on',i===(id==='chat'?0:1)));}
+function sliders(){$('sliders').innerHTML=GROUPS.map(([g,idx])=>`<div class=jgroup>${g}</div>`+idx.map(i=>`<div class=slider><label>${NAMES[i]}<span>${joints[i].toFixed(2)}</span></label><input type=range min=${limits[i][0]} max=${limits[i][1]} step=.02 value=${joints[i]} oninput="setJ(${i},this.value)"></div>`).join('')).join('');}
+function setJ(i,v){joints[i]=+v;render();document.querySelectorAll('#sliders .slider').forEach((el,k)=>{const all=[].concat(...GROUPS.map(x=>x[1]));if(all[k]===i)el.querySelector('span').textContent=joints[i].toFixed(2);});}
+async function refresh(full){const r=await api('/health');if(!r.ok){$('badge').textContent='OFFLINE';return;}$('statusOut').textContent=JSON.stringify(r.d,null,2);const h=r.d.health?.healthy;$('badge').textContent=h?'HEALTHY':'DEGRADED';$('badge').style.color=h?'#5eead4':'#fb7185';$('mh').textContent=h?'OK':'FAIL';$('mdof').textContent=r.d.embodiment?.dof||'—';$('mq').textContent=r.d.execution?.queued||0;$('estop').textContent=r.d.emergencyStopped?'E-STOP':'READY';$('estop').style.color=r.d.emergencyStopped?'#fb7185':'#5eead4';if(r.d.embodiment?.jointLimits?.length===24){limits=r.d.embodiment.jointLimits;}}
+async function state(){const r=await api('/robot/state');if(r.ok&&r.d.joints){joints=r.d.joints.map(Number);render();}}
+async function cmd(js){return api('/robot/command','POST',{type:'robot.motion',skillId:'manual_control',joints:js.map(Number),velocityRadS:+$('vel').value,accelerationRadS2:.8,torqueNm:+$('tor').value});}
+async function sendManual(){const r=await cmd(joints);show('goalOut',r.d);setTimeout(state,80);refresh();}
+async function homePose(){joints=NAMES.map((n,i)=>i>=22?0.6:0);sliders();render();await sendManual();}
+async function demoPose(){const r=await api('/goal','POST',{text:'挥手打招呼'});show('goalOut',r.d);setTimeout(state,120);refresh();}
+async function stopAll(){const r=await api('/emergency-stop','POST');msg(`急停：${r.d.stopped}`,'s');refresh();}
+async function kick(){await api('/watchdog/kick','POST',{});refresh();}
+async function sendChat(){const text=$('chatInput').value.trim();if(!text)return;msg(text,'u');$('chatInput').value='';const r=await api('/ai/chat','POST',{message:text});
+ if(r.ok&&r.d.mode==='safe_command'){const p=r.d.robotState?.joints||[];msg(`${r.d.reply}\n执行状态：${r.d.execution?.ok===false?'被安全层拦截':'已提交成功'}\n命令ID：${r.d.execution?.commandId||'-'}\nDOF：${p.length}`);joints=p.length?p.map(Number):joints;render();sliders();}else if(r.ok){msg(r.d.content+'\n\n注意：这是 AI 文本回复，不是真实机器人执行结果。');}else{msg(`执行失败：${r.d.error||'未知错误'}`);}refresh();}
+async function configureAI(){const r=await api('/ai/configure','POST',{apiKey:$('apiKey').value,modelId:$('modelId').value,baseUrl:$('localBaseUrl').value.trim()});show('aiOut',r.d);msg(r.ok?`AI 已配置：${r.d.modelId}`:`配置失败：${r.d.error}`,'s');}
+async function resetAI(){const r=await api('/ai/reset','POST');show('aiOut',r.d);msg('AI 服务端上下文已清空。','s');}
+async function resetSafety(){const r=await api('/safety/reset','POST',{authorizationToken:$('resetToken').value});msg(r.ok?'安全状态与后端已恢复。':`恢复失败：${r.d.error}`,'s');refresh();}
+async function runGoal(){const r=await api('/goal','POST',{text:$('goalText').value});show('goalOut',r.d);setTimeout(state,120);refresh();}
+function post(path,bodyId,outId){api(path,'POST',JSON.parse($(bodyId).value)).then(r=>show(outId,r.d)).then(refresh);}
+function show(id,o){$(id).textContent=JSON.stringify(o,null,2);}
+sliders();render();state();refresh();setInterval(()=>{refresh();if(!$('estop').textContent.includes('E'))state();},1800);
+</script></body></html>

@@ -1,0 +1,10 @@
+{
+  "task": "walk_forward",
+  "steps": 5000,
+  "elapsed_min": 1.304845360914866,
+  "forward_dist": 0.5482720935736198,
+  "standing_steps": 27,
+  "save_path": "C:\\Users\\redactxxxxxxx\\Desktop\\大脑项目\\大脑项目_副本\\training\\humanoid_walk_forward_v3.zip",
+  "method": "ProtoMotions_tracking_v3",
+  "device": "cuda"
+}

@@ -1,0 +1,57 @@
+# G1 Humanoid Robot Configuration (29-DOF)
+robot_name: G1
+manufacturer: Unitree
+dof: 29
+control_freq_hz: 100
+obs_dim: 102
+act_dim: 29
+
+joints:
+  - {name: left_hip_pitch,    id: 0,  min: -2.35, max: 2.35, init: 0.0}
+  - {name: left_hip_roll,     id: 1,  min: -0.49, max: 0.49, init: 0.0}
+  - {name: left_hip_yaw,      id: 2,  min: -0.49, max: 0.49, init: 0.0}
+  - {name: left_knee,         id: 3,  min: -0.52, max: 2.09, init: 0.0}
+  - {name: left_ankle_pitch,  id: 4,  min: -0.87, max: 0.87, init: 0.0}
+  - {name: left_ankle_roll,   id: 5,  min: -0.52, max: 0.52, init: 0.0}
+  - {name: right_hip_pitch,   id: 6,  min: -2.35, max: 2.35, init: 0.0}
+  - {name: right_hip_roll,    id: 7,  min: -0.49, max: 0.49, init: 0.0}
+  - {name: right_hip_yaw,     id: 8,  min: -0.49, max: 0.49, init: 0.0}
+  - {name: right_knee,        id: 9,  min: -0.52, max: 2.09, init: 0.0}
+  - {name: right_ankle_pitch, id: 10, min: -0.87, max: 0.87, init: 0.0}
+  - {name: right_ankle_roll,  id: 11, min: -0.52, max: 0.52, init: 0.0}
+  - {name: waist_yaw,         id: 12, min: -2.35, max: 2.35, init: 0.0}
+  - {name: waist_roll,        id: 13, min: -0.49, max: 0.49, init: 0.0}
+  - {name: waist_pitch,       id: 14, min: -0.49, max: 0.49, init: 0.0}
+  - {name: left_shoulder_pitch, id: 15, min: -3.14, max: 3.14, init: 0.0}
+  - {name: left_shoulder_roll,  id: 16, min: -0.49, max: 3.14, init: 0.0}
+  - {name: left_shoulder_yaw,   id: 17, min: -3.14, max: 3.14, init: 0.0}
+  - {name: left_elbow,          id: 18, min: -1.57, max: 1.57, init: 0.0}
+  - {name: left_wrist_roll,     id: 19, min: -3.14, max: 3.14, init: 0.0}
+  - {name: left_wrist_pitch,    id: 20, min: -1.57, max: 1.57, init: 0.0}
+  - {name: left_wrist_yaw,      id: 21, min: -3.14, max: 3.14, init: 0.0}
+  - {name: right_shoulder_pitch, id: 22, min: -3.14, max: 3.14, init: 0.0}
+  - {name: right_shoulder_roll,  id: 23, min: -0.49, max: 3.14, init: 0.0}
+  - {name: right_shoulder_yaw,   id: 24, min: -3.14, max: 3.14, init: 0.0}
+  - {name: right_elbow,          id: 25, min: -1.57, max: 1.57, init: 0.0}
+  - {name: right_wrist_roll,     id: 26, min: -3.14, max: 3.14, init: 0.0}
+  - {name: right_wrist_pitch,    id: 27, min: -1.57, max: 1.57, init: 0.0}
+  - {name: right_wrist_yaw,      id: 28, min: -3.14, max: 3.14, init: 0.0}
+
+domain_randomize:
+  mass_range: [0.92, 1.08]      # ±8%
+  damping_range: [0.90, 1.10]   # ±10%
+  gear_range: [0.92, 1.08]      # ±8%
+  friction_range: [0.90, 1.10]  # ±10%
+
+morphology_randomize:
+  leg_length_range: [0.95, 1.05]  # ±5%
+  com_offset_range: [-0.02, 0.02] # ±2cm
+  joint_friction_range: [0.70, 1.30]  # ±30%
+
+lora:
+  rank: 16
+  alpha: 32
+  target_modules: ["action_net", "mlp_extractor"]
+
+mujoco_model: "C:/Temp/g1_model/g1.xml"
+stand_height: 0.79

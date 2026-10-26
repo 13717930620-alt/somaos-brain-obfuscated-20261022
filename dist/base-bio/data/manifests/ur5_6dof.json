@@ -1,0 +1,133 @@
+{
+  "manifestVersion": 1,
+  "embodimentId": "ur5_6dof",
+  "signature": "015e965c4f40",
+  "name": "UR5",
+  "manufacturer": "Universal_Robots",
+  "type": "arm",
+  "dof": 6,
+  "brainVersion": 1,
+  "controlFreqHz": 125,
+  "interfaces": {
+    "health": "/health",
+    "state": "/state",
+    "command": "/command",
+    "estop": "/estop"
+  },
+  "state": {
+    "joints": [
+      "shoulder_pan",
+      "shoulder_lift",
+      "elbow",
+      "wrist_1",
+      "wrist_2",
+      "wrist_3"
+    ],
+    "observationDim": 18,
+    "actionDim": 6
+  },
+  "commands": {
+    "allowed": [
+      "stop",
+      "standUp",
+      "armTo",
+      "wave",
+      "armsOut"
+    ],
+    "conditional": [],
+    "blocked": [
+      "sitDown",
+      "bow",
+      "waistTwist",
+      "march",
+      "walk",
+      "turn",
+      "moveTo",
+      "grasp"
+    ]
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "shoulder_pan",
+        "min": -6.28,
+        "max": 6.28
+      },
+      {
+        "name": "shoulder_lift",
+        "min": -6.28,
+        "max": 6.28
+      },
+      {
+        "name": "elbow",
+        "min": -3.14,
+        "max": 3.14
+      },
+      {
+        "name": "wrist_1",
+        "min": -6.28,
+        "max": 6.28
+      },
+      {
+        "name": "wrist_2",
+        "min": -6.28,
+        "max": 6.28
+      },
+      {
+        "name": "wrist_3",
+        "min": -6.28,
+        "max": 6.28
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "shoulder_pan",
+        "max": null
+      },
+      {
+        "name": "shoulder_lift",
+        "max": null
+      },
+      {
+        "name": "elbow",
+        "max": null
+      },
+      {
+        "name": "wrist_1",
+        "max": null
+      },
+      {
+        "name": "wrist_2",
+        "max": null
+      },
+      {
+        "name": "wrist_3",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "controller": {
+    "overall": "unsupported",
+    "simTier": "none",
+    "realTier": "no_transport_driver",
+    "note": ""
+  },
+  "readiness": "blocked-no-transport",
+  "provenance": {
+    "yaml": "training\\robot_configs\\ur5_6dof.yaml",
+    "mjcf": null,
+    "jointMatch": {
+      "matched": 0,
+      "mjcfOnly": 0,
+      "yamlOnly": 0
+    },
+    "rangeOverrides": [],
+    "significantMismatches": 0
+  },
+  "generatedBy": "SOMAOS大底座/cloudBrainManifest",
+  "generatedAt": "2026-10-11T13:02:05.252Z",
+  "savedAt": "2026-10-11T13:02:05.287Z",
+  "storedUnder": ".."
+}

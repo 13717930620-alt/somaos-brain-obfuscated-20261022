@@ -1,0 +1,193 @@
+{
+  "id": "ur5_6dof",
+  "name": "UR5",
+  "manufacturer": "Universal_Robots",
+  "dof": 6,
+  "family": "arm",
+  "capabilities": {
+    "id": "ur5_6dof",
+    "type": "arm",
+    "dof": 6,
+    "hasLegs": false,
+    "bipedal": false,
+    "hasArms": true,
+    "armDof": 6,
+    "hasWaist": false,
+    "hasHead": false,
+    "hasWheels": false,
+    "hasGripper": false,
+    "canWalk": false,
+    "canManipulate": true,
+    "controlFreqHz": 125,
+    "actionDim": 6,
+    "observationDim": 18,
+    "cameras": [],
+    "groups": {
+      "arm": 6
+    },
+    "unnamedArmDof": 0
+  },
+  "controller": {
+    "id": "ur5_6dof",
+    "dof": 6,
+    "tokens": [
+      "ur5",
+      "6dof",
+      "universal",
+      "robots"
+    ],
+    "family": "arm",
+    "overall": "unsupported",
+    "note": "机械臂类且无运动证据面（robot\\/simulation\\ 缺失、checkpoint 未绑定）：不宣称可指挥",
+    "sim": {
+      "tier": "none",
+      "ready": false,
+      "evidence": [],
+      "missing": [
+        "mjcf_or_urdf_physics_model"
+      ]
+    },
+    "real": {
+      "tier": "no_transport_driver",
+      "ready": false,
+      "evidence": [],
+      "missing": [
+        "transport_driver_or_vendor_api"
+      ]
+    },
+    "rootsUsed": [
+      "大脑项目运动版机械臂无权重版"
+    ],
+    "artifacts": {
+      "family": "arm",
+      "roots": [
+        "C-arm"
+      ],
+      "relevant": [],
+      "countedForReadiness": 0,
+      "unboundLoadUnverified": [
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/act_pretrain_best.pt",
+          "bytes": 1009126,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/act_pretrain_final.pt",
+          "bytes": 1011622,
+          "hasEvalReport": true
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/l2_l4_policy.pt",
+          "bytes": 1039505,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/multimodal_fusion.pt",
+          "bytes": 5391914,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/pointflow_weights_v7_full.pt",
+          "bytes": 17607212,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/pointflow_weights_v7_pf.pt",
+          "bytes": 17607040,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/segmentation_weights_v2.pt",
+          "bytes": 860768,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/smolvla_weights.pt",
+          "bytes": 3873934,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/_deprecated/act_best.pt",
+          "bytes": 1615514,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints/_deprecated/act_final.pt",
+          "bytes": 1617178,
+          "hasEvalReport": true
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints_v2/act_best.pt",
+          "bytes": 1616050,
+          "hasEvalReport": false
+        },
+        {
+          "root": "C-arm",
+          "file": "training/checkpoints_v2/act_final.pt",
+          "bytes": 1616202,
+          "hasEvalReport": true
+        }
+      ],
+      "datasetEmbedded": 0,
+      "withoutEvalReport": [
+        "training/checkpoints/act_pretrain_best.pt",
+        "training/checkpoints/l2_l4_policy.pt",
+        "training/checkpoints/multimodal_fusion.pt",
+        "training/checkpoints/pointflow_weights_v7_full.pt",
+        "training/checkpoints/pointflow_weights_v7_pf.pt",
+        "training/checkpoints/segmentation_weights_v2.pt",
+        "training/checkpoints/smolvla_weights.pt",
+        "training/checkpoints/_deprecated/act_best.pt",
+        "training/checkpoints_v2/act_best.pt"
+      ],
+      "ledgerMissingRecords": 34,
+      "ledgerMissingBytes": 41807267573
+    },
+    "evidenceSurface": {
+      "declared": [
+        {
+          "id": "C-arm",
+          "family": "arm",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": [
+            "robot",
+            "simulation"
+          ],
+          "hasDriveSurface": false
+        },
+        {
+          "id": "D-humanoid",
+          "family": "humanoid",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": [
+            "robot",
+            "simulation"
+          ],
+          "hasDriveSurface": false
+        }
+      ],
+      "missing": [],
+      "degraded": false
+    }
+  },
+  "builtAt": "2026-10-11T13:02:22.898Z"
+}

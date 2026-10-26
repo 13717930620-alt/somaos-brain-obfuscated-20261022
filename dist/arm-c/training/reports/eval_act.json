@@ -1,0 +1,10 @@
+{
+  "policy": "act",
+  "checkpoint": "C:\\Users\\redactxxxxxxx\\Desktop\\大脑项目2\\training\\checkpoints\\act_final.pt",
+  "n_eval": 50,
+  "success_rate": 0.72,
+  "collision_rate": 0.06,
+  "avg_smoothness": 0.8577416640124855,
+  "elapsed_s": 0.01706242561340332,
+  "passed": true
+}

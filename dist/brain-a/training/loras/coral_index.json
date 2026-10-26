@@ -1,0 +1,23 @@
+{
+  "tasks": {
+    "pick_cup": {
+      "loraPath": {
+        "loraPath": "/lora/pick_cup"
+      },
+      "metadata": {},
+      "registeredAt": 1792630516815,
+      "swaps": 0
+    },
+    "pour_water": {
+      "loraPath": {
+        "loraPath": "/lora/pour_water"
+      },
+      "metadata": {},
+      "registeredAt": 1792630516692,
+      "swaps": 0
+    }
+  },
+  "swapCount": 0,
+  "lastSwapTime": null,
+  "updatedAt": 1792630516815
+}

@@ -1,0 +1,26 @@
+# UR5 Robot Arm Configuration (6-DOF)
+robot_name: UR5
+manufacturer: Universal_Robots
+dof: 6
+control_freq_hz: 125
+obs_dim: 18
+act_dim: 6
+
+joints:
+  - {name: shoulder_pan,  id: 0, min: -6.28, max: 6.28, init: 0.0}
+  - {name: shoulder_lift, id: 1, min: -6.28, max: 6.28, init: 0.0}
+  - {name: elbow,         id: 2, min: -3.14, max: 3.14, init: 0.0}
+  - {name: wrist_1,       id: 3, min: -6.28, max: 6.28, init: 0.0}
+  - {name: wrist_2,       id: 4, min: -6.28, max: 6.28, init: 0.0}
+  - {name: wrist_3,       id: 5, min: -6.28, max: 6.28, init: 0.0}
+
+domain_randomize:
+  mass_range: [0.92, 1.08]
+  damping_range: [0.90, 1.10]
+  gear_range: [0.92, 1.08]
+  friction_range: [0.90, 1.10]
+
+lora:
+  rank: 16
+  alpha: 32
+  target_modules: ["action_net", "mlp_extractor"]

@@ -1,0 +1,1127 @@
+{
+  "profileVersion": 1,
+  "embodimentId": "g1_29dof",
+  "signature": "6f8b1cc3cb15",
+  "name": "G1",
+  "manufacturer": "Unitree",
+  "type": "humanoid",
+  "dof": 29,
+  "actionDim": 29,
+  "observationDim": 102,
+  "controlFreqHz": 100,
+  "standHeight": 0.79,
+  "maxVelocity": null,
+  "capabilities": {
+    "id": "g1_29dof",
+    "type": "humanoid",
+    "dof": 29,
+    "hasLegs": true,
+    "bipedal": true,
+    "hasArms": true,
+    "armDof": 14,
+    "hasWaist": true,
+    "hasHead": false,
+    "hasWheels": false,
+    "hasGripper": false,
+    "canWalk": true,
+    "canManipulate": true,
+    "controlFreqHz": 100,
+    "actionDim": 29,
+    "observationDim": 102,
+    "cameras": [],
+    "groups": {
+      "leg": 12,
+      "waist": 3,
+      "arm": 14
+    },
+    "unnamedArmDof": 0
+  },
+  "joints": [
+    {
+      "name": "left_hip_pitch",
+      "canonical": "left_hip_pitch",
+      "index": 0,
+      "min": -2.5307,
+      "max": 2.8798,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -88,
+        88
+      ],
+      "group": "leg",
+      "side": "left"
+    },
+    {
+      "name": "left_hip_roll",
+      "canonical": "left_hip_roll",
+      "index": 1,
+      "min": -0.5236,
+      "max": 2.9671,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -139,
+        139
+      ],
+      "group": "leg",
+      "side": "left"
+    },
+    {
+      "name": "left_hip_yaw",
+      "canonical": "left_hip_yaw",
+      "index": 2,
+      "min": -2.7576,
+      "max": 2.7576,
+      "init": 0,
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "forceRange": [
+        -88,
+        88
+      ],
+      "group": "leg",
+      "side": "left"
+    },
+    {
+      "name": "left_knee",
+      "canonical": "left_knee",
+      "index": 3,
+      "min": -0.087267,
+      "max": 2.8798,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -139,
+        139
+      ],
+      "group": "leg",
+      "side": "left"
+    },
+    {
+      "name": "left_ankle_pitch",
+      "canonical": "left_ankle_pitch",
+      "index": 4,
+      "min": -0.87267,
+      "max": 0.5236,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -50,
+        50
+      ],
+      "group": "leg",
+      "side": "left"
+    },
+    {
+      "name": "left_ankle_roll",
+      "canonical": "left_ankle_roll",
+      "index": 5,
+      "min": -0.2618,
+      "max": 0.2618,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -50,
+        50
+      ],
+      "group": "leg",
+      "side": "left"
+    },
+    {
+      "name": "right_hip_pitch",
+      "canonical": "right_hip_pitch",
+      "index": 6,
+      "min": -2.5307,
+      "max": 2.8798,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -88,
+        88
+      ],
+      "group": "leg",
+      "side": "right"
+    },
+    {
+      "name": "right_hip_roll",
+      "canonical": "right_hip_roll",
+      "index": 7,
+      "min": -2.9671,
+      "max": 0.5236,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -139,
+        139
+      ],
+      "group": "leg",
+      "side": "right"
+    },
+    {
+      "name": "right_hip_yaw",
+      "canonical": "right_hip_yaw",
+      "index": 8,
+      "min": -2.7576,
+      "max": 2.7576,
+      "init": 0,
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "forceRange": [
+        -88,
+        88
+      ],
+      "group": "leg",
+      "side": "right"
+    },
+    {
+      "name": "right_knee",
+      "canonical": "right_knee",
+      "index": 9,
+      "min": -0.087267,
+      "max": 2.8798,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -139,
+        139
+      ],
+      "group": "leg",
+      "side": "right"
+    },
+    {
+      "name": "right_ankle_pitch",
+      "canonical": "right_ankle_pitch",
+      "index": 10,
+      "min": -0.87267,
+      "max": 0.5236,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -50,
+        50
+      ],
+      "group": "leg",
+      "side": "right"
+    },
+    {
+      "name": "right_ankle_roll",
+      "canonical": "right_ankle_roll",
+      "index": 11,
+      "min": -0.2618,
+      "max": 0.2618,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -50,
+        50
+      ],
+      "group": "leg",
+      "side": "right"
+    },
+    {
+      "name": "waist_yaw",
+      "canonical": "waist_yaw",
+      "index": 12,
+      "min": -2.618,
+      "max": 2.618,
+      "init": 0,
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "forceRange": [
+        -88,
+        88
+      ],
+      "group": "waist",
+      "side": null
+    },
+    {
+      "name": "waist_roll",
+      "canonical": "waist_roll",
+      "index": 13,
+      "min": -0.52,
+      "max": 0.52,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -50,
+        50
+      ],
+      "group": "waist",
+      "side": null
+    },
+    {
+      "name": "waist_pitch",
+      "canonical": "waist_pitch",
+      "index": 14,
+      "min": -0.52,
+      "max": 0.52,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -50,
+        50
+      ],
+      "group": "waist",
+      "side": null
+    },
+    {
+      "name": "left_shoulder_pitch",
+      "canonical": "left_shoulder_pitch",
+      "index": 15,
+      "min": -3.0892,
+      "max": 2.6704,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "left"
+    },
+    {
+      "name": "left_shoulder_roll",
+      "canonical": "left_shoulder_roll",
+      "index": 16,
+      "min": -1.5882,
+      "max": 2.2515,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "left"
+    },
+    {
+      "name": "left_shoulder_yaw",
+      "canonical": "left_shoulder_yaw",
+      "index": 17,
+      "min": -2.618,
+      "max": 2.618,
+      "init": 0,
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "left"
+    },
+    {
+      "name": "left_elbow",
+      "canonical": "left_elbow",
+      "index": 18,
+      "min": -1.0472,
+      "max": 2.0944,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "left"
+    },
+    {
+      "name": "left_wrist_roll",
+      "canonical": "left_wrist_roll",
+      "index": 19,
+      "min": -1.97222,
+      "max": 1.97222,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "left"
+    },
+    {
+      "name": "left_wrist_pitch",
+      "canonical": "left_wrist_pitch",
+      "index": 20,
+      "min": -1.61443,
+      "max": 1.61443,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -5,
+        5
+      ],
+      "group": "arm",
+      "side": "left"
+    },
+    {
+      "name": "left_wrist_yaw",
+      "canonical": "left_wrist_yaw",
+      "index": 21,
+      "min": -1.61443,
+      "max": 1.61443,
+      "init": 0,
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "forceRange": [
+        -5,
+        5
+      ],
+      "group": "arm",
+      "side": "left"
+    },
+    {
+      "name": "right_shoulder_pitch",
+      "canonical": "right_shoulder_pitch",
+      "index": 22,
+      "min": -3.0892,
+      "max": 2.6704,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "right"
+    },
+    {
+      "name": "right_shoulder_roll",
+      "canonical": "right_shoulder_roll",
+      "index": 23,
+      "min": -2.2515,
+      "max": 1.5882,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "right"
+    },
+    {
+      "name": "right_shoulder_yaw",
+      "canonical": "right_shoulder_yaw",
+      "index": 24,
+      "min": -2.618,
+      "max": 2.618,
+      "init": 0,
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "right"
+    },
+    {
+      "name": "right_elbow",
+      "canonical": "right_elbow",
+      "index": 25,
+      "min": -1.0472,
+      "max": 2.0944,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "right"
+    },
+    {
+      "name": "right_wrist_roll",
+      "canonical": "right_wrist_roll",
+      "index": 26,
+      "min": -1.97222,
+      "max": 1.97222,
+      "init": 0,
+      "axis": [
+        1,
+        0,
+        0
+      ],
+      "forceRange": [
+        -25,
+        25
+      ],
+      "group": "arm",
+      "side": "right"
+    },
+    {
+      "name": "right_wrist_pitch",
+      "canonical": "right_wrist_pitch",
+      "index": 27,
+      "min": -1.61443,
+      "max": 1.61443,
+      "init": 0,
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "forceRange": [
+        -5,
+        5
+      ],
+      "group": "arm",
+      "side": "right"
+    },
+    {
+      "name": "right_wrist_yaw",
+      "canonical": "right_wrist_yaw",
+      "index": 28,
+      "min": -1.61443,
+      "max": 1.61443,
+      "init": 0,
+      "axis": [
+        0,
+        0,
+        1
+      ],
+      "forceRange": [
+        -5,
+        5
+      ],
+      "group": "arm",
+      "side": "right"
+    }
+  ],
+  "motor": {
+    "adaptationDofCap": 64,
+    "adaptationDofApplied": 29,
+    "directDriveJoints": [
+      "waist_yaw",
+      "waist_roll",
+      "waist_pitch",
+      "left_shoulder_pitch",
+      "left_shoulder_roll",
+      "left_shoulder_yaw",
+      "left_elbow",
+      "left_wrist_roll",
+      "left_wrist_pitch",
+      "left_wrist_yaw",
+      "right_shoulder_pitch",
+      "right_shoulder_roll",
+      "right_shoulder_yaw",
+      "right_elbow",
+      "right_wrist_roll",
+      "right_wrist_pitch",
+      "right_wrist_yaw"
+    ],
+    "directDriveForbiddenJoints": [
+      "left_hip_pitch",
+      "left_hip_roll",
+      "left_hip_yaw",
+      "left_knee",
+      "left_ankle_pitch",
+      "left_ankle_roll",
+      "right_hip_pitch",
+      "right_hip_roll",
+      "right_hip_yaw",
+      "right_knee",
+      "right_ankle_pitch",
+      "right_ankle_roll"
+    ],
+    "verbs": {
+      "allowed": [
+        "stop",
+        "standUp",
+        "sitDown",
+        "armTo",
+        "wave",
+        "armsOut",
+        "bow",
+        "waistTwist"
+      ],
+      "conditional": [
+        {
+          "verb": "march",
+          "reason": "需控制器档位确认",
+          "requiresControllerTier": [
+            "vendor-controller",
+            "trained-policy"
+          ]
+        },
+        {
+          "verb": "walk",
+          "reason": "需控制器档位确认",
+          "requiresControllerTier": [
+            "vendor-controller",
+            "trained-policy"
+          ]
+        },
+        {
+          "verb": "turn",
+          "reason": "需控制器档位确认",
+          "requiresControllerTier": [
+            "vendor-controller",
+            "trained-policy"
+          ]
+        },
+        {
+          "verb": "moveTo",
+          "reason": "需控制器档位确认",
+          "requiresControllerTier": [
+            "vendor-controller",
+            "trained-policy"
+          ]
+        }
+      ],
+      "blocked": [
+        {
+          "verb": "grasp",
+          "reason": "capability_not_met"
+        }
+      ]
+    }
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "left_hip_pitch",
+        "min": -2.5307,
+        "max": 2.8798
+      },
+      {
+        "name": "left_hip_roll",
+        "min": -0.5236,
+        "max": 2.9671
+      },
+      {
+        "name": "left_hip_yaw",
+        "min": -2.7576,
+        "max": 2.7576
+      },
+      {
+        "name": "left_knee",
+        "min": -0.087267,
+        "max": 2.8798
+      },
+      {
+        "name": "left_ankle_pitch",
+        "min": -0.87267,
+        "max": 0.5236
+      },
+      {
+        "name": "left_ankle_roll",
+        "min": -0.2618,
+        "max": 0.2618
+      },
+      {
+        "name": "right_hip_pitch",
+        "min": -2.5307,
+        "max": 2.8798
+      },
+      {
+        "name": "right_hip_roll",
+        "min": -2.9671,
+        "max": 0.5236
+      },
+      {
+        "name": "right_hip_yaw",
+        "min": -2.7576,
+        "max": 2.7576
+      },
+      {
+        "name": "right_knee",
+        "min": -0.087267,
+        "max": 2.8798
+      },
+      {
+        "name": "right_ankle_pitch",
+        "min": -0.87267,
+        "max": 0.5236
+      },
+      {
+        "name": "right_ankle_roll",
+        "min": -0.2618,
+        "max": 0.2618
+      },
+      {
+        "name": "waist_yaw",
+        "min": -2.618,
+        "max": 2.618
+      },
+      {
+        "name": "waist_roll",
+        "min": -0.52,
+        "max": 0.52
+      },
+      {
+        "name": "waist_pitch",
+        "min": -0.52,
+        "max": 0.52
+      },
+      {
+        "name": "left_shoulder_pitch",
+        "min": -3.0892,
+        "max": 2.6704
+      },
+      {
+        "name": "left_shoulder_roll",
+        "min": -1.5882,
+        "max": 2.2515
+      },
+      {
+        "name": "left_shoulder_yaw",
+        "min": -2.618,
+        "max": 2.618
+      },
+      {
+        "name": "left_elbow",
+        "min": -1.0472,
+        "max": 2.0944
+      },
+      {
+        "name": "left_wrist_roll",
+        "min": -1.97222,
+        "max": 1.97222
+      },
+      {
+        "name": "left_wrist_pitch",
+        "min": -1.61443,
+        "max": 1.61443
+      },
+      {
+        "name": "left_wrist_yaw",
+        "min": -1.61443,
+        "max": 1.61443
+      },
+      {
+        "name": "right_shoulder_pitch",
+        "min": -3.0892,
+        "max": 2.6704
+      },
+      {
+        "name": "right_shoulder_roll",
+        "min": -2.2515,
+        "max": 1.5882
+      },
+      {
+        "name": "right_shoulder_yaw",
+        "min": -2.618,
+        "max": 2.618
+      },
+      {
+        "name": "right_elbow",
+        "min": -1.0472,
+        "max": 2.0944
+      },
+      {
+        "name": "right_wrist_roll",
+        "min": -1.97222,
+        "max": 1.97222
+      },
+      {
+        "name": "right_wrist_pitch",
+        "min": -1.61443,
+        "max": 1.61443
+      },
+      {
+        "name": "right_wrist_yaw",
+        "min": -1.61443,
+        "max": 1.61443
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "left_hip_pitch",
+        "max": 88
+      },
+      {
+        "name": "left_hip_roll",
+        "max": 139
+      },
+      {
+        "name": "left_hip_yaw",
+        "max": 88
+      },
+      {
+        "name": "left_knee",
+        "max": 139
+      },
+      {
+        "name": "left_ankle_pitch",
+        "max": 50
+      },
+      {
+        "name": "left_ankle_roll",
+        "max": 50
+      },
+      {
+        "name": "right_hip_pitch",
+        "max": 88
+      },
+      {
+        "name": "right_hip_roll",
+        "max": 139
+      },
+      {
+        "name": "right_hip_yaw",
+        "max": 88
+      },
+      {
+        "name": "right_knee",
+        "max": 139
+      },
+      {
+        "name": "right_ankle_pitch",
+        "max": 50
+      },
+      {
+        "name": "right_ankle_roll",
+        "max": 50
+      },
+      {
+        "name": "waist_yaw",
+        "max": 88
+      },
+      {
+        "name": "waist_roll",
+        "max": 50
+      },
+      {
+        "name": "waist_pitch",
+        "max": 50
+      },
+      {
+        "name": "left_shoulder_pitch",
+        "max": 25
+      },
+      {
+        "name": "left_shoulder_roll",
+        "max": 25
+      },
+      {
+        "name": "left_shoulder_yaw",
+        "max": 25
+      },
+      {
+        "name": "left_elbow",
+        "max": 25
+      },
+      {
+        "name": "left_wrist_roll",
+        "max": 25
+      },
+      {
+        "name": "left_wrist_pitch",
+        "max": 5
+      },
+      {
+        "name": "left_wrist_yaw",
+        "max": 5
+      },
+      {
+        "name": "right_shoulder_pitch",
+        "max": 25
+      },
+      {
+        "name": "right_shoulder_roll",
+        "max": 25
+      },
+      {
+        "name": "right_shoulder_yaw",
+        "max": 25
+      },
+      {
+        "name": "right_elbow",
+        "max": 25
+      },
+      {
+        "name": "right_wrist_roll",
+        "max": 25
+      },
+      {
+        "name": "right_wrist_pitch",
+        "max": 5
+      },
+      {
+        "name": "right_wrist_yaw",
+        "max": 5
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "modelArtifacts": {
+    "mujocoModel": "C:/Temp/g1_model/g1.xml",
+    "urdfPath": null,
+    "cameras": [],
+    "gripper": null
+  },
+  "provenance": {
+    "yaml": "training\\robot_configs\\g1_29dof.yaml",
+    "mjcf": "mujoco_menagerie\\unitree_g1\\g1.xml",
+    "jointMatch": {
+      "matched": 29,
+      "mjcfOnly": 0,
+      "yamlOnly": 0
+    },
+    "rangeOverrides": [],
+    "significantMismatches": 0
+  },
+  "sources": [
+    "yaml",
+    "mjcf"
+  ],
+  "flags": [
+    {
+      "code": "LEGS_NOT_DIRECTLY_DRIVEN",
+      "message": "双足本体 12 个关节禁止直驱，必须由本体自带平衡控制器接管",
+      "affectedJoints": [
+        "left_hip_pitch",
+        "left_hip_roll",
+        "left_hip_yaw",
+        "left_knee",
+        "left_ankle_pitch",
+        "left_ankle_roll",
+        "right_hip_pitch",
+        "right_hip_roll",
+        "right_hip_yaw",
+        "right_knee",
+        "right_ankle_pitch",
+        "right_ankle_roll"
+      ]
+    }
+  ],
+  "generatedBy": "SOMAOS大底座/BrainBlueprint",
+  "generatedAt": "2026-10-11T13:02:12.338Z",
+  "controller": {
+    "id": "g1_29dof",
+    "dof": 29,
+    "tokens": [
+      "g1",
+      "29dof",
+      "unitree"
+    ],
+    "family": "humanoid",
+    "overall": "ready-real",
+    "note": "存在厂商高层控制器证据",
+    "sim": {
+      "tier": "mujoco+joint_targets",
+      "ready": true,
+      "evidence": [
+        {
+          "kind": "physics-model",
+          "reasons": [
+            "mjcf",
+            "mjcf_model"
+          ]
+        },
+        {
+          "kind": "placeholder-artifact-not-counted",
+          "files": [
+            {
+              "file": "training/g1_policy.onnx",
+              "bytes": 1947,
+              "root": "大脑项目_训练完版无权重副本（旧版）",
+              "usableAsTrainedEvidence": false,
+              "unboundBecause": "字节不足 100KB 或未落在加载器期望路径，只登记不升档"
+            }
+          ]
+        }
+      ],
+      "missing": []
+    },
+    "real": {
+      "tier": "vendor-controller",
+      "ready": true,
+      "evidence": [
+        {
+          "kind": "vendor-high-level-controller",
+          "files": [
+            {
+              "file": "robot/unitree_g1_driver.py",
+              "api": "LocoClient",
+              "root": "大脑项目_副本"
+            }
+          ]
+        }
+      ],
+      "missing": []
+    },
+    "placeholderPolicyBytes": 1947,
+    "artifacts": {
+      "family": "humanoid",
+      "roots": [
+        "A-trained-legacy",
+        "B-current",
+        "D-humanoid"
+      ],
+      "relevant": [
+        {
+          "root": "A-trained-legacy",
+          "file": "training/g1_policy.onnx",
+          "bytes": 1947,
+          "class": "placeholder",
+          "hasEvalReport": false,
+          "provenance": {}
+        }
+      ],
+      "countedForReadiness": 0,
+      "unboundLoadUnverified": [],
+      "datasetEmbedded": 4,
+      "withoutEvalReport": [
+        "training/datasets/humanoid_full/seg_net.pt",
+        "training/g1_policy.onnx",
+        "training/l2_l4_results/l2_l4_policy.pt",
+        "training/venv_gpu/Lib/site-packages/distutils-precedence.pth"
+      ],
+      "ledgerMissingRecords": 0,
+      "ledgerMissingBytes": 0
+    },
+    "evidenceSurface": {
+      "declared": [
+        {
+          "id": "A-trained-legacy",
+          "family": "all",
+          "present": true,
+          "surfaces": [
+            "robot",
+            "training"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "B-current",
+          "family": "all",
+          "present": true,
+          "surfaces": [
+            "robot",
+            "training"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "C-arm",
+          "family": "arm",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": []
+        },
+        {
+          "id": "D-humanoid",
+          "family": "humanoid",
+          "present": true,
+          "surfaces": [
+            "training",
+            "models"
+          ],
+          "surfacesMissing": []
+        }
+      ],
+      "missing": [],
+      "degraded": false
+    }
+  },
+  "manifestErrors": [],
+  "savedAt": "2026-10-11T13:02:12.886Z",
+  "storedUnder": ".."
+}

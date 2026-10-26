@@ -1,0 +1,367 @@
+{
+  "generatedAt": "2026-10-11T13:05:38.189Z",
+  "scope": "supervision-only",
+  "note": "本运行层不产生关节目标、不跑控制回路、不连真机。readiness=real 需要真实且已探活的传输层。",
+  "envTransport": "null",
+  "cloudConfiguredByDefault": false,
+  "embodimentCount": 7,
+  "rows": [
+    {
+      "id": "franka_7dof",
+      "readiness": "commandable",
+      "dof": 7,
+      "jointWindows": 7,
+      "verbsAllowed": 5,
+      "verbsConditional": 0,
+      "verbsBlocked": 8,
+      "withNoTransport": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NO_TRANSPORT",
+        "state": "idle",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "null",
+          "isReal": false,
+          "configured": false,
+          "canSend": false
+        }
+      },
+      "withLoopbackCloudOff": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "cloud",
+        "armCode": "CLOUD_UNCONFIGURED",
+        "state": "idle",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      },
+      "withLoopbackCloudOn": {
+        "readiness": "simulated",
+        "armed": true,
+        "armStage": null,
+        "armCode": null,
+        "state": "running",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      }
+    },
+    {
+      "id": "g1_29dof",
+      "readiness": "commandable",
+      "dof": 29,
+      "jointWindows": 29,
+      "verbsAllowed": 8,
+      "verbsConditional": 4,
+      "verbsBlocked": 1,
+      "withNoTransport": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NO_TRANSPORT",
+        "state": "idle",
+        "jointWindows": 29,
+        "transport": {
+          "kind": "null",
+          "isReal": false,
+          "configured": false,
+          "canSend": false
+        }
+      },
+      "withLoopbackCloudOff": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "cloud",
+        "armCode": "CLOUD_UNCONFIGURED",
+        "state": "idle",
+        "jointWindows": 29,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      },
+      "withLoopbackCloudOn": {
+        "readiness": "simulated",
+        "armed": true,
+        "armStage": null,
+        "armCode": null,
+        "state": "running",
+        "jointWindows": 29,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      }
+    },
+    {
+      "id": "ur5_6dof",
+      "readiness": "blocked-no-transport",
+      "dof": 6,
+      "jointWindows": 6,
+      "verbsAllowed": 5,
+      "verbsConditional": 0,
+      "verbsBlocked": 8,
+      "withNoTransport": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NOT_COMMANDABLE",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "null",
+          "isReal": false,
+          "configured": false,
+          "canSend": false
+        }
+      },
+      "withLoopbackCloudOff": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "cloud",
+        "armCode": "CLOUD_UNCONFIGURED",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      },
+      "withLoopbackCloudOn": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NOT_COMMANDABLE",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      }
+    },
+    {
+      "id": "builtin:franka_droid",
+      "readiness": "commandable",
+      "dof": 7,
+      "jointWindows": 7,
+      "verbsAllowed": 6,
+      "verbsConditional": 0,
+      "verbsBlocked": 7,
+      "withNoTransport": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NO_TRANSPORT",
+        "state": "idle",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "null",
+          "isReal": false,
+          "configured": false,
+          "canSend": false
+        }
+      },
+      "withLoopbackCloudOff": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "cloud",
+        "armCode": "CLOUD_UNCONFIGURED",
+        "state": "idle",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      },
+      "withLoopbackCloudOn": {
+        "readiness": "simulated",
+        "armed": true,
+        "armStage": null,
+        "armCode": null,
+        "state": "running",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      }
+    },
+    {
+      "id": "builtin:so100",
+      "readiness": "commandable",
+      "dof": 6,
+      "jointWindows": 6,
+      "verbsAllowed": 6,
+      "verbsConditional": 0,
+      "verbsBlocked": 7,
+      "withNoTransport": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NO_TRANSPORT",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "null",
+          "isReal": false,
+          "configured": false,
+          "canSend": false
+        }
+      },
+      "withLoopbackCloudOff": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "cloud",
+        "armCode": "CLOUD_UNCONFIGURED",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      },
+      "withLoopbackCloudOn": {
+        "readiness": "simulated",
+        "armed": true,
+        "armStage": null,
+        "armCode": null,
+        "state": "running",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      }
+    },
+    {
+      "id": "builtin:ur5",
+      "readiness": "blocked-no-transport",
+      "dof": 6,
+      "jointWindows": 6,
+      "verbsAllowed": 6,
+      "verbsConditional": 0,
+      "verbsBlocked": 7,
+      "withNoTransport": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NOT_COMMANDABLE",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "null",
+          "isReal": false,
+          "configured": false,
+          "canSend": false
+        }
+      },
+      "withLoopbackCloudOff": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "cloud",
+        "armCode": "CLOUD_UNCONFIGURED",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      },
+      "withLoopbackCloudOn": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NOT_COMMANDABLE",
+        "state": "idle",
+        "jointWindows": 6,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      }
+    },
+    {
+      "id": "builtin:kinova_gen3",
+      "readiness": "blocked-no-transport",
+      "dof": 7,
+      "jointWindows": 7,
+      "verbsAllowed": 6,
+      "verbsConditional": 0,
+      "verbsBlocked": 7,
+      "withNoTransport": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NOT_COMMANDABLE",
+        "state": "idle",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "null",
+          "isReal": false,
+          "configured": false,
+          "canSend": false
+        }
+      },
+      "withLoopbackCloudOff": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "cloud",
+        "armCode": "CLOUD_UNCONFIGURED",
+        "state": "idle",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      },
+      "withLoopbackCloudOn": {
+        "readiness": "blocked",
+        "armed": false,
+        "armStage": "supervisor",
+        "armCode": "NOT_COMMANDABLE",
+        "state": "idle",
+        "jointWindows": 7,
+        "transport": {
+          "kind": "loopback",
+          "isReal": false,
+          "configured": true,
+          "canSend": true
+        }
+      }
+    }
+  ]
+}

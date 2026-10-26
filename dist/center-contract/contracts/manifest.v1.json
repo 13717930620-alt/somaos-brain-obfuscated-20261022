@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "note": "固化 SOMAOS仿生脑大底座/src/cloudBrainManifest.js 的现有输出形状。字段一个不改，因为运行层 113 条用例已钉死它。verdict 为契约层追加的只读字段。",
+  "required": [
+    "manifestVersion",
+    "embodimentId",
+    "dof",
+    "state",
+    "commands",
+    "safety",
+    "interfaces",
+    "readiness"
+  ],
+  "readinessEnum": ["commandable", "blocked-no-transport"],
+  "appended": {
+    "verdict": {
+      "driveEvidence": "string",
+      "motionSelfSufficiency": "string",
+      "scopes": "object",
+      "sources": "object"
+    }
+  },
+  "invariants": [
+    "契约层只追加 verdict，绝不改写 readiness",
+    "任何 manifest 改动后必须仍能通过 cloudBrainManifest.validateManifest()"
+  ]
+}

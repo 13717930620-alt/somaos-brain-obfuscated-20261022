@@ -1,0 +1,84 @@
+{
+  "embodiment": "humanoid",
+  "version": "1.0.0",
+  "description": "24 自由度具身人形机器人：头2 + 腰2 + 双臂8 + 双手2 + 双腿10",
+  "dof": 24,
+  "notes": [
+    "gripper: 0 = 闭合, 1.2 = 张开",
+    "角度单位 rad; 速度为 rad/s; 加速度为 rad/s^2; 扭矩为 N·m",
+    "腿部扭矩上限显著高于臂部，符合人形承载需求"
+  ],
+  "groups": {
+    "head": { "label": "头部", "dof": 2 },
+    "waist": { "label": "腰部", "dof": 2 },
+    "left_arm": { "label": "左臂", "dof": 4 },
+    "right_arm": { "label": "右臂", "dof": 4 },
+    "left_hand": { "label": "左手", "dof": 1 },
+    "right_hand": { "label": "右手", "dof": 1 },
+    "left_leg": { "label": "左腿", "dof": 5 },
+    "right_leg": { "label": "右腿", "dof": 5 }
+  },
+  "joints": [
+    { "index": 0,  "name": "head_yaw",        "group": "head",        "minRad": -1.57, "maxRad": 1.57, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 4.0, "maxTorqueNm": 8 },
+    { "index": 1,  "name": "head_pitch",      "group": "head",        "minRad": -0.61, "maxRad": 0.79, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 4.0, "maxTorqueNm": 8 },
+
+    { "index": 2,  "name": "waist_yaw",       "group": "waist",       "minRad": -1.05, "maxRad": 1.05, "maxVelocityRadS": 1.2, "maxAccelerationRadS2": 2.5, "maxTorqueNm": 60 },
+    { "index": 3,  "name": "waist_pitch",     "group": "waist",       "minRad": -0.52, "maxRad": 0.87, "maxVelocityRadS": 1.2, "maxAccelerationRadS2": 2.5, "maxTorqueNm": 60 },
+
+    { "index": 4,  "name": "l_shoulder_pitch", "group": "left_arm",   "minRad": -3.05, "maxRad": 3.05, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 30 },
+    { "index": 5,  "name": "l_shoulder_roll",  "group": "left_arm",   "minRad": -0.26, "maxRad": 3.05, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 30 },
+    { "index": 6,  "name": "l_elbow_pitch",    "group": "left_arm",   "minRad": -2.53, "maxRad": 0.09, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 24 },
+    { "index": 7,  "name": "l_wrist_pitch",    "group": "left_arm",   "minRad": -1.57, "maxRad": 1.57, "maxVelocityRadS": 3.0, "maxAccelerationRadS2": 8.0, "maxTorqueNm": 8 },
+
+    { "index": 8,  "name": "r_shoulder_pitch", "group": "right_arm",  "minRad": -3.05, "maxRad": 3.05, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 30 },
+    { "index": 9,  "name": "r_shoulder_roll",  "group": "right_arm",  "minRad": -3.05, "maxRad": 0.26, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 30 },
+    { "index": 10, "name": "r_elbow_pitch",    "group": "right_arm",  "minRad": -2.53, "maxRad": 0.09, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 24 },
+    { "index": 11, "name": "r_wrist_pitch",    "group": "right_arm",  "minRad": -1.57, "maxRad": 1.57, "maxVelocityRadS": 3.0, "maxAccelerationRadS2": 8.0, "maxTorqueNm": 8 },
+
+    { "index": 12, "name": "l_hip_pitch",      "group": "left_leg",   "minRad": -1.57, "maxRad": 1.05, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 5.0, "maxTorqueNm": 100 },
+    { "index": 13, "name": "l_hip_roll",       "group": "left_leg",   "minRad": -0.52, "maxRad": 0.52, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 5.0, "maxTorqueNm": 100 },
+    { "index": 14, "name": "l_knee_pitch",     "group": "left_leg",   "minRad": -0.09, "maxRad": 2.53, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 5.0, "maxTorqueNm": 120 },
+    { "index": 15, "name": "l_ankle_pitch",    "group": "left_leg",   "minRad": -0.87, "maxRad": 0.52, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 40 },
+    { "index": 16, "name": "l_ankle_roll",     "group": "left_leg",   "minRad": -0.35, "maxRad": 0.35, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 40 },
+
+    { "index": 17, "name": "r_hip_pitch",      "group": "right_leg",  "minRad": -1.57, "maxRad": 1.05, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 5.0, "maxTorqueNm": 100 },
+    { "index": 18, "name": "r_hip_roll",       "group": "right_leg",  "minRad": -0.52, "maxRad": 0.52, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 5.0, "maxTorqueNm": 100 },
+    { "index": 19, "name": "r_knee_pitch",     "group": "right_leg",  "minRad": -0.09, "maxRad": 2.53, "maxVelocityRadS": 2.0, "maxAccelerationRadS2": 5.0, "maxTorqueNm": 120 },
+    { "index": 20, "name": "r_ankle_pitch",    "group": "right_leg",  "minRad": -0.87, "maxRad": 0.52, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 40 },
+    { "index": 21, "name": "r_ankle_roll",     "group": "right_leg",  "minRad": -0.35, "maxRad": 0.35, "maxVelocityRadS": 2.5, "maxAccelerationRadS2": 6.0, "maxTorqueNm": 40 },
+
+    { "index": 22, "name": "l_gripper",        "group": "left_hand",  "minRad": 0.0,   "maxRad": 1.2,  "maxVelocityRadS": 4.0, "maxAccelerationRadS2": 10.0, "maxTorqueNm": 5 },
+    { "index": 23, "name": "r_gripper",        "group": "right_hand", "minRad": 0.0,   "maxRad": 1.2,  "maxVelocityRadS": 4.0, "maxAccelerationRadS2": 10.0, "maxTorqueNm": 5 }
+  ],
+  "homePose": {
+    "l_gripper": 0.6,
+    "r_gripper": 0.6
+  },
+  "poses": {
+    "stand": {},
+    "wave": { "r_shoulder_pitch": -1.6, "r_shoulder_roll": 0.9, "r_elbow_pitch": -1.1, "r_wrist_pitch": 0.3, "head_yaw": -0.15 },
+    "bow": { "waist_pitch": 0.5, "head_pitch": 0.3, "l_shoulder_pitch": 0.3, "r_shoulder_pitch": 0.3, "l_elbow_pitch": 0.05, "r_elbow_pitch": 0.05 },
+    "walk_a": { "l_hip_pitch": 0.35, "l_knee_pitch": 0.3, "l_ankle_pitch": -0.15, "r_hip_pitch": -0.25, "r_knee_pitch": 0.15, "r_ankle_pitch": 0.05, "l_shoulder_pitch": -0.25, "r_shoulder_pitch": 0.25 },
+    "walk_b": { "r_hip_pitch": 0.35, "r_knee_pitch": 0.3, "r_ankle_pitch": -0.15, "l_hip_pitch": -0.25, "l_knee_pitch": 0.15, "l_ankle_pitch": 0.05, "r_shoulder_pitch": -0.25, "l_shoulder_pitch": 0.25 },
+    "step_a": { "l_hip_pitch": 0.2, "l_knee_pitch": 0.35, "l_ankle_pitch": -0.1, "r_hip_pitch": 0.05, "r_knee_pitch": 0.05, "r_ankle_pitch": 0.0 },
+    "step_b": { "r_hip_pitch": 0.2, "r_knee_pitch": 0.35, "r_ankle_pitch": -0.1, "l_hip_pitch": 0.05, "l_knee_pitch": 0.05, "l_ankle_pitch": 0.0 },
+    "turn": { "waist_yaw": 0.35, "l_hip_pitch": 0.1, "r_hip_pitch": 0.1, "l_knee_pitch": 0.12, "r_knee_pitch": 0.12 },
+    "reach": { "l_shoulder_pitch": -1.2, "l_elbow_pitch": -0.6, "r_shoulder_pitch": -1.2, "r_elbow_pitch": -0.6 },
+    "grasp": { "l_shoulder_pitch": -1.1, "l_elbow_pitch": -0.9, "r_shoulder_pitch": -1.1, "r_elbow_pitch": -0.9, "l_gripper": 0.0, "r_gripper": 0.0 }
+  },
+  "safety": {
+    "maxVelocityRadS": 2.5,
+    "maxAccelerationRadS2": 6.0,
+    "maxTorqueNm": 120,
+    "minJointAngleRad": -3.05,
+    "maxJointAngleRad": 3.05,
+    "watchdogTimeoutMs": 1500
+  },
+  "balance": {
+    "mode": "static-stability-assist",
+    "supportPolygonM": 0.24,
+    "maxTiltRad": 0.35,
+    "comHeightM": 0.9,
+    "note": "占位平衡监督：仅做姿态与倾角越界检测，不含 ZMP/MPC 全身控制。"
+  }
+}

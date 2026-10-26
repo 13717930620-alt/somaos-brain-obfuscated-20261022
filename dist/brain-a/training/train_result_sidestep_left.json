@@ -1,0 +1,8 @@
+{
+  "task": "sidestep_left",
+  "steps": 1000000,
+  "elapsed_min": 16.712172015508017,
+  "forward_dist": -1.4256474082109407,
+  "standing_steps": 182,
+  "save_path": "C:\\Users\\redact\\Desktop\\\u5927\u8111\u9879\u76ee\\\u5927\u8111\u9879\u76ee_\u526f\u672c\\training\\humanoid_sidestep_left_ppo.zip"
+}

@@ -1,0 +1,8 @@
+{
+  "task": "walk_backward",
+  "steps": 1000000,
+  "elapsed_min": 17.006413996219635,
+  "forward_dist": -1.3574419610267516,
+  "standing_steps": 202,
+  "save_path": "C:\\Users\\redact\\Desktop\\\u5927\u8111\u9879\u76ee\\\u5927\u8111\u9879\u76ee_\u526f\u672c\\training\\humanoid_walk_backward_ppo.zip"
+}

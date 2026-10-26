@@ -1,0 +1,14 @@
+﻿{
+  "_comment": "AprilTag world positions - one entry per printed tag in the environment",
+  "size_m": 0.10,
+  "tags": [
+    {"id": 0, "x": 0.00, "y": 0.00, "z": 0.50, "roll": 0, "pitch": 0, "yaw": 0,
+     "_label": "Charging station - front"},
+    {"id": 1, "x": 3.00, "y": 0.00, "z": 0.50, "roll": 0, "pitch": 0, "yaw": 3.1416,
+     "_label": "Room A entrance"},
+    {"id": 2, "x": -2.00, "y": 2.50, "z": 0.50, "roll": 0, "pitch": 0, "yaw": -1.5708,
+     "_label": "Room B doorway"},
+    {"id": 3, "x": 5.00, "y": -3.00, "z": 0.50, "roll": 0, "pitch": 0, "yaw": 1.5708,
+     "_label": "Kitchen counter"}
+  ]
+}

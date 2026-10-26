@@ -1,0 +1,10 @@
+{
+  "task": "walk_curriculum",
+  "steps": 3000000,
+  "elapsed_min": 56.413519724210104,
+  "forward_dist": 1.130995734246045,
+  "standing_steps": 317,
+  "final_level": 0,
+  "save_path": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\humanoid_walk_curriculum.zip",
+  "n_envs": 8
+}

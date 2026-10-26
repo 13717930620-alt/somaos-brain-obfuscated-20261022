@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://somaos.local/schemas/action.schema.json",
+  "title": "Robot Action",
+  "type": "object",
+  "required": ["id", "skillId", "type", "joints", "velocityRadS", "accelerationRadS2", "torqueNm"],
+  "properties": {
+    "id": { "type": "string", "minLength": 8 },
+    "skillId": { "type": "string", "minLength": 3 },
+    "type": { "const": "robot.motion" },
+    "joints": { "type": "array", "minItems": 1 },
+    "velocityRadS": { "type": "number", "minimum": 0, "maximum": 1.5 },
+    "accelerationRadS2": { "type": "number", "minimum": 0, "maximum": 3 },
+    "torqueNm": { "type": "number", "minimum": 0, "maximum": 35 }
+  }
+}

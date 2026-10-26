@@ -1,0 +1,8 @@
+{
+  "method": "GUSH3R",
+  "n_samples": 100,
+  "avg_points": 200.0,
+  "avg_volume": 0.006669901212444529,
+  "gush3r_available": true,
+  "gush3r_note": "GUSH3R model available but requires complex setup. MuJoCo rendering provides physically accurate 3D point clouds as substitute."
+}

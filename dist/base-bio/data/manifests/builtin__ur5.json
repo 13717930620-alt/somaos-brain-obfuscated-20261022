@@ -1,0 +1,126 @@
+{
+  "manifestVersion": 1,
+  "embodimentId": "builtin:ur5",
+  "signature": "015e965c4f40",
+  "name": "Universal Robots UR5",
+  "manufacturer": "builtin",
+  "type": "arm",
+  "dof": 6,
+  "brainVersion": 1,
+  "controlFreqHz": null,
+  "interfaces": {
+    "health": "/health",
+    "state": "/state",
+    "command": "/command",
+    "estop": "/estop"
+  },
+  "state": {
+    "joints": [
+      "shoulder_pan_joint",
+      "shoulder_lift_joint",
+      "elbow_joint",
+      "wrist_1_joint",
+      "wrist_2_joint",
+      "wrist_3_joint"
+    ],
+    "observationDim": null,
+    "actionDim": 6
+  },
+  "commands": {
+    "allowed": [
+      "stop",
+      "standUp",
+      "armTo",
+      "wave",
+      "armsOut",
+      "grasp"
+    ],
+    "conditional": [],
+    "blocked": [
+      "sitDown",
+      "bow",
+      "waistTwist",
+      "march",
+      "walk",
+      "turn",
+      "moveTo"
+    ]
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "shoulder_pan_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "shoulder_lift_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "elbow_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "wrist_1_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "wrist_2_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      },
+      {
+        "name": "wrist_3_joint",
+        "min": -6.2832,
+        "max": 6.2832
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "shoulder_pan_joint",
+        "max": null
+      },
+      {
+        "name": "shoulder_lift_joint",
+        "max": null
+      },
+      {
+        "name": "elbow_joint",
+        "max": null
+      },
+      {
+        "name": "wrist_1_joint",
+        "max": null
+      },
+      {
+        "name": "wrist_2_joint",
+        "max": null
+      },
+      {
+        "name": "wrist_3_joint",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "controller": {
+    "overall": "unsupported",
+    "simTier": "none",
+    "realTier": "no_transport_driver",
+    "note": ""
+  },
+  "readiness": "blocked-no-transport",
+  "provenance": {
+    "builtin": "services/MultiRobotAdapter.js",
+    "jointMatch": null
+  },
+  "generatedBy": "SOMAOS大底座/cloudBrainManifest",
+  "generatedAt": "2026-10-11T13:02:05.715Z",
+  "savedAt": "2026-10-11T13:02:05.746Z",
+  "storedUnder": ".."
+}

@@ -1,0 +1,10 @@
+{
+  "policy": "act_pretrain",
+  "checkpoint": "training/checkpoints/act_pretrain_final.pt",
+  "n_eval": 50,
+  "success_rate": 0.72,
+  "collision_rate": 0.06,
+  "avg_smoothness": 0.8577416640124855,
+  "elapsed_s": 0.006581544876098633,
+  "passed": true
+}

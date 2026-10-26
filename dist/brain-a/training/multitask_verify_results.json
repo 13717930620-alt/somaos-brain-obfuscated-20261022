@@ -1,0 +1,44 @@
+{
+  "walk_forward": {
+    "task": "walk_forward",
+    "standing_steps": 1000,
+    "standing_rate": 100.0,
+    "forward_dist": -0.10666692495164858,
+    "success": "False"
+  },
+  "walk_backward": {
+    "task": "walk_backward",
+    "standing_steps": 167,
+    "standing_rate": 97.0059880239521,
+    "backward_dist": 1.3203461761778965,
+    "success": "True"
+  },
+  "sidestep_left": {
+    "task": "sidestep_left",
+    "standing_steps": 82,
+    "standing_rate": 92.6829268292683,
+    "sidestep_dist": 0.744346210983059,
+    "success": "True"
+  },
+  "reach_right_mid": {
+    "task": "reach_right_mid",
+    "standing_steps": 74,
+    "standing_rate": 91.8918918918919,
+    "min_hand_target_dist": 0.3741580195018412,
+    "success": "False"
+  },
+  "grasp_right": {
+    "task": "grasp_right",
+    "standing_steps": 500,
+    "standing_rate": 100.0,
+    "min_hand_ball_dist": 0.12376997145129001,
+    "success": "True"
+  },
+  "push_forward": {
+    "task": "push_forward",
+    "standing_steps": 500,
+    "standing_rate": 100.0,
+    "box_forward": 0.38644396889329147,
+    "success": "True"
+  }
+}

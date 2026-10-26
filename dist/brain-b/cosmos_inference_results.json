@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "image": "external_cam.jpg",
+      "time": 38.03944754600525,
+      "success": true,
+      "action_shape": "[torch.Size([16, 10])]",
+      "video_frames": 1
+    }
+  ],
+  "success_count": 1,
+  "total": 1,
+  "model": "Cosmos3-Edge-Policy-DROID"
+}

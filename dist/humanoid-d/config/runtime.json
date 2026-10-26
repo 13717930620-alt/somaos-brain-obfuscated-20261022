@@ -1,0 +1,31 @@
+{
+  "mode": "local-safe",
+  "bindHost": "127.0.0.1",
+  "port": 3002,
+  "embodiment": "humanoid",
+  "humanoidConfigPath": "config/humanoid.json",
+  "safety": {
+    "maxVelocityRadS": 2.5,
+    "maxAccelerationRadS2": 6,
+    "maxTorqueNm": 120,
+    "jointRangeRad": [-3.05, 3.05]
+  },
+  "models": {
+    "policy": "deterministic-fallback",
+    "vlm": "qwen3-vl-8b-local-vlm",
+    "world_model": "cosmos3-edge-policy-droid",
+    "pointflow": "pointflow-v7-trained",
+    "language": "qwen3-14b-local-language",
+    "safety": "builtin-rules"
+  },
+  "localInference": {
+    "llmUrl": "http://127.0.0.1:18080/v1",
+    "vlmUrl": "http://127.0.0.1:18081/v1",
+    "sttModel": "models/stt/iic/SenseVoiceSmall/model.pt",
+    "ttsRoot": "models/cosyvoice2-0.5b"
+  },
+  "learning": {
+    "experienceStore": "logs/experience.jsonl",
+    "preferFailures": true
+  }
+}

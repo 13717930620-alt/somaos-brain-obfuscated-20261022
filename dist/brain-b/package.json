@@ -1,0 +1,39 @@
+{
+  "name": "somaos-brain-b",
+  "version": "1.0.0",
+  "description": "SomaOS 仿生脑 B（训练完版·旧版） — 混淆字节码发布件（不含权重、不含第三方二进制、不含明文源码）",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "private": false,
+  "main": "index.js",
+  "engines": {
+    "node": "v24.15.0"
+  },
+  "os": [
+    "win32",
+    "linux",
+    "darwin"
+  ],
+  "scripts": {
+    "verify-abi": "node ../../scripts/verify-abi.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@darksol/remem": "^0.10.0",
+    "dotenv": "^16.6.1",
+    "onnxruntime-node": "^1.19.2",
+    "pptxgenjs": "^4.0.1",
+    "yuandian-mcp-server": "^0.2.0",
+    "bytenode": "^2.1.0"
+  },
+  "somaosRelease": {
+    "dist": "brain-b",
+    "sourceTree": "tree-b",
+    "node": "v24.15.0",
+    "v8": "13.6.233.17-node.48",
+    "python": "3.11.9",
+    "pythonMagic": "a70d0d0a",
+    "obfuscator": "javascript-obfuscator@5.9.0 (medium: stringArray+base64, hexadecimal identifiers, no control-flow flattening)",
+    "bytecode": "bytenode@2.1.0 (.jsc, Node v24.15.0 / V8 13.6.233.17-node.48 only)",
+    "builtAt": "2026-10-26T11:56:06.263Z"
+  }
+}

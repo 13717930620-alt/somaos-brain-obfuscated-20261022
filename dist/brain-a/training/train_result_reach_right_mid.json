@@ -1,0 +1,8 @@
+{
+  "task": "reach_right_mid",
+  "steps": 500000,
+  "elapsed_min": 8.373524765173594,
+  "forward_dist": 0.16377099402679074,
+  "standing_steps": 85,
+  "save_path": "C:\\Users\\redact\\Desktop\\\u5927\u8111\u9879\u76ee\\\u5927\u8111\u9879\u76ee_\u526f\u672c\\training\\humanoid_reach_right_mid_ppo.zip"
+}

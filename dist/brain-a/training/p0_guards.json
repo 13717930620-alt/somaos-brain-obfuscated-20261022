@@ -1,0 +1,16 @@
+{
+  "tag": "MILESTONE_v16_3h86",
+  "model": "_milestones/v16_best_3h86.zip",
+  "when": "2026-09-27 10:45:41",
+  "sign_fix": false,
+  "terrain": false,
+  "ep_steps": 1000.0,
+  "episodes": 20,
+  "forward": 2.803245534348868,
+  "asym": 0.12091951089965544,
+  "clearance": 0.06000000000000001,
+  "falls": 0,
+  "single": 0.2468,
+  "match": 0.1369499999999999,
+  "both_air": 0.05989999999999999
+}

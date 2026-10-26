@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GR00T × S0MA-MOLMO — 3D 机械臂运动可视化</title>
+<script src="/lib/three.min.js"></script>
+<script src="/lib/OrbitControls.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#060a16;color:#c8d0e0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+#header{background:linear-gradient(135deg,#0a1025,#080c18);padding:8px 20px;border-bottom:1px solid #151f35;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;height:44px}
+#header h1{font-size:14px;color:#7c8dff;font-weight:600;display:flex;align-items:center;gap:8px}
+#header .dot{width:8px;height:8px;border-radius:50%;background:#34d399;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+#header .stats{display:flex;gap:10px;font-size:11px}
+.stat{display:flex;align-items:center;gap:4px;padding:2px 8px;background:#0c1225;border-radius:4px;border:1px solid #151f35}
+.stat .v{color:#34d399;font-weight:600}
+#main{flex:1;display:flex;min-height:0}
+#canvas-container{flex:1;position:relative;background:radial-gradient(ellipse at center,#0c1425 0%,#060a16 70%)}
+#canvas-container canvas{display:block}
+#panel{width:320px;flex-shrink:0;background:#080c18;border-left:1px solid #151f35;display:flex;flex-direction:column;overflow-y:auto}
+#panel h3{padding:14px 16px 8px;font-size:13px;color:#7c8dff;border-bottom:1px solid #151f35}
+#cmd-list{padding:12px 16px;display:flex;flex-direction:column;gap:6px}
+.cmd-btn{display:block;width:100%;padding:10px 14px;background:#0c1225;border:1px solid #1a2540;border-radius:8px;color:#c8d0e0;font-size:13px;cursor:pointer;text-align:left;transition:all 0.2s}
+.cmd-btn:hover{background:#0e1a2e;border-color:#4a7dff;color:#fff;transform:translateX(2px)}
+.cmd-btn .icon{font-size:16px;margin-right:8px}
+.cmd-btn .tag{float:right;font-size:10px;padding:2px 6px;background:#1a2a4a;border-radius:4px;color:#5a7dff}
+#custom-cmd{padding:8px 16px;display:flex;gap:8px}
+#custom-input{flex:1;background:#0c1225;border:1px solid #1a2540;border-radius:8px;padding:8px 12px;color:#c8d0e0;font-size:13px;outline:none}
+#custom-input:focus{border-color:#4a7dff}
+#custom-btn{background:linear-gradient(135deg,#4a7dff,#5a8dff);border:none;border-radius:8px;padding:8px 16px;color:#fff;font-size:13px;cursor:pointer;white-space:nowrap}
+#custom-btn:disabled{opacity:0.4}
+#info-box{margin:8px 16px;padding:12px;background:#0c1225;border:1px solid #1a2540;border-radius:8px;font-size:12px;min-height:60px;max-height:200px;overflow-y:auto}
+#info-box .row{display:flex;justify-content:space-between;padding:2px 0}
+#info-box .row .k{color:#5a6a8a}
+#info-box .row .val{color:#c8d0e0;font-weight:500}
+#steps-bar{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:11px;color:#5a6a8a}
+#steps-bar .bar{flex:1;height:4px;background:#1a2540;border-radius:2px;overflow:hidden}
+#steps-bar .bar .fill{height:100%;background:linear-gradient(90deg,#4a7dff,#34d399);border-radius:2px;transition:width 0.3s}
+#legend{position:absolute;bottom:12px;left:12px;display:flex;gap:6px;font-size:10px;color:#5a6a8a;background:rgba(6,10,22,0.9);padding:6px 10px;border-radius:6px;border:1px solid #151f35}
+#legend .item{display:flex;align-items:center;gap:4px}
+#legend .swatch{width:8px;height:8px;border-radius:2px}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1><span class="dot"></span>GR00T-DROID × S0MA-MOLMO — 7轴机械臂实时运动</h1>
+  <div class="stats">
+    <div class="stat">GPU <span class="v" id="gpu-status">🟢</span></div>
+    <div class="stat">VRAM <span class="v" id="vram-info">11.0GB</span></div>
+    <div class="stat">延迟 <span class="v" id="latency-info">—</span></div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="canvas-container"></div>
+
+  <div id="panel">
+    <h3>🤖 机器人指令</h3>
+    <div id="cmd-list">
+      <button class="cmd-btn" onclick="runCmd('/pick blue cup')"><span class="icon">🫳</span>抓起蓝色杯子<span class="tag">抓取</span></button>
+      <button class="cmd-btn" onclick="runCmd('/place cup on table')"><span class="icon">📥</span>放置杯子到桌面<span class="tag">放置</span></button>
+      <button class="cmd-btn" onclick="runCmd('/push red box to left')"><span class="icon">👉</span>推红色盒子到左边<span class="tag">推动</span></button>
+      <button class="cmd-btn" onclick="runCmd('/grasp bottle')"><span class="icon">✊</span>握住瓶子<span class="tag">抓握</span></button>
+      <button class="cmd-btn" onclick="runCmd('/move to sink area')"><span class="icon">🚶</span>移动到水槽区域<span class="tag">移动</span></button>
+      <button class="cmd-btn" onclick="runCmd('/release bottle')"><span class="icon">🖐️</span>松开瓶子<span class="tag">释放</span></button>
+    </div>
+
+    <div id="custom-cmd">
+      <input id="custom-input" type="text" placeholder="输入指令，如 /pick cup" onkeydown="if(event.key==='Enter')runCustom()">
+      <button id="custom-btn" onclick="runCustom()">发送</button>
+    </div>
+
+    <div id="steps-bar">
+      运动进度 <div class="bar"><div class="fill" id="progress-fill" style="width:0%"></div></div> <span id="step-text">0/0</span>
+    </div>
+
+    <h3>📊 推理详情</h3>
+    <div id="info-box">
+      <div style="color:#5a6a8a;text-align:center;padding:20px">点击左侧指令按钮<br>开始 GPU 推理</div>
+    </div>
+  </div>
+</div>
+
+<div id="legend">
+  <div class="item"><div class="swatch" style="background:#4a7dff"></div>关节</div>
+  <div class="item"><div class="swatch" style="background:#34d399"></div>连杆</div>
+  <div class="item"><div class="swatch" style="background:#f59e0b"></div>末端夹爪</div>
+  <div class="item"><div class="swatch" style="background:#c084fc"></div>目标位置</div>
+</div>
+
+<script>
+// ============================================================
+// 3D Scene Setup
+// ============================================================
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+
+// Camera
+const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.05, 20);
+camera.position.set(2.2, 1.5, 1.8);
+camera.lookAt(0, 0.5, 0);
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
+
+// Orbit Controls
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0.5, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 0.6;
+controls.maxDistance = 5;
+controls.maxPolarAngle = Math.PI * 0.75;
+controls.update();
+
+// Lighting
+scene.add(new THREE.AmbientLight('#334466', 2.0));
+const sun = new THREE.DirectionalLight('#ffffff', 3.5);
+sun.position.set(3, 5, 2);
+sun.castShadow = true;
+scene.add(sun);
+scene.add(new THREE.DirectionalLight('#4466aa', 1.2)).position.set(-2, 2, -1);
+
+// Grid / floor
+const grid = new THREE.GridHelper(1.6, 20, '#1a2a45', '#0c1225');
+grid.position.y = -0.02;
+scene.add(grid);
+
+// Table
+const tableGeo = new THREE.BoxGeometry(1.2, 0.03, 0.8);
+const tableMat = new THREE.MeshStandardMaterial({ color: '#1a1a2e', roughness: 0.5, metalness: 0.3 });
+const table = new THREE.Mesh(tableGeo, tableMat);
+table.position.set(0, -0.015, 0);
+table.castShadow = true; table.receiveShadow = true;
+scene.add(table);
+
+// ============================================================
+// Robot Arm — Franka Panda 7-DOF kinematic chain
+// ============================================================
+const linkColors = ['#3a5a8a', '#3a6a9a', '#4a7aaa', '#4a7aaa', '#5a8aba', '#5a8aba', '#6a9aca'];
+const jointRadius = 0.028;
+const linkRadius = 0.022;
+
+// Create a joint sphere
+function makeJoint(color) {
+  const geo = new THREE.SphereGeometry(jointRadius, 16, 12);
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.3, metalness: 0.6 });
+  return new THREE.Mesh(geo, mat);
+}
+
+// Create a link cylinder between two points
+function makeLink(start, end, color) {
+  const dir = new THREE.Vector3().subVectors(end, start);
+  const len = dir.length();
+  const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+  const geo = new THREE.CylinderGeometry(linkRadius, linkRadius, len, 12, 1);
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.4, metalness: 0.5 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.copy(mid);
+  // Align cylinder (Y-up) to direction
+  const yAxis = new THREE.Vector3(0, 1, 0);
+  const quat = new THREE.Quaternion().setFromUnitVectors(yAxis, dir.normalize());
+  mesh.setRotationFromQuaternion(quat);
+  return mesh;
+}
+
+// Build kinematic chain
+const root = new THREE.Group();
+scene.add(root);
+
+// Base plate
+const baseGeo = new THREE.CylinderGeometry(0.06, 0.07, 0.04, 24);
+const baseMat = new THREE.MeshStandardMaterial({ color: '#444466', roughness: 0.3, metalness: 0.7 });
+const base = new THREE.Mesh(baseGeo, baseMat);
+base.position.y = 0.02;
+root.add(base);
+
+// Joint pivot groups (each rotates around its local axis)
+const pivots = [];
+for (let i = 0; i < 7; i++) {
+  const p = new THREE.Group();
+  (pivots.length === 0 ? root : pivots[i - 1]).add(p);
+  pivots.push(p);
+}
+
+// Joint sphere meshes
+const jointMeshes = [];
+for (let i = 0; i < 7; i++) {
+  const jm = makeJoint(linkColors[i]);
+  jm.position.set(0, 0, 0);
+  pivots[i].add(jm);
+  jointMeshes.push(jm);
+}
+
+// Link lengths (Franka scaled x2 for visibility)
+const linkLengths = [0.333, 0.316, 0.384, 0.0, 0.107, 0.0, 0.103];
+// Joint axes for Franka: Z, Y, Y, Z, Y, Z, Y
+const jointAxes = ['z','y','y','z','y','z','y'];
+
+const links = [];
+const linkMeshes = [];
+
+for (let i = 0; i < 7; i++) {
+  if (linkLengths[i] > 0.001) {
+    const start = new THREE.Vector3(0, 0, 0);
+    const end = new THREE.Vector3(0, linkLengths[i], 0);
+    const lm = makeLink(start, end, linkColors[i]);
+    pivots[i].add(lm);
+    linkMeshes.push(lm);
+    links.push({ mesh: lm, start, end, length: linkLengths[i], pivotIdx: i });
+  }
+  // Position next pivot at end of this link
+  if (i < 6) {
+    pivots[i + 1].position.set(0, linkLengths[i], 0);
+  }
+}
+
+// Gripper
+const gripperGroup = new THREE.Group();
+pivots[6].add(gripperGroup);
+gripperGroup.position.set(0, linkLengths[6] || 0.10, 0);
+
+const gripBaseGeo = new THREE.BoxGeometry(0.04, 0.02, 0.04);
+const gripBaseMat = new THREE.MeshStandardMaterial({ color: '#f59e0b', roughness: 0.3, metalness: 0.5 });
+const gripBase = new THREE.Mesh(gripBaseGeo, gripBaseMat);
+gripperGroup.add(gripBase);
+
+const fingerGeo = new THREE.BoxGeometry(0.008, 0.05, 0.012);
+const fingerMat = new THREE.MeshStandardMaterial({ color: '#f59e0b', roughness: 0.3, metalness: 0.6 });
+const leftFinger = new THREE.Mesh(fingerGeo, fingerMat);
+leftFinger.position.set(-0.012, -0.015, 0);
+gripperGroup.add(leftFinger);
+const rightFinger = new THREE.Mesh(fingerGeo, fingerMat);
+rightFinger.position.set(0.012, -0.015, 0);
+gripperGroup.add(rightFinger);
+
+// Target ghost (semi-transparent sphere showing goal position)
+const targetGeo = new THREE.SphereGeometry(0.03, 16, 12);
+const targetMat = new THREE.MeshStandardMaterial({ color: '#c084fc', roughness: 0.2, metalness: 0.3, transparent: true, opacity: 0.5 });
+const targetSphere = new THREE.Mesh(targetGeo, targetMat);
+targetSphere.visible = false;
+scene.add(targetSphere);
+
+// ============================================================
+// Set joint angles (radians) — applies to kinematic chain
+// ============================================================
+function setJointAngles(angles) {
+  for (let i = 0; i < 7; i++) {
+    const a = angles[i] || 0;
+    if (jointAxes[i] === 'z') {
+      pivots[i].rotation.set(0, 0, a);
+    } else {
+      pivots[i].rotation.set(0, a, 0);
+    }
+  }
+}
+
+// Compute end-effector position (forward kinematics simplified)
+function getEndEffectorPos() {
+  const pos = new THREE.Vector3();
+  gripperGroup.getWorldPosition(pos);
+  return pos;
+}
+
+// Default home pose
+const homePose = [0, -0.5, 0, -2.0, 0, 1.5, 0];
+setJointAngles(homePose);
+
+// ============================================================
+// Animation system
+// ============================================================
+let animQueue = [];          // Array of target angle arrays
+let animStep = 0;
+let animTotal = 0;
+let animFrom = null;         // current joint angles
+let animTo = null;           // target joint angles
+let animT = 1.0;
+let animSpeed = 0.02;       // interpolation speed per frame
+let isAnimating = false;
+
+function updateProgress() {
+  document.getElementById('progress-fill').style.width =
+    (animTotal > 0 ? (animStep / animTotal * 100) : 0) + '%';
+  document.getElementById('step-text').textContent = animStep + '/' + animTotal;
+}
+
+function startAnimation(trajectory) {
+  // trajectory is array of 7-element arrays
+  if (!trajectory || trajectory.length === 0) return;
+  animQueue = trajectory;
+  animTotal = trajectory.length;
+  animStep = 0;
+  // Get current joint angles as start
+  animFrom = [];
+  for (let i = 0; i < 7; i++) {
+    animFrom.push(jointAxes[i]==='z' ? pivots[i].rotation.z : pivots[i].rotation.y);
+  }
+  animTo = animQueue[0];
+  animT = 0;
+  isAnimating = true;
+  updateProgress();
+}
+
+function animateFrame() {
+  if (!isAnimating || !animTo) return;
+
+  animT += animSpeed;
+  if (animT >= 1.0) {
+    // Snap to target
+    setJointAngles(animTo);
+    animStep++;
+    updateProgress();
+
+    if (animStep >= animTotal) {
+      // Done
+      isAnimating = false;
+      document.getElementById('step-text').textContent = animStep + '/' + animTotal + ' ✅';
+      return;
+    }
+
+    // Next target
+    animFrom = [...animTo];
+    animTo = animQueue[animStep];
+    animT = 0;
+  } else {
+    // Interpolate
+    const t = smoothstep(animT);
+    const interp = animFrom.map((a, i) => a + (animTo[i] - a) * t);
+    setJointAngles(interp);
+  }
+
+  // Update target ghost
+  const ee = getEndEffectorPos();
+  targetSphere.position.copy(ee);
+}
+
+function smoothstep(t) {
+  return t * t * (3 - 2 * t);
+}
+
+// ============================================================
+// Backend communication
+// ============================================================
+let busy = false;
+
+async function runCmd(cmd) {
+  if (busy) return;
+  busy = true;
+  document.getElementById('custom-btn').disabled = true;
+  document.getElementById('custom-input').value = cmd;
+
+  const infoBox = document.getElementById('info-box');
+  infoBox.innerHTML = '<div style="color:#f59e0b;text-align:center;padding:10px">⏳ GPU 推理中...</div>';
+  document.getElementById('latency-info').textContent = '...';
+
+  try {
+    const res = await fetch('/robot-act', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: cmd }),
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      infoBox.innerHTML = '<div style="color:#ff6b6b">❌ ' + data.error + '</div>';
+    } else if (data.actions && data.actions.length > 0) {
+      // Update info
+      const steps = data.actions.length;
+      const dt = data.dt_ms || 0;
+      document.getElementById('latency-info').textContent = Math.round(dt) + 'ms';
+
+      infoBox.innerHTML = `
+        <div class="row"><span class="k">指令</span><span class="val">${escapeHtml(cmd)}</span></div>
+        <div class="row"><span class="k">动作步数</span><span class="val">${steps} steps</span></div>
+        <div class="row"><span class="k">推理延迟</span><span class="val">${Math.round(dt)}ms</span></div>
+        <div class="row"><span class="k">关节范围</span><span class="val">q1～q7</span></div>
+        <div class="row"><span class="k">推理模式</span><span class="val">GR00T GPU (bf16)</span></div>
+      `;
+
+      // Extract joint angles from actions (actions is Nx8, take first 7 cols)
+      const trajectory = data.actions.map(row => row.slice(0, 7));
+      startAnimation(trajectory);
+    } else {
+      infoBox.innerHTML = '<div style="color:#f59e0b">⚠️ 无动作返回</div>';
+    }
+  } catch (e) {
+    infoBox.innerHTML = '<div style="color:#ff6b6b">❌ 连接失败: ' + escapeHtml(e.message) + '<br><small>请确认 GPU 服务器运行中</small></div>';
+  }
+
+  busy = false;
+  document.getElementById('custom-btn').disabled = false;
+}
+
+function runCustom() {
+  const input = document.getElementById('custom-input').value.trim();
+  if (input) runCmd(input);
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ============================================================
+// Render loop
+// ============================================================
+function render() {
+  requestAnimationFrame(render);
+  controls.update();
+  animateFrame();
+  renderer.render(scene, camera);
+}
+
+// Handle resize
+window.addEventListener('resize', () => {
+  camera.aspect = container.clientWidth / container.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth, container.clientHeight);
+});
+
+// Check GPU status
+async function checkGPU() {
+  try {
+    const res = await fetch('/robot-act', { method: 'GET' });
+    const data = await res.json();
+    document.getElementById('gpu-status').textContent = data.status === 'ok' ? '🟢' : '🔴';
+    if (data.vram_used_gb) {
+      document.getElementById('vram-info').textContent = data.vram_used_gb.toFixed(1) + '/' + data.vram_total_gb.toFixed(1) + 'GB';
+    }
+  } catch(e) {
+    document.getElementById('gpu-status').textContent = '🔴';
+  }
+}
+checkGPU();
+setInterval(checkGPU, 30000);
+
+// Keyboard shortcuts disabled — use on-screen buttons only
+
+// Start
+render();
+document.getElementById('custom-input').focus();
+</script>
+</body>
+</html>

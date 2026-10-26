@@ -1,0 +1,95 @@
+# RCAN Configuration for SomaOS Brain — OpenCastor Integration
+# This file configures the OpenCastor RCAN runtime for the 19-region brain AI
+
+rcan_version: "3.0"
+
+metadata:
+  robot_name: somaos-brain
+  robot_type: embodied-ai
+  description: "SomaOS 19-region brain AI with OpenCastor RCAN runtime"
+  created: 2026-08-29
+
+agent:
+  provider: somaos
+  model: 19-region-brain
+  endpoint: http://localhost:3000/api/brain
+  note: "大脑项目19脑区AI替换OpenCastor Tiered Brain"
+
+# RCAN Protocol
+rcan:
+  signing:
+    algorithm: ed25519
+    # ML-DSA-65 for post-quantum readiness (Q-Day 2029)
+    pqc_algorithm: ml-dsa-65
+  carriers:
+    - mqtt
+    - ble
+    - lora
+  loa_required: L2
+
+# Protocol 66 Safety
+safety:
+  protocol_66_version: "94"
+  estop_qos: 2
+  confidence_threshold: 0.7
+  audit_chain: true
+  guardian_agent: true
+  experience_gate: true
+
+# Hardware Drivers (18 presets)
+hardware:
+  preset: mujoco
+  auto_detect: true
+  presets_available:
+    - raspberry_pi
+    - jetson
+    - arduino
+    - esp32
+    - lego
+    - oak_d
+    - so_arm101
+    - hailo
+    - realsense
+    - mujoco
+    - webots
+    - gazebo
+
+# Fleet Management
+fleet:
+  enabled: true
+  fleet_ui: app.opencastor.com
+  heartbeat_ms: 5000
+  outbound_only: true
+
+# Messaging Channels
+messaging:
+  whatsapp:
+    enabled: false
+  telegram:
+    enabled: false
+  discord:
+    enabled: false
+  slack:
+    enabled: false
+  homeassistant:
+    enabled: false
+  mqtt:
+    enabled: true
+    broker: localhost
+    port: 1883
+
+# Self-Improvement
+evolution:
+  sisyphus: true
+  self_evolver: true
+  link_enabled: true
+
+# MCP Bridge
+mcp:
+  enabled: true
+  tools:
+    - brain_chat
+    - brain_status
+    - brain_evolve
+    - brain_motor
+    - brain_perceive

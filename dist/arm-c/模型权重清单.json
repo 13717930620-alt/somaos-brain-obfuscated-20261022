@@ -1,0 +1,514 @@
+{
+  "name": "大脑项目2 轻量版 · 模型权重清单",
+  "generatedAt": "2026-10-10 19:21:17",
+  "sourceProject": "C:\\Users\\redact\\Desktop\\大脑项目2",
+  "lightweightCopy": "C:\\Users\\redact\\Desktop\\大脑项目2_轻量版",
+  "excludedCount": 34,
+  "excludedTotalBytes": 41807267573,
+  "excludedTotalGB": 38.94,
+  "criteria": "排除 models/ 下 ≥1MB 的模型权重（.gguf/.safetensors/.pt/.pth/.onnx/.onnx_data/.zip）",
+  "keptOnPurpose": [
+    "training/ 下 12 个 .pt 检查点（用户自训练产物，不可再生）",
+    "models/llm_backup_qwen25/qwen2.5_256k_header.bin（256KB，权重头/元数据）",
+    "models/vla/groot/training_args.bin（8KB，训练参数）",
+    "llama/ 与 whisper/ 的推理运行时 DLL/exe（非权重）",
+    "training/datasets/ 下的 .npz 数据集"
+  ],
+  "verifyCommand": "node scripts/verify-local-models.js",
+  "groups": {
+    "llm": "语言模型",
+    "vlm": "视觉语言模型",
+    "vla": "机器人策略 (VLA)",
+    "world": "世界模型",
+    "tts": "语音合成",
+    "stt": "语音识别",
+    "vision": "视觉感知",
+    "local": "本地训练产物"
+  },
+  "files": [
+    {
+      "path": "models/cosyvoice2-0.5b/CosyVoice-BlankEN/model.safetensors",
+      "bytes": 988097824,
+      "sha256": "130282af0dfa9fe5840737cc49a0d339d06075f83c5a315c3372c9a0740d0b96",
+      "group": "tts",
+      "role": "TTS 文本编码器 (BlankEN)",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "CosyVoice-BlankEN/model.safetensors",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/campplus.onnx",
+      "bytes": 28303423,
+      "sha256": "a6ac6a63997761ae2997373e2ee1c47040854b4b759ea41ec48e4e42df0f4d73",
+      "group": "tts",
+      "role": "TTS 说话人嵌入 (CAM++)",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "campplus.onnx",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/flow.cache.pt",
+      "bytes": 450496991,
+      "sha256": "3ebde248652c6eed855e08bb6a263af3847039a1361f8019bdb27f5f680a1dc4",
+      "group": "tts",
+      "role": "CosyVoice2 运行时缓存",
+      "downloadable": false,
+      "source": null,
+      "note": "运行时自动生成的缓存，不是发布文件；可忽略，跑一次 TTS 会自动重建。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/flow.decoder.estimator.fp32.onnx",
+      "bytes": 286317026,
+      "sha256": "cd54e4281701e6630730da64502d77b7e8b6e5c057cca65128bffb50f85cbf98",
+      "group": "tts",
+      "role": "TTS Flow 解码器估计器",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "flow.decoder.estimator.fp32.onnx",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/flow.encoder.fp16.zip",
+      "bytes": 116705475,
+      "sha256": "6f2e61e46f65acca84e5aed25db3740c15726253e04173abb9cf4a58f248a0cf",
+      "group": "tts",
+      "role": "TTS Flow 编码器 (fp16 打包)",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "flow.encoder.fp16.zip",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/flow.encoder.fp32.zip",
+      "bytes": 192367811,
+      "sha256": "eed80c9801459be6e156ad541336259c83fd4f35fa97c2c57b3b9f40761b6496",
+      "group": "tts",
+      "role": "TTS Flow 编码器 (fp32 打包)",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "flow.encoder.fp32.zip",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/flow.pt",
+      "bytes": 450575567,
+      "sha256": "ff4c2f867674411e0a08cee702996df13fa67c1cd864c06108da88d16d088541",
+      "group": "tts",
+      "role": "TTS TTS Flow 模型",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "flow.pt",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/hift.pt",
+      "bytes": 83390254,
+      "sha256": "3386cc880324d4e98e05987b99107f49e40ed925b8ecc87c1f4939432d429879",
+      "group": "tts",
+      "role": "TTS 声码器 HiFT",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "hift.pt",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/llm.pt",
+      "bytes": 2023316821,
+      "sha256": "b144ef55b51ce8cfb79a73c90dbba0bdaba4e451c0ebcfab20f769264f84a608",
+      "group": "tts",
+      "role": "TTS TTS 语言模型",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "llm.pt",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/speech_tokenizer_v2.batch.onnx",
+      "bytes": 496095794,
+      "sha256": "5b45a98572ed21e3a3ebf50201f3020567f7db40e9a57509b790b2982f5c07b7",
+      "group": "tts",
+      "role": "TTS 语音分词器 (batch)",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "speech_tokenizer_v2.batch.onnx",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/cosyvoice2-0.5b/speech_tokenizer_v2.onnx",
+      "bytes": 496082973,
+      "sha256": "d43342aa12163a80bf07bffb94c9de2e120a8df2f9917cd2f642e7f4219c6f71",
+      "group": "tts",
+      "role": "TTS 语音分词器",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/CosyVoice2-0.5B",
+        "file": "speech_tokenizer_v2.onnx",
+        "mirror": "https://huggingface.co/FunAudioLLM/CosyVoice2-0.5B"
+      },
+      "note": "ModelScope iic/CosyVoice2-0.5B 或 HuggingFace FunAudioLLM/CosyVoice2-0.5B。"
+    },
+    {
+      "path": "models/depth_anything_v2_vits.onnx",
+      "bytes": 99373606,
+      "sha256": "d2b11a11c1d4a12b47608fa65a17ee9a4c605b55ee1730c8e3b526304f2562be",
+      "group": "vision",
+      "role": "深度估计 (Depth Anything V2 ViT-S)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "depth-anything/Depth-Anything-V2-Small",
+        "file": ""
+      },
+      "note": "官方只发布 PyTorch 权重，ONNX 需自行导出（或从原项目复制）。",
+      "sourceConfidence": "低"
+    },
+    {
+      "path": "models/embedding/model.onnx_data",
+      "bytes": 2266820608,
+      "sha256": "1eebfb28493f67bba03ce0ef64bfdc7fc5a3bd9d7493f818bb1d78cd798416b4",
+      "group": "vision",
+      "role": "文本嵌入模型 (ONNX 权重)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "BAAI/bge-m3",
+        "file": "onnx/model.onnx_data"
+      },
+      "note": "待确认：tokenizer 为 XLMRoberta（8192 上下文），疑似 BAAI/bge-m3 的 ONNX 导出。若不一致请从原项目复制。",
+      "sourceConfidence": "低"
+    },
+    {
+      "path": "models/llm/qwen3-14b-instruct-q4_k_m.gguf",
+      "bytes": 9276184896,
+      "sha256": "a8cc1361f3145dc01f6d77c6c82c9116b9ffe3c97b34716fe20418455876c40e",
+      "group": "llm",
+      "role": "语言模型 (LLM)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "Qwen/Qwen3-14B-GGUF",
+        "file": "Qwen3-14B-Q4_K_M.gguf",
+        "mirror": "https://www.modelscope.cn/models/Qwen/Qwen3-14B-GGUF"
+      },
+      "note": "仓库内文件名为 Qwen3-14B-Q4_K_M.gguf，下载后需重命名为本地文件名。"
+    },
+    {
+      "path": "models/pointflow/pointflow_weights_v7.pt",
+      "bytes": 17607040,
+      "sha256": "75ddcf80f38457fec5bbc2687ac5d02d3b0207c0f3c48207aed02c8498491108",
+      "group": "local",
+      "role": "PointFlow v7 权重 (本地训练)",
+      "downloadable": false,
+      "source": null,
+      "note": "本地训练产物（RTX 3060，20 epoch）。本轻量版已保留同源的 training/checkpoints/pointflow_weights_v7_full.pt，复制并改名即可。"
+    },
+    {
+      "path": "models/segmentation/model.safetensors",
+      "bytes": 897830992,
+      "sha256": "ff304832fa2bafd6dbfa923ef3fb1d44ee7480838992a5504f73cffe6288d582",
+      "group": "vision",
+      "role": "图像分割 (SAM2 Hiera Large)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "facebook/sam2-hiera-large",
+        "file": "model.safetensors"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/segmentation/sam2_hiera_large.pt",
+      "bytes": 897952466,
+      "sha256": "7442e4e9b732a508f80e141e7c2913437a3610ee0c77381a66658c3a445df87b",
+      "group": "vision",
+      "role": "图像分割 (SAM2 Hiera Large, 原始 ckpt)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "facebook/sam2-hiera-large",
+        "file": "sam2_hiera_large.pt"
+      },
+      "note": "官方 ckpt 也可从 facebookresearch/segment-anything-2 发布页获取。"
+    },
+    {
+      "path": "models/sensevoice/model.pt",
+      "bytes": 936291369,
+      "sha256": "833ca2dcfdf8ec91bd4f31cfac36d6124e0c459074d5e909aec9cabe6204a3ea",
+      "group": "stt",
+      "role": "语音识别 (SenseVoiceSmall)",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/SenseVoiceSmall",
+        "file": "model.pt",
+        "mirror": "https://huggingface.co/FunAudioLLM/SenseVoiceSmall"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/stt/iic/SenseVoiceSmall/model.pt",
+      "bytes": 936291369,
+      "sha256": "833ca2dcfdf8ec91bd4f31cfac36d6124e0c459074d5e909aec9cabe6204a3ea",
+      "group": "stt",
+      "role": "语音识别 (SenseVoiceSmall)",
+      "downloadable": true,
+      "source": {
+        "type": "modelscope",
+        "repo": "iic/SenseVoiceSmall",
+        "file": "model.pt",
+        "mirror": "https://huggingface.co/FunAudioLLM/SenseVoiceSmall"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/vla/groot/model-00001-of-00003.safetensors",
+      "bytes": 1996859888,
+      "sha256": "4d5e8e2a81a4b25084965ae87b8257a87ebe2f3b6656f83bbb15ba13675940b6",
+      "group": "vla",
+      "role": "VLA 机器人策略 (GR00T N1.7)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "nvidia/GR00T-N1.7-3B",
+        "file": "model-00001-of-00003.safetensors",
+        "mirror": "https://huggingface.co/collections/nvidia/gr00t-n17"
+      },
+      "note": "原项目记录 revision=2fc962b973bccdd5d8ce4f67cc63b264d6886495；架构 Gr00tN1d7。"
+    },
+    {
+      "path": "models/vla/groot/model-00002-of-00003.safetensors",
+      "bytes": 1996145888,
+      "sha256": "03ba0f11339d5ed24920582781c7352e308eb4eb78067c128bd8516b146656c8",
+      "group": "vla",
+      "role": "VLA 机器人策略 (GR00T N1.7)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "nvidia/GR00T-N1.7-3B",
+        "file": "model-00002-of-00003.safetensors",
+        "mirror": "https://huggingface.co/collections/nvidia/gr00t-n17"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/vla/groot/model-00003-of-00003.safetensors",
+      "bytes": 1455454240,
+      "sha256": "1f572eb204d7afe3ddbfb890ca56eac1a9bafbdce51ed6fd3ba314dc4298d565",
+      "group": "vla",
+      "role": "VLA 机器人策略 (GR00T N1.7)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "nvidia/GR00T-N1.7-3B",
+        "file": "model-00003-of-00003.safetensors",
+        "mirror": "https://huggingface.co/collections/nvidia/gr00t-n17"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/vlm/lora_adapter/adapter_model.safetensors",
+      "bytes": 34898512,
+      "sha256": "a76741b33ae725630163c3a067944085495178e5f337cab537192e7841fed3f1",
+      "group": "local",
+      "role": "VLM LoRA 适配器 (本地训练)",
+      "downloadable": false,
+      "source": null,
+      "note": "本地训练 LoRA（r=32，target=q/k/v/o_proj，base=Qwen2-VL-2B-Instruct），网上无来源，只能从原项目复制。"
+    },
+    {
+      "path": "models/vlm/mmproj-F16.gguf",
+      "bytes": 1159029824,
+      "sha256": "ca524100ebf825c9a870db1c580d03879e0da0ab2541697e2458e64891cf9d38",
+      "group": "vlm",
+      "role": "VLM 视觉投影器 (mmproj)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "Qwen/Qwen3-VL-8B-Instruct-GGUF",
+        "file": "mmproj-F16.gguf",
+        "mirror": "https://www.modelscope.cn/models/Qwen/Qwen3-VL-8B-Instruct-GGUF"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/vlm/qwen3-vl-8b-instruct-q4_k_m.gguf",
+      "bytes": 5027784800,
+      "sha256": "67d1659bfe71b89d50b45a4ad1a9e5b997e5bb16ce5da66a6a6167abd569e9e2",
+      "group": "vlm",
+      "role": "视觉语言模型 (VLM)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "Qwen/Qwen3-VL-8B-Instruct-GGUF",
+        "file": "Qwen3-VL-8B-Instruct-Q4_K_M.gguf",
+        "mirror": "https://www.modelscope.cn/models/Qwen/Qwen3-VL-8B-Instruct-GGUF"
+      },
+      "note": "仓库内文件名为 Qwen3-VL-8B-Instruct-Q4_K_M.gguf，下载后需重命名。"
+    },
+    {
+      "path": "models/world_model/cosmos3-edge-policy-droid/transformer/diffusion_pytorch_model-00001-of-00002.safetensors",
+      "bytes": 5000041944,
+      "sha256": "99b0ff1f9dbdcb497fac16cbc0ebe33dee19653b4c182fa0d474433dcc845206",
+      "group": "world",
+      "role": "世界模型 Transformer 分片 1/2",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "nvidia/Cosmos3-Edge-Policy-DROID",
+        "file": "transformer/diffusion_pytorch_model-00001-of-00002.safetensors",
+        "mirror": "https://huggingface.co/collections/nvidia/cosmos3"
+      },
+      "note": "原项目记录 revision=3ea407af3e156c0af3b4bb6edd85842cc9a58777。"
+    },
+    {
+      "path": "models/world_model/cosmos3-edge-policy-droid/transformer/diffusion_pytorch_model-00002-of-00002.safetensors",
+      "bytes": 1748779008,
+      "sha256": "1842fefdacd0dcbb8ab543b59848a0b696e0c9634676bc76db9e0c971fe328d5",
+      "group": "world",
+      "role": "世界模型 Transformer 分片 2/2",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "nvidia/Cosmos3-Edge-Policy-DROID",
+        "file": "transformer/diffusion_pytorch_model-00002-of-00002.safetensors",
+        "mirror": "https://huggingface.co/collections/nvidia/cosmos3"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/world_model/cosmos3-edge-policy-droid/vae/diffusion_pytorch_model.safetensors",
+      "bytes": 1409400600,
+      "sha256": "230496cb59ff85bc9c040487737c4062480cb61c71e697b197b4c30142f2a0da",
+      "group": "world",
+      "role": "世界模型 VAE",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "nvidia/Cosmos3-Edge-Policy-DROID",
+        "file": "vae/diffusion_pytorch_model.safetensors",
+        "mirror": "https://huggingface.co/collections/nvidia/cosmos3"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/world_model/cosmos3-edge-policy-droid/vision_encoder/model.safetensors",
+      "bytes": 978739880,
+      "sha256": "2180ad739ecc96b5c1e9386892d3c5c08bfa42b9cdab9aabc53b028671db89b3",
+      "group": "world",
+      "role": "世界模型视觉编码器",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "nvidia/Cosmos3-Edge-Policy-DROID",
+        "file": "vision_encoder/model.safetensors",
+        "mirror": "https://huggingface.co/collections/nvidia/cosmos3"
+      },
+      "note": ""
+    },
+    {
+      "path": "models/world_model/cosmos_lora_adapter/adapter_model.safetensors",
+      "bytes": 25718440,
+      "sha256": "81386503c7cf9e32dc0dca5ebe3af0f8b2850efdcaded86b2b31e9154585ba11",
+      "group": "local",
+      "role": "Cosmos LoRA 适配器 (本地训练)",
+      "downloadable": false,
+      "source": null,
+      "note": "本地训练 LoRA（r=16，base=Cosmos3OmniTransformer），网上无来源，只能从原项目复制。"
+    },
+    {
+      "path": "models/yolo/yolo26n-objv1-150.pt",
+      "bytes": 5975045,
+      "sha256": "fab6114e4c91cac560c849ac732c0756e0575c9195e2a7fedfa4a8d92c6253b3",
+      "group": "vision",
+      "role": "目标检测 (自定义训练 objv1-150)",
+      "downloadable": false,
+      "source": null,
+      "note": "文件名含 objv1-150，疑似自定义训练版本，网上无公开来源，建议从原项目复制。",
+      "sourceConfidence": "低"
+    },
+    {
+      "path": "models/yolo/yolo26n.onnx",
+      "bytes": 9941640,
+      "sha256": "03ffc67eebede3ec8bb0f736fb70d02f0e665cbaab2b4d2c940a8cd0abbc1e17",
+      "group": "vision",
+      "role": "目标检测 (YOLO26n ONNX)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "ultralytics/assets",
+        "file": ""
+      },
+      "note": "由 yolo26n.pt 导出。",
+      "sourceConfidence": "中"
+    },
+    {
+      "path": "models/yolo/yolo26n.pt",
+      "bytes": 5544453,
+      "sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+      "group": "vision",
+      "role": "目标检测 (YOLO26n)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "ultralytics/assets",
+        "file": ""
+      },
+      "note": "ultralytics 官方权重；版本号以 ultralytics 发布为准。",
+      "sourceConfidence": "中"
+    },
+    {
+      "path": "models/yolov8n.onnx",
+      "bytes": 12851106,
+      "sha256": "7aa7d36cbf35a614e408e894233e4c5d00d90c7685ca23716d3ab0ebd9331742",
+      "group": "vision",
+      "role": "目标检测 (YOLOv8n ONNX)",
+      "downloadable": true,
+      "source": {
+        "type": "huggingface",
+        "repo": "ultralytics/assets",
+        "file": ""
+      },
+      "note": "由 ultralytics yolov8n.pt 导出：YOLO('yolov8n.pt').export(format='onnx')。",
+      "sourceConfidence": "中"
+    }
+  ]
+}

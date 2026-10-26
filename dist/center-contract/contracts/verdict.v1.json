@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "note": "三维度判定契约。两个 overall 作用域不同，禁止合并成单一档位。适配器只做字段映射，不做判定。",
+  "dimensions": {
+    "driveEvidence": {
+      "scope": "A/B/C/D",
+      "scopeNote": "全项目 A/B/C/D 四根（含代码根 B）",
+      "source": "SOMAOS仿生脑大底座",
+      "computedBy": "SOMAOS仿生脑大底座",
+      "enum": ["vendor-controller", "joint-target-driver", "no_transport_driver", "none"],
+      "meaning": "整个项目范围内有没有该本体的真机指令通路证据"
+    },
+    "motionSelfSufficiency": {
+      "scope": "C/D",
+      "scopeNote": "仅 C/D 两棵运动树，结构性不回落规格根 B",
+      "source": "大脑项目运动脑大底座",
+      "computedBy": "大脑项目运动脑大底座",
+      "enum": ["ready-real", "ready-sim", "needs-training", "unsupported"],
+      "meaning": "运动树自身能否自足指挥"
+    },
+    "commandable": {
+      "scope": "runtime",
+      "scopeNote": "当前运行态实时计算，鉴权/安全/传输三关都过才为 true",
+      "source": "机器人大脑模型中心_运行层",
+      "computedBy": "机器人大脑模型中心_运行层",
+      "enum": ["true", "false"],
+      "meaning": "本契约层不计算它，只声明它存在且归运行层"
+    }
+  },
+  "invariants": [
+    "适配器不得出现基于 bio 与 motion 取值的条件分支",
+    "driveEvidence 与 motionSelfSufficiency 必须同时保留，不得压成一个 overall",
+    "本契约层不修改任何 manifest 的 readiness 字段"
+  ]
+}

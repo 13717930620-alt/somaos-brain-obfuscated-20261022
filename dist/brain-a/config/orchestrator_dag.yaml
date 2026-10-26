@@ -1,0 +1,63 @@
+
+nodes:
+  - id: qwen_vl_32b
+    backend: vllm
+    gpu: 0
+    pinned: true
+    qos: P1
+  - id: groot_motor
+    backend: groot
+    gpu: 1
+    pinned: true
+    qos: P0
+  - id: gush3r
+    backend: gush3r
+    gpu: 1
+    pinned: false
+    qos: P2
+  - id: dreamzero
+    backend: dreamdojo
+    gpu: 1
+    pinned: false
+    qos: P2
+  - id: whisper
+    backend: whisper
+    gpu: 0
+    pinned: true
+    qos: P1
+  - id: embedding
+    backend: onnx
+    gpu: 0
+    pinned: true
+    qos: P2
+  - id: qwen_14b
+    backend: vllm
+    gpu: 1
+    pinned: false
+    qos: P1
+    role: fallback
+
+modes:
+  IDLE: [qwen_vl_32b, embedding]
+  CONVERSATION: [qwen_vl_32b, whisper, embedding]
+  VISION_INSPECTION: [qwen_vl_32b, embedding]
+  NEW_ROOM_EXPLORATION: [qwen_vl_32b, gush3r, embedding]
+  TASK_PLANNING: [qwen_vl_32b, dreamzero, embedding]
+  MANIPULATION: [qwen_vl_32b, groot_motor]
+  IMAGINATION: [qwen_vl_32b, dreamzero]
+  MULTI_MODAL: [qwen_vl_32b, whisper, groot_motor, embedding]
+  EMERGENCY: [qwen_vl_32b]
+
+transient:
+  NEW_ROOM_EXPLORATION: [gush3r]
+  TASK_PLANNING: [dreamzero]
+  IMAGINATION: [dreamzero]
+
+edges:
+  - { from: CONVERSATION, to: MANIPULATION, cost: 0.8 }
+  - { from: CONVERSATION, to: VISION_INSPECTION, cost: 0.6 }
+  - { from: CONVERSATION, to: TASK_PLANNING, cost: 0.5 }
+  - { from: VISION_INSPECTION, to: MANIPULATION, cost: 0.7 }
+  - { from: MANIPULATION, to: IMAGINATION, cost: 0.4 }
+  - { from: IDLE, to: CONVERSATION, cost: 0.3 }
+

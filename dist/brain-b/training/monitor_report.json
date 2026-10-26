@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-09-23 07:16:50",
+  "process_running": true,
+  "stats": {
+    "total_iters": 218,
+    "current_step": 3176448.0,
+    "callback_step": 446464,
+    "current_z": 0.98,
+    "current_x": 0.67,
+    "falls": 0,
+    "fps": 365.0,
+    "elapsed_s": 1222.0,
+    "ep_rew": 416.2,
+    "ep_len": 1000.0,
+    "ev": 0.0,
+    "fall_rate": 0,
+    "stage": 0,
+    "approx_kl": 0.5902127,
+    "value_loss": 13000.0,
+    "clip_fraction": 0.179,
+    "learning_rate": 3e-05,
+    "z_mean": 1.0028,
+    "z_min": 0.94,
+    "z_max": 1.24,
+    "x_mean": 0.35700000000000004,
+    "x_progress": 1.1,
+    "low_z_count": 0,
+    "fall_risk": 0
+  },
+  "models": {
+    "humanoid_walk_best.zip": {
+      "size_mb": 6.22,
+      "mtime": "04:39:38"
+    },
+    "humanoid_stand_best.zip": {
+      "size_mb": 0.22,
+      "mtime": "15:41:48"
+    }
+  },
+  "issues": [
+    "警告: explained_variance=0.000<0.1, 价值函数欠拟合",
+    "警告: value_loss=1.30e+04>5000, 价值损失过大"
+  ]
+}

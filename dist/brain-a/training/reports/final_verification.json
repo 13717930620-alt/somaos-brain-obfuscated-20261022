@@ -1,0 +1,28 @@
+{
+  "results": {
+    "pf_v7": true,
+    "pf_v7_audit": true,
+    "physics_v2": true,
+    "physics_v2_audit": true,
+    "seg_v2": true,
+    "seg_v2_audit": true,
+    "sim_v2": true,
+    "w_v7_full": true,
+    "w_seg_v2": true,
+    "w_seg_v1": true,
+    "w_l2_l4": true,
+    "w_multimodal": true,
+    "w_smolvla": true,
+    "dr_params": true,
+    "failure_bank": true,
+    "gr00t_config": true,
+    "V7 Full History": true,
+    "L2-L4 History": true,
+    "Multimodal History": true,
+    "SmolVLA History": true
+  },
+  "n_pass": 20,
+  "n_total": 20,
+  "pass_rate": 1.0,
+  "timestamp": "2026-09-01 03:55:17"
+}

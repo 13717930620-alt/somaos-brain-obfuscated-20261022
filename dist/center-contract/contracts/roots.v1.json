@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "note": "证据根登记。所有 dir 都是相对 baseDir 的路径，不再写死用户名。env SOMAOS_CONTRACT_BASE_DIR 可整体替换 baseDir。displayName/auditAlias 只用于跨报告对账，不改变判定路径。",
+  "baseDir": "..",
+  "codeRoot": {
+    "id": "B-current",
+    "displayName": "最新无权重版副本代码根（审计口径 A 树）",
+    "auditAlias": "A",
+    "dir": "大脑项目最新无权重版/大脑项目_副本",
+    "surfaces": ["robot", "training"]
+  },
+  "bio": [
+    {
+      "id": "A-trained-legacy",
+      "displayName": "训练完版旧版（审计口径 B 树）",
+      "auditAlias": "B",
+      "family": "all",
+      "dir": "大脑项目_训练完版无权重副本（旧版）",
+      "surfaces": ["robot", "training"]
+    },
+    {
+      "id": "B-current",
+      "displayName": "最新无权重版副本（审计口径 A 树）",
+      "auditAlias": "A",
+      "family": "all",
+      "dir": "大脑项目最新无权重版/大脑项目_副本",
+      "surfaces": ["robot", "training"]
+    },
+    {
+      "id": "C-arm",
+      "displayName": "机械臂运动树（审计口径 C 树）",
+      "auditAlias": "C",
+      "family": "arm",
+      "dir": "大脑项目运动版机械臂无权重版",
+      "surfaces": ["training", "models"]
+    },
+    {
+      "id": "D-humanoid",
+      "displayName": "人形运动树（审计口径 D 树）",
+      "auditAlias": "D",
+      "family": "humanoid",
+      "dir": "大脑项目运动脑具身人形版无权重模型",
+      "surfaces": ["training", "models"]
+    }
+  ],
+  "motion": [
+    {
+      "id": "C-arm",
+      "displayName": "机械臂运动树（审计口径 C 树）",
+      "auditAlias": "C",
+      "family": "arm",
+      "dir": "大脑项目运动版机械臂无权重版",
+      "surfaces": ["training", "models", "robot", "simulation"]
+    },
+    {
+      "id": "D-humanoid",
+      "displayName": "人形运动树（审计口径 D 树）",
+      "auditAlias": "D",
+      "family": "humanoid",
+      "dir": "大脑项目运动脑具身人形版无权重模型",
+      "surfaces": ["training", "models", "robot", "simulation"]
+    }
+  ],
+  "motionSpecRoot": {
+    "id": "B-current",
+    "displayName": "最新无权重版副本（规格来源，审计口径 A 树）",
+    "auditAlias": "A",
+    "dir": "大脑项目最新无权重版/大脑项目_副本"
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "start_time": "2026-10-02 00:02:14",
+  "tasks": {
+    "cosmos_scenes": {
+      "status": "completed",
+      "time_seconds": 845.5,
+      "result": [
+        {
+          "scene": "flat_walk",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_flat_walk.mp4",
+          "frames": 13,
+          "time": 97.95736455917358
+        },
+        {
+          "scene": "slope_walk",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_slope_walk.mp4",
+          "frames": 13,
+          "time": 79.59801697731018
+        },
+        {
+          "scene": "stairs_climb",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_stairs_climb.mp4",
+          "frames": 13,
+          "time": 82.98242735862732
+        },
+        {
+          "scene": "rough_terrain",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_rough_terrain.mp4",
+          "frames": 13,
+          "time": 89.75773477554321
+        },
+        {
+          "scene": "narrow_passage",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_narrow_passage.mp4",
+          "frames": 13,
+          "time": 92.07267093658447
+        },
+        {
+          "scene": "obstacle_avoid",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_obstacle_avoid.mp4",
+          "frames": 13,
+          "time": 82.75174450874329
+        },
+        {
+          "scene": "turn_corner",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_turn_corner.mp4",
+          "frames": 13,
+          "time": 75.28094673156738
+        },
+        {
+          "scene": "carry_load",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_carry_load.mp4",
+          "frames": 13,
+          "time": 85.22937822341919
+        },
+        {
+          "scene": "squat_stand",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_squat_stand.mp4",
+          "frames": 13,
+          "time": 75.39969897270203
+        },
+        {
+          "scene": "push_object",
+          "file": "C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\cosmos_scene_push_object.mp4",
+          "frames": 13,
+          "time": 74.25296235084534
+        }
+      ]
+    },
+    "g1_terrain": {
+      "status": "completed",
+      "time_seconds": 22.8,
+      "result": [
+        {
+          "terrain": "flat",
+          "mean_vel": 0.2581868008265514,
+          "peak_vel": 1.549618061311979,
+          "total_x": 0.634449359062005,
+          "walk_ratio": 0.37,
+          "falls": 0,
+          "steps": 300
+        },
+        {
+          "terrain": "low_friction",
+          "mean_vel": 0.28917401018244787,
+          "peak_vel": 1.3552404813094205,
+          "total_x": 0.7162235394048472,
+          "walk_ratio": 0.38333333333333336,
+          "falls": 0,
+          "steps": 300
+        },
+        {
+          "terrain": "high_friction",
+          "mean_vel": 0.20119635966810226,
+          "peak_vel": 1.267971872105547,
+          "total_x": 0.5060878741824897,
+          "walk_ratio": 0.31666666666666665,
+          "falls": 0,
+          "steps": 300
+        },
+        {
+          "terrain": "slope_5deg",
+          "mean_vel": 0.21855310920828805,
+          "peak_vel": 1.573148755563096,
+          "total_x": 0.23041484275431243,
+          "walk_ratio": 0.3566666666666667,
+          "falls": 1,
+          "steps": 300
+        },
+        {
+          "terrain": "slope_10deg",
+          "mean_vel": 0.24641540948536952,
+          "peak_vel": 1.4253801179671128,
+          "total_x": 0.6032633367426994,
+          "walk_ratio": 0.36666666666666664,
+          "falls": 0,
+          "steps": 300
+        },
+        {
+          "terrain": "rough_terrain",
+          "mean_vel": 0.21584342352399896,
+          "peak_vel": 1.6779982245018743,
+          "total_x": 0.5339429069066173,
+          "walk_ratio": 0.3566666666666667,
+          "falls": 0,
+          "steps": 300
+        }
+      ]
+    },
+    "g1_multitask": {
+      "status": "completed",
+      "time_seconds": 19.8,
+      "result": [
+        {
+          "task": "stand_stable",
+          "mean_z": 0.7944284018892046,
+          "z_std": 0.015036289471593961,
+          "mean_speed": 0.6881905046685324,
+          "stability": 0.8496371052840603,
+          "falls": 0
+        },
+        {
+          "task": "turn_left",
+          "mean_z": 0.7965597054794157,
+          "z_std": 0.011748485727764173,
+          "mean_speed": 0.6305595624851665,
+          "stability": 0.8825151427223583,
+          "falls": 0
+        },
+        {
+          "task": "turn_right",
+          "mean_z": 0.7793852631762289,
+          "z_std": 0.05093497058401442,
+          "mean_speed": 0.717606563463556,
+          "stability": 0.49065029415985584,
+          "falls": 1
+        },
+        {
+          "task": "squat",
+          "mean_z": 0.7850447211282824,
+          "z_std": 0.041539846680936784,
+          "mean_speed": 0.7755223361865142,
+          "stability": 0.5846015331906322,
+          "falls": 0
+        },
+        {
+          "task": "step_in_place",
+          "mean_z": 0.7940222445352846,
+          "z_std": 0.011879784574402377,
+          "mean_speed": 0.865123033647458,
+          "stability": 0.8812021542559763,
+          "falls": 0
+        },
+        {
+          "task": "walk_backward",
+          "mean_z": 0.7778667412473027,
+          "z_std": 0.03897867667864697,
+          "mean_speed": 0.693261173833044,
+          "stability": 0.6102132332135304,
+          "falls": 0
+        },
+        {
+          "task": "side_step_left",
+          "mean_z": 0.7747439379894367,
+          "z_std": 0.04398667197034372,
+          "mean_speed": 0.835663334993214,
+          "stability": 0.5601332802965628,
+          "falls": 0
+        },
+        {
+          "task": "side_step_right",
+          "mean_z": 0.7861847077184921,
+          "z_std": 0.036484532280619736,
+          "mean_speed": 0.6797264009386064,
+          "stability": 0.6351546771938026,
+          "falls": 0
+        }
+      ]
+    },
+    "brain_modules": {
+      "status": "completed",
+      "time_seconds": 0.6,
+      "result": {
+        "snn": {
+          "error": "cannot import name 'train_snn' from 'snn_training' (C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\snn_training.pyc)"
+        },
+        "brain_models": {
+          "error": "cannot import name 'train_brain_models' from 'brain_model_integration' (C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\brain_model_integration.pyc)"
+        },
+        "evolution": {
+          "error": "'EvolutionLearningManager' object has no attribute 'evolve'"
+        },
+        "complete_integration": {
+          "error": "cannot import name 'run_complete_integration' from 'complete_integration' (C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\complete_integration.pyc)"
+        }
+      }
+    },
+    "vlm_finetune": {
+      "status": "completed",
+      "time_seconds": 0.2,
+      "result": {
+        "error": "cannot import name 'AutoModelForVision2Seq' from 'transformers' (C:\\Users\\redact\\Desktop\\大脑项目\\大脑项目_副本\\training\\venv_gpu\\Lib\\site-packages\\transformers\\__init__.pyc)"
+      }
+    },
+    "cross_embodiment": {
+      "status": "completed",
+      "time_seconds": 0.5,
+      "result": {
+        "pass": true
+      }
+    }
+  },
+  "task_order": [
+    "cosmos_scenes",
+    "g1_terrain",
+    "g1_multitask",
+    "brain_modules",
+    "vlm_finetune",
+    "cross_embodiment"
+  ],
+  "end_time": "2026-10-02 00:17:04",
+  "total_time": 889.4
+}

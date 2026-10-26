@@ -1,0 +1,441 @@
+{
+  "generatedAt": "2026-10-21T23:27:33.891Z",
+  "joinKey": "embodiment.id",
+  "persist": false,
+  "forbidRootMerge": true,
+  "degraded": false,
+  "verdictSource": "..\\..\\center-contract",
+  "requireMissingRootsEmpty": true,
+  "bio": {
+    "root": "..\\..\\brain-a",
+    "evidenceRoots": [
+      {
+        "id": "A-trained-legacy",
+        "family": "all",
+        "present": true
+      },
+      {
+        "id": "B-current",
+        "family": "all",
+        "present": true
+      },
+      {
+        "id": "C-arm",
+        "family": "arm",
+        "present": true
+      },
+      {
+        "id": "D-humanoid",
+        "family": "humanoid",
+        "present": true
+      }
+    ],
+    "missing": []
+  },
+  "mot": {
+    "specRoot": "..\\..\\brain-a",
+    "evidenceRoots": [
+      {
+        "id": "C-arm",
+        "family": "arm",
+        "present": true
+      },
+      {
+        "id": "D-humanoid",
+        "family": "humanoid",
+        "present": true
+      }
+    ],
+    "missing": []
+  },
+  "rows": [
+    {
+      "id": "franka_7dof",
+      "family": "arm",
+      "bio": {
+        "overall": "ready-real",
+        "simTier": "none",
+        "realTier": "joint-target-driver",
+        "countedForReadiness": 0,
+        "evidenceKind": "inferred",
+        "inferredFrom": [
+          "franka_droid"
+        ]
+      },
+      "mot": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "counted": 0
+      },
+      "motManaged": true,
+      "verdict": {
+        "bio": {
+          "driveEvidence": "joint-target-driver",
+          "simulationEvidence": "none",
+          "projectOverall": "ready-real",
+          "evidence": [
+            {
+              "kind": "joint-target-driver-script",
+              "files": [
+                {
+                  "file": "robot/robot_driver.py",
+                  "robotTypes": [
+                    "franka_droid"
+                  ],
+                  "root": "大脑项目_训练完版无权重副本（旧版）",
+                  "matches": [
+                    {
+                      "branch": "franka_droid",
+                      "token": "franka",
+                      "kind": "partial"
+                    }
+                  ],
+                  "inferred": true
+                }
+              ]
+            }
+          ],
+          "missing": [],
+          "evidenceKind": "inferred",
+          "inferredFrom": [
+            "franka_droid"
+          ],
+          "scope": "A/B/C/D",
+          "source": "SOMAOS仿生脑大底座"
+        },
+        "motion": {
+          "motionSelfSufficiency": "unsupported",
+          "simulationTier": "none",
+          "transportTier": "no_transport_driver",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "scope": "C/D",
+          "source": "大脑项目运动脑大底座"
+        }
+      }
+    },
+    {
+      "id": "g1_29dof",
+      "family": "humanoid",
+      "bio": {
+        "overall": "ready-real",
+        "simTier": "mujoco+joint_targets",
+        "realTier": "vendor-controller",
+        "countedForReadiness": 0,
+        "evidenceKind": "direct",
+        "inferredFrom": []
+      },
+      "mot": {
+        "overall": "needs-training",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "counted": 0
+      },
+      "motManaged": true,
+      "verdict": {
+        "bio": {
+          "driveEvidence": "vendor-controller",
+          "simulationEvidence": "mujoco+joint_targets",
+          "projectOverall": "ready-real",
+          "evidence": [
+            {
+              "kind": "vendor-high-level-controller",
+              "files": [
+                {
+                  "file": "robot/unitree_g1_driver.py",
+                  "api": "LocoClient",
+                  "root": "大脑项目_副本",
+                  "matchedToken": "unitree",
+                  "matchKind": "exact"
+                }
+              ]
+            }
+          ],
+          "missing": [],
+          "evidenceKind": "direct",
+          "inferredFrom": [],
+          "scope": "A/B/C/D",
+          "source": "SOMAOS仿生脑大底座"
+        },
+        "motion": {
+          "motionSelfSufficiency": "needs-training",
+          "simulationTier": "none",
+          "transportTier": "no_transport_driver",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api",
+            "whole_body_balance_controller"
+          ],
+          "scope": "C/D",
+          "source": "大脑项目运动脑大底座"
+        }
+      }
+    },
+    {
+      "id": "ur5_6dof",
+      "family": "arm",
+      "bio": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "countedForReadiness": 0,
+        "evidenceKind": "none",
+        "inferredFrom": []
+      },
+      "mot": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "counted": 0
+      },
+      "motManaged": true,
+      "verdict": {
+        "bio": {
+          "driveEvidence": "no_transport_driver",
+          "simulationEvidence": "none",
+          "projectOverall": "unsupported",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "evidenceKind": "none",
+          "inferredFrom": [],
+          "scope": "A/B/C/D",
+          "source": "SOMAOS仿生脑大底座"
+        },
+        "motion": {
+          "motionSelfSufficiency": "unsupported",
+          "simulationTier": "none",
+          "transportTier": "no_transport_driver",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "scope": "C/D",
+          "source": "大脑项目运动脑大底座"
+        }
+      }
+    },
+    {
+      "id": "builtin:franka_droid",
+      "family": "arm",
+      "bio": {
+        "overall": "ready-real",
+        "simTier": "none",
+        "realTier": "joint-target-driver",
+        "countedForReadiness": 0,
+        "evidenceKind": "direct",
+        "inferredFrom": []
+      },
+      "mot": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "counted": 0
+      },
+      "motManaged": true,
+      "verdict": {
+        "bio": {
+          "driveEvidence": "joint-target-driver",
+          "simulationEvidence": "none",
+          "projectOverall": "ready-real",
+          "evidence": [
+            {
+              "kind": "joint-target-driver-script",
+              "files": [
+                {
+                  "file": "robot/robot_driver.py",
+                  "robotTypes": [
+                    "franka_droid"
+                  ],
+                  "root": "大脑项目_训练完版无权重副本（旧版）",
+                  "matches": [
+                    {
+                      "branch": "franka_droid",
+                      "token": "franka_droid",
+                      "kind": "exact"
+                    }
+                  ],
+                  "inferred": false
+                }
+              ]
+            }
+          ],
+          "missing": [],
+          "evidenceKind": "direct",
+          "inferredFrom": [],
+          "scope": "A/B/C/D",
+          "source": "SOMAOS仿生脑大底座"
+        },
+        "motion": {
+          "motionSelfSufficiency": "unsupported",
+          "simulationTier": "none",
+          "transportTier": "no_transport_driver",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "scope": "C/D",
+          "source": "大脑项目运动脑大底座"
+        }
+      }
+    },
+    {
+      "id": "builtin:so100",
+      "family": "arm",
+      "bio": {
+        "overall": "ready-real",
+        "simTier": "none",
+        "realTier": "joint-target-driver",
+        "countedForReadiness": 0,
+        "evidenceKind": "direct",
+        "inferredFrom": []
+      },
+      "mot": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "counted": 0
+      },
+      "motManaged": true,
+      "verdict": {
+        "bio": {
+          "driveEvidence": "joint-target-driver",
+          "simulationEvidence": "none",
+          "projectOverall": "ready-real",
+          "evidence": [
+            {
+              "kind": "joint-target-driver-script",
+              "files": [
+                {
+                  "file": "robot/robot_driver.py",
+                  "robotTypes": [
+                    "so100"
+                  ],
+                  "root": "大脑项目_训练完版无权重副本（旧版）",
+                  "matches": [
+                    {
+                      "branch": "so100",
+                      "token": "so100",
+                      "kind": "exact"
+                    }
+                  ],
+                  "inferred": false
+                }
+              ]
+            }
+          ],
+          "missing": [],
+          "evidenceKind": "direct",
+          "inferredFrom": [],
+          "scope": "A/B/C/D",
+          "source": "SOMAOS仿生脑大底座"
+        },
+        "motion": {
+          "motionSelfSufficiency": "unsupported",
+          "simulationTier": "none",
+          "transportTier": "no_transport_driver",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "scope": "C/D",
+          "source": "大脑项目运动脑大底座"
+        }
+      }
+    },
+    {
+      "id": "builtin:ur5",
+      "family": "arm",
+      "bio": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "countedForReadiness": 0,
+        "evidenceKind": "none",
+        "inferredFrom": []
+      },
+      "mot": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "counted": 0
+      },
+      "motManaged": true,
+      "verdict": {
+        "bio": {
+          "driveEvidence": "no_transport_driver",
+          "simulationEvidence": "none",
+          "projectOverall": "unsupported",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "evidenceKind": "none",
+          "inferredFrom": [],
+          "scope": "A/B/C/D",
+          "source": "SOMAOS仿生脑大底座"
+        },
+        "motion": {
+          "motionSelfSufficiency": "unsupported",
+          "simulationTier": "none",
+          "transportTier": "no_transport_driver",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "scope": "C/D",
+          "source": "大脑项目运动脑大底座"
+        }
+      }
+    },
+    {
+      "id": "builtin:kinova_gen3",
+      "family": "arm",
+      "bio": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "countedForReadiness": 0,
+        "evidenceKind": "none",
+        "inferredFrom": []
+      },
+      "mot": {
+        "overall": "unsupported",
+        "simTier": "none",
+        "realTier": "no_transport_driver",
+        "counted": 0
+      },
+      "motManaged": true,
+      "verdict": {
+        "bio": {
+          "driveEvidence": "no_transport_driver",
+          "simulationEvidence": "none",
+          "projectOverall": "unsupported",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "evidenceKind": "none",
+          "inferredFrom": [],
+          "scope": "A/B/C/D",
+          "source": "SOMAOS仿生脑大底座"
+        },
+        "motion": {
+          "motionSelfSufficiency": "unsupported",
+          "simulationTier": "none",
+          "transportTier": "no_transport_driver",
+          "evidence": [],
+          "missing": [
+            "transport_driver_or_vendor_api"
+          ],
+          "scope": "C/D",
+          "source": "大脑项目运动脑大底座"
+        }
+      }
+    }
+  ]
+}

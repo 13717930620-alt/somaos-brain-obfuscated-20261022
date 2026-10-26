@@ -1,0 +1,143 @@
+{
+  "manifestVersion": 1,
+  "embodimentId": "franka_7dof",
+  "signature": "bea6f40019fa",
+  "name": "Franka",
+  "manufacturer": "Franka_Emika",
+  "type": "arm",
+  "dof": 7,
+  "brainVersion": 1,
+  "controlFreqHz": 1000,
+  "interfaces": {
+    "health": "/health",
+    "state": "/state",
+    "command": "/command",
+    "estop": "/estop"
+  },
+  "state": {
+    "joints": [
+      "joint_1",
+      "joint_2",
+      "joint_3",
+      "joint_4",
+      "joint_5",
+      "joint_6",
+      "joint_7"
+    ],
+    "observationDim": 20,
+    "actionDim": 7
+  },
+  "commands": {
+    "allowed": [
+      "stop",
+      "standUp",
+      "armTo",
+      "wave",
+      "armsOut"
+    ],
+    "conditional": [],
+    "blocked": [
+      "sitDown",
+      "bow",
+      "waistTwist",
+      "march",
+      "walk",
+      "turn",
+      "moveTo",
+      "grasp"
+    ]
+  },
+  "safety": {
+    "positionWindows": [
+      {
+        "name": "joint_1",
+        "min": -2.9,
+        "max": 2.9
+      },
+      {
+        "name": "joint_2",
+        "min": -1.8,
+        "max": 1.8
+      },
+      {
+        "name": "joint_3",
+        "min": -2.9,
+        "max": 2.9
+      },
+      {
+        "name": "joint_4",
+        "min": -3.1,
+        "max": -0.1
+      },
+      {
+        "name": "joint_5",
+        "min": -2.9,
+        "max": 2.9
+      },
+      {
+        "name": "joint_6",
+        "min": -1.6,
+        "max": 1.6
+      },
+      {
+        "name": "joint_7",
+        "min": -2.9,
+        "max": 2.9
+      }
+    ],
+    "torqueCeilings": [
+      {
+        "name": "joint_1",
+        "max": null
+      },
+      {
+        "name": "joint_2",
+        "max": null
+      },
+      {
+        "name": "joint_3",
+        "max": null
+      },
+      {
+        "name": "joint_4",
+        "max": null
+      },
+      {
+        "name": "joint_5",
+        "max": null
+      },
+      {
+        "name": "joint_6",
+        "max": null
+      },
+      {
+        "name": "joint_7",
+        "max": null
+      }
+    ],
+    "estopRequired": true,
+    "source": "EmbodimentSpec 关节限位/力矩真值"
+  },
+  "controller": {
+    "overall": "ready-real",
+    "simTier": "none",
+    "realTier": "joint-target-driver",
+    "note": "指令通路证据为驱动脚本存在，尚未真机验证"
+  },
+  "readiness": "commandable",
+  "provenance": {
+    "yaml": "training\\robot_configs\\franka_7dof.yaml",
+    "mjcf": null,
+    "jointMatch": {
+      "matched": 0,
+      "mjcfOnly": 0,
+      "yamlOnly": 0
+    },
+    "rangeOverrides": [],
+    "significantMismatches": 0
+  },
+  "generatedBy": "SOMAOS大底座/cloudBrainManifest",
+  "generatedAt": "2026-10-11T13:02:04.979Z",
+  "savedAt": "2026-10-11T13:02:05.021Z",
+  "storedUnder": ".."
+}

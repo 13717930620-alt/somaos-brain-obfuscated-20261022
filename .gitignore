@@ -6,3 +6,5 @@ node_modules/
 staging/
 pytmp/
 memory_store/
+hippocampus_store/
+.brain-memory/

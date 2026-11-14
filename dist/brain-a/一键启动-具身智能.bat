@@ -88,13 +88,9 @@ rem  (critical: loading 14B LLM while old VLM/python still hold 12GB VRAM
 rem   crashes the Brain process silently -> port 3001 never comes up)
 echo [0/7] Cleaning stale processes, freeing GPU memory
 echo [0/7] Cleanup stale processes... >> "_launch_debug.log"
-rem 杀残留的 llama-server (LLM/VLM 推理引擎, 占大量显存)
 taskkill /F /IM llama-server.exe >nul 2>&1
-rem 杀残留的 node 进程 (Brain 主进程 + gush3r_launcher)
 taskkill /F /IM node.exe >nul 2>&1
-rem 杀残留的 Python 进程 (SNN/STT/MuJoCo/GPUView/GUSH3R 等占显存/内存)
 wmic process where "name='python.exe'" call terminate >nul 2>&1
-rem 按端口清理 (兜底)
 call :kill_port %PORT_BRAIN%
 call :kill_port %PORT_LLM%
 call :kill_port %PORT_VLM%
@@ -103,7 +99,6 @@ call :kill_port %PORT_SNN%
 call :kill_port %PORT_STT%
 call :kill_port %PORT_VIEW%
 call :kill_port %PORT_GUSH3R%
-rem 等待 GPU 显存释放 (驱动回收需要时间)
 timeout /t 5 /nobreak >nul
 echo     cleanup done, GPU memory released
 echo.
@@ -138,7 +133,6 @@ echo.
 rem ---------- 2) VLM ----------
 echo [2/7] VLM vision-language model, port %PORT_VLM%
 echo [2/7] Starting VLM... >> "_launch_debug.log"
-rem 中文路径修复：映射英文盘符B: (llama.cpp无法读取含中文的路径)
 subst B: /d >nul 2>&1
 subst B: "%ROOT%" >nul 2>&1
 set "VLM_MODEL="
@@ -211,16 +205,11 @@ if exist "simulation\full_gpu_visual_web.pyc" (
 echo.
 
 rem ---------- 7) GUSH3R 3D reconstruction ----------
-rem  GUSH3R 由 Brain 内部 WorldCentricLoop 自动管理 (GUSH3RBridge spawn gush3r_bridge.py)
-rem  brain.log 会显示 "[WorldLoop v2] GUSH3R 3D场景重建就绪"
-rem  不再独立启动 gush3r_launcher.js (避免与 Brain 内部 GUSH3RBridge 双倍加载模型 + 8011 端口冲突)
 echo [7/7] GUSH3R 3D scene reconstruction (managed by Brain WorldCentricLoop)
 echo [7/7] GUSH3R managed by Brain internally >> "_launch_debug.log"
 echo.
 
 rem ---------- 7b) GR00T N1.5-3B VLA ----------
-rem  GR00T 为 VLA 核心, 端口 8001, 权重 models/vla/groot (5.07GB)
-rem  Mock 增强模式纯 CPU 运行, 不占显存, 可与 LLM/VLM 同驻
 echo [7b] Starting GR00T N1.5-3B VLA server, port %PORT_GROOT%
 echo [7b] Starting GR00T VLA... >> "_launch_debug.log"
 if exist "services\groot_server.pyc" (
@@ -255,7 +244,6 @@ echo.
 
 echo === LAUNCH COMPLETE at %time% === >> "_launch_debug.log"
 
-rem ---------- 健康验证汇总 ----------
 echo.
 echo ============================================================
 echo   Health Verification

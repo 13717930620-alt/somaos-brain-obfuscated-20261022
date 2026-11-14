@@ -1,7 +1,6 @@
-# SomaOS 桌面窗口 — PowerShell + Edge WebView2 (无需安装，Win10/11 自带)
+﻿
 Add-Type -AssemblyName System.Windows.Forms
 
-# 窗口设置
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "SomaOS · 19脑区类脑认知智能体"
 $form.Size = New-Object System.Drawing.Size(1200, 820)
@@ -10,13 +9,11 @@ $form.StartPosition = "CenterScreen"
 $form.BackColor = [System.Drawing.Color]::FromArgb(6, 10, 22)
 $form.Icon = $null
 
-# 尝试用 Edge WebView2 加载
 $webViewLoaded = $false
 try {
     Add-Type -Path "$env:ProgramFiles\Microsoft\EdgeWebView\Microsoft.Web.WebView2.Core.dll" -ErrorAction SilentlyContinue
     Add-Type -Path "$env:LocalAppData\Microsoft\EdgeWebView\Microsoft.Web.WebView2.Core.dll" -ErrorAction SilentlyContinue
 
-    # 如果 WebView2 可用，使用它；否则回退到 IE WebBrowser 控件
     $web = New-Object System.Windows.Forms.WebBrowser
     $web.IsWebBrowserContextMenuEnabled = $false
     $web.ScriptErrorsSuppressed = $true
@@ -24,17 +21,14 @@ try {
     $web.Dock = [System.Windows.Forms.DockStyle]::Fill
     $webViewLoaded = $true
 } catch {
-    # IE WebBrowser 作为回退
     $web = New-Object System.Windows.Forms.WebBrowser
     $web.ScriptErrorsSuppressed = $true
     $web.Dock = [System.Windows.Forms.DockStyle]::Fill
 }
 
-# 等待服务器启动后加载页面
 $web.Navigate("about:blank")
 $form.Controls.Add($web)
 
-# 异步等待服务器
 $timer = New-Object System.Windows.Forms.Timer
 $timer.Interval = 1000
 $retry = 0
@@ -60,7 +54,6 @@ $timer.Add_Tick({
 })
 $timer.Start()
 
-# 窗口关闭时退出
 $form.Add_FormClosed({
     $timer.Stop()
     $timer.Dispose()

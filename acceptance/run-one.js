@@ -1,5 +1,5 @@
 'use strict';
-// 单文件跑法：node acceptance/run-one.js acceptance/03_motion_cd.test.js
+// 单文件跑法：node acceptance/run-one.js acceptance/01_packaging.test.js
 const path = require('path');
 const { spawnSync } = require('child_process');
 

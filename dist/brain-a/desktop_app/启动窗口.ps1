@@ -1,7 +1,6 @@
-﻿# BrainAgent 桌面窗口启动器
+﻿
 $projectDir = ".."
 
-# 1. 检查服务
 try {
     $r = Invoke-WebRequest -Uri "http://localhost:3003/" -TimeoutSec 2 -ErrorAction Stop
     Write-Host "服务已在运行"
@@ -11,7 +10,6 @@ try {
     Start-Sleep -Seconds 18
 }
 
-# 2. 打开 Edge 无边框窗口
 $edgePaths = @(
     "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
     "C:\Program Files\Microsoft\Edge\Application\msedge.exe"
